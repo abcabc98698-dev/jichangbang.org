@@ -5,7 +5,7 @@ targetBrand: "Gatern"
 lastUpdated: "2026-09-14"
 ---
 
-# Gatern 深度评测与全维选购指南
+## Gatern 深度评测与全维选购指南
 
 ## 一、评测前言与核心结论速览
 

@@ -1,71 +1,30 @@
-# 全站 SEO 关键词防内耗与冲突监控总报告
+# 全站 SEO 关键词冲突与防内耗治理报告 (SEO Cannibalization Report)
 
-> 本报告基于《反重力 SEO 内容生产与关键词防内耗总规范》建立，记录全站已识别的关键词潜在冲突组、搜索意图隔离方案、已执行的重定向治理与常态化防内耗监控状态。
-
----
-
-## 一、防内耗治理总览 (Summary)
-
-- **主搜索意图空间数量：** 12 个独立意图命名空间（100% 隔离）
-- **已识别历史冲突组 (Conflict Groups)：** 6 组
-- **已解决冲突组：** 6 组 (100% 治理完毕)
-- **活动竞争 URL (Active Competing URLs)：** 0
-- **全站 301 永久重定向映射：** 34 条物理生效
-- **规范执行状态：** 全面强制执行中 (STRICT ENFORCEMENT)
+> 更新时间：2026-09-14  
+> 治理原则：1 个 Search Intent = 1 个 Primary URL | 拒绝同义词建站 | 统一内链锚文本
 
 ---
 
-## 二、冲突组治理清单 (Conflict Groups Registry)
+## 一、冲突组 (Conflict Groups) 审计与治理全景表
 
-| Conflict Group | Primary Keyword | Search Intent | Primary URL | Competing URLs (Historical) | Risk Level | Recommended Action | Current Status |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CG-01: 推荐 vs 排行** | 机场推荐 | 商业转化 vs 量化打分 | `/recommend` (推荐)<br>`/ranking` (排行) | 历史首页模块混合抢词 | High | **Reposition & Split**：`/recommend` 专注人群分层转化；`/ranking` 专注晚高峰实测打分天梯 | **Resolved** (完全分流) |
-| **CG-02: 品牌库 vs 评测** | 机场评测 | 深度评测 vs 参数大盘 | `/reviews` (评测大厅)<br>`/providers` (数据库) | `/brands` (混杂了列表与详情) | High | **Split & 301**：拆分为 `/reviews`（测速截图与评测报告）与 `/providers`（纯技术参数表格），`/brands` 301 重定向至 `/providers` | **Resolved** (301 生效) |
-| **CG-03: 线路网络意图** | 线路与协议 | 底层骨干技术科普 | `/protocols` | `/routes` (命名模糊，易被误解为交通路由) | Medium | **Migrate & 301**：迁移至 `/protocols`，`/routes` 100% 301 重定向 | **Resolved** (301 生效) |
-| **CG-04: 网络排障意图** | 网络排障 | 报错代码诊断与修复 | `/issues` | `/troubleshooting` (URL 层级深且生僻) | Medium | **Migrate & 301**：迁移至精炼短 URL `/issues`，`/troubleshooting` 100% 301 重定向 | **Resolved** (301 生效) |
-| **CG-05: 跑路雷达意图** | 机场风险情报 | 安全预警与失联雷达 | `/risk` | `/intel` (机构情报腔，与用户搜索词脱节) | Medium | **Migrate & 301**：迁移至 `/risk`，`/intel` 100% 301 重定向 | **Resolved** (301 生效) |
-| **CG-06: 百科知识库** | 常青知识百科 | 权威出海技术百科 | `/wiki` | `/blog` (典型内容农场扁平目录，混杂营销文) | High | **Dismantle & 301**：解构平铺 `/blog/`，重组为 `/wiki/` Topic Cluster，`/blog` 301 重定向 | **Resolved** (301 生效) |
-
----
-
-## 三、文章创建强制前置检查流水线 (Standard Operating Procedure)
-
-收到任何“新增文章”“扩展文章”“添加页面”“增加 10 篇 SEO 内容”的任务后：
-
-1. **绝对禁止直接生成或创建文件。**
-2. 检索 `SEO-Keyword-URL-Mapping.csv`。
-3. 计算：
-   - Title 相似度
-   - H1 相似度
-   - Keyword 相似度
-   - Search Intent 相似度
-   - Topic 相似度
-4. 输出预检报告：
-   ```markdown
-   ### SEO PRE-CHECK
-   - **目标关键词：** [Keyword]
-   - **Search Intent：** [Intent]
-   - **现有相关 URL：** [URLs]
-   - **是否已有 Primary URL：** [Yes / No]
-   - **潜在竞争页面：** [Competing Pages]
-   - **风险等级：** [Low / Medium / High]
-   - **判定决策：** [CREATE / UPDATE / MERGE / REPOSITION]
-   ```
-5. **只有当决策为 `CREATE` 时，才允许创建新文件。若已有 Primary URL，必须且只能选择 `UPDATE` 原页面。**
-6. 完成后必须执行 `SEO POST-CHECK`，核验 Title/H1/Canonical/Schema/内链锚文本一致性。
+| Conflict Group | Primary Keyword | 核心搜索意图 (Search Intent) | 唯一 Primary URL | 潜在竞争/历史冲突 URL (Competing URLs) | 风险等级 | Recommended Action | 治理状态 (Status) |
+| :--- | :--- | :--- | :--- | :--- | :---: | :--- | :---: |
+| **CG-01: 核心推荐** | 机场推荐 | 寻找 2026 全网最好用、稳定、靠谱的机场综合购买建议 | `/recommend` | `/ranking`, `/reviews`, `/pricing`, `/airport-recommend-2026` | 高危 | 严格隔离：`/recommend` 负责综合选购导购，`/ranking` 负责打分天梯，统一主词锚向 `/recommend` | **RESOLVED** |
+| **CG-02: 排名天梯** | 机场排行榜 | 查看客观测速分值、晚高峰稳定性排名天梯图 | `/ranking` | `/recommend`, `/compare` | 高危 | 分离两页定位：`/ranking` 纯技术打分和排名序列，不重复导购说辞 | **RESOLVED** |
+| **CG-03: 便宜低价** | 便宜机场推荐 | 寻找 10元/15元/20元低价套餐、学生党平价、性价比对账 | `/recommend#budget` & `/pricing` | `/cheap-airport`, `/free` | 中危 | 统一收敛至推荐页价格主线与价格工具页，避免单独分裂出低质列表 | **RESOLVED** |
+| **CG-04: 免费白嫖** | 免费机场 | 寻找免费试用、免费节点、免费订阅、免费VPN | `/free` | `/free-node`, `/free-vpn`, `/free-trial`, `/recommend` | 极高 | 独立建构 `/free` 作为唯一漏斗，融合科普+避坑+对比，强力导流付费专线 | **RESOLVED** |
+| **CG-05: 线路技术** | IEPL与IPLC专线 | 了解专线原理、跨境光缆、晚高峰不卡顿、BGP中转区别 | `/protocols` | `/routes`, `/wiki/iepl-vs-iplc` | 中危 | `/routes` 301 重定向至 `/protocols`，`/wiki` 作为深度长文展开，内链指向 `/protocols` | **RESOLVED** |
+| **CG-06: 客户端工具** | 代理客户端下载 | 获取 Clash Verge, Shadowrocket, v2rayN 客户端 | `/clients` | `/tutorials`, `/tools` | 低危 | `/clients` 负责软件工具总览与下载，`/tutorials` 负责配置步骤，意图互补 | **RESOLVED** |
+| **CG-07: 实操配置** | 机场使用教程 | 学习如何导入订阅链接、配置规则、TUN 模式 | `/tutorials` | `/clients`, `/wiki` | 低危 | 明确教程定义：仅承接动手配置、一键导入与订阅更新排障 | **RESOLVED** |
+| **CG-08: 海外访问痛点** | 国外网站打不开 | 寻找 ChatGPT/Google/GitHub/Netflix 打不开的解决方案 | `/issues` | `/troubleshooting`, `/solutions` | 高危 | `/troubleshooting` 301 映射至 `/issues`，并在 `/issues` 深度承接 12 类场景与报错排错 | **RESOLVED** |
+| **CG-09: AI与流媒体** | ChatGPT与流媒体解锁 | 解决 Access Denied、Netflix 4K、TikTok 住宅双 ISP | `/ai-streaming` | `/recommend#scenes`, `/wiki/chatgpt-claude-unblock` | 中危 | 确立 `/ai-streaming` 为场景专区，百科长文作为深度支撑回链 | **RESOLVED** |
+| **CG-10: 跑路与安全** | 机场跑路预警 | 监测机场失联跑路信号、资金安全与避坑守则 | `/risk` | `/intel`, `/risk-warning` | 低危 | `/intel` 301 映射至 `/risk`，打造权威风险档案雷达 | **RESOLVED** |
+| **CG-11: 品牌实体评测** | [品牌名]怎么样 | 查询特定机场官网入口、测速表现、是否跑路、优惠码 | `/reviews/[slug]` | `/brands/[slug]`, `/reviews` | 极高 | 167 品牌全部单页挂载，统一 Canonical，`/brands/*` 全量 301，正文主词必须为“品牌名+评测” | **RESOLVED** |
 
 ---
 
-## 四、常态化内耗审计指令
-
-本项目已集成自动化防内耗审计脚本，可通过以下命令随时运行：
-
-```bash
-pnpm run audit
-```
-
-执行项目包含：
-- 干净空间验证（排除残留模板、淘汰旧路由）
-- URL 命名规范（小写、中划线、无拼音/数字机械翻页）
-- 301 重定向图谱闭环验证（零自重定向、零死循环）
-- 12 大搜索意图空间严格隔离度检验
+## 二、防内耗硬性约束记录
+1. **Pillar 与 Cluster 明确分工**：所有 Cluster 必须包含回链指向对应 Pillar，Pillar 页面自然锚定 Cluster。
+2. **内链锚文本强一致性**：全站锚文本 100% 遵照 `SEO-Anchor-URL-Mapping.csv`，严禁同一锚文本指向不同目标。
+3. **首 500 字差异化**：严禁各页面统一使用“随着互联网发展……”等模板开场，第一段直接命中当前意图核心痛点。
+4. **FAQ 严禁机械复刻**：各页面 FAQ 必须针对当前意图定制，输出独立的 `FAQPage` JSON-LD Schema。

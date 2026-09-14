@@ -4,4 +4,18 @@ Disallow: /*?*
 Disallow: /*?
 Disallow: /*&
 
+# Major Search Engine Crawlers Compatibility
+User-agent: Googlebot
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: yisouspider
+Allow: /
+
+Sitemap: https://jichangbang.org/sitemap.xml
 Sitemap: https://jichangbang.org/sitemap-index.xml

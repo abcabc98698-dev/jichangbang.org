@@ -30,4 +30,5 @@ SOGO云,/reviews/sogoyun,品牌评测,全站出现“SOGO云”及“SOGO Cloud�
 极联云,/reviews/jilianyun,品牌评测,全站出现“极联云”及“JiLian Cloud”一律指向 /reviews/jilianyun
 U1S1,/reviews/u1s1,品牌评测,全站出现“U1S1”及“U1S1 Cloud”一律指向 /reviews/u1s1
 无忧云,/reviews/wuyou,品牌评测,全站出现“无忧云”及“WuYou Cloud”一律指向 /reviews/wuyou
+免费机场,/free,免费资源,全站出现“免费机场”、“免费节点”、“免费试用机场”、“免费订阅”一律指向 /free
 关于机场榜一,/about,站点信息,全站出现“关于机场榜一”、“联系与反馈”一律指向 /about

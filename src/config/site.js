@@ -27,6 +27,13 @@ export const siteConfig = {
 		github: "https://github.com/jichangbang",
 		rss: "/rss.xml",
 	},
+	// 站长平台验证配置 (可通过环境变量或此处直接填入对应验证代码)
+	verification: {
+		google: import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+		bing: import.meta.env.PUBLIC_BING_SITE_VERIFICATION || '', // msvalidate.01
+		baidu: import.meta.env.PUBLIC_BAIDU_SITE_VERIFICATION || '', // baidu-site-verification
+		shenma: import.meta.env.PUBLIC_SHENMA_SITE_VERIFICATION || '', // shenma-site-verification
+	},
 };
 
 // 页脚社交与快捷外链

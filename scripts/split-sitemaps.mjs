@@ -79,4 +79,5 @@ const sitemapIndexXml = `<?xml version="1.0" encoding="UTF-8"?>
 </sitemapindex>`;
 
 fs.writeFileSync(path.join(distDir, 'sitemap-index.xml'), sitemapIndexXml, 'utf8');
-console.log('Updated dist/sitemap-index.xml with 5 specialized split sitemaps.');
+fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemapIndexXml, 'utf8');
+console.log('Updated dist/sitemap-index.xml and dist/sitemap.xml with 5 specialized split sitemaps.');

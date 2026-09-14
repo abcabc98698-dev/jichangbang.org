@@ -27,6 +27,7 @@
 		"name": "更多专题",
 		"children": [
 			{ "name": "品牌数据库", "url": "/providers" },
+			{ "name": "免费资源评测", "url": "/free" },
 			{ "name": "线路与协议", "url": "/protocols" },
 			{ "name": "客户端下载", "url": "/clients" },
 			{ "name": "使用教程", "url": "/tutorials" },

@@ -1,4 +1,10 @@
 {
+  "/vpn": "/recommend",
+  "/jichang": "/recommend",
+  "/clash": "/clients",
+  "/nodes": "/protocols",
+  "/tizi": "/recommend",
+  "/tutorial": "/tutorials",
   "/brands": "/providers",
   "/brands/guangsu": "/reviews/guangsu",
   "/brands/yuzhou": "/reviews/yuzhou",

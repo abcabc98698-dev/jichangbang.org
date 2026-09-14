@@ -5,10 +5,7 @@ import Badge from "@/components/ui/Badge.astro";
 import JsonLd from "@/components/seo/JsonLd.astro";
 import {
   Wrench,
-  ShieldCheck,
   Award,
-  Zap,
-  Sparkles,
   Clock
 } from "@lucide/astro";
 
@@ -50,6 +47,22 @@ const faqItems = [
   {
     question: "为什么我们强烈建议常备一条不限时按量付费的备用专线？",
     answer: "在实际网络运维中，单一机场可能因骨干网故障、机房割接或域名受到短时攻击而暂时出现订阅无法刷新或节点抖动。如果手头仅有单一服务商，一旦遭遇突发故障便会陷入‘因无法翻墙而无法打开官网更新订阅’的死循环。常备一条像星岛梦那样永不过期的按量付费套餐，随用随扣不产生固定月租，在突发故障时能够充当最可靠的排障对照组与应急破局通道。"
+  },
+  {
+    question: "为什么 Wi-Fi 下可以连接但手机移动流量下无法使用机场？",
+    answer: "这通常是手机移动蜂窝网络的 APN 协议或运营商 DNS 拦截所致。部分省份中国移动或中国联通的 4G/5G 默认开启了严格的 IPv6 防火墙，导致代理客户端的 TUN 虚拟网卡在双栈路由下出现回环断流。解决方案：1. 在手机系统网络设置中，将蜂窝网络 APN 协议从 IPv4/IPv6 调整为仅 IPv4；2. 在 Clash 或小火箭中开启‘仅 IPv4 分流’并固定 DNS 为 223.5.5.5；3. 在客户端节点列表中选用针对中国移动或三网专门优化的专线入口。"
+  },
+  {
+    question: "为什么测速软件显示几百兆高速，但实际看视频和打网页依然转圈卡顿？",
+    answer: "测速软件通常使用的是持续多线程并发下载，测出的是链路瞬时带宽峰值；而实际浏览网页和播放视频深度依赖的是‘单线程首包响应延迟（TTFB）’与‘晚高峰链路抖动（Jitter）’。如果机场中转节点存在丢包率（如丢包超 2%），TCP 协议会强制频繁重传握手包，导致网页每次建立连接都需要等待数秒。解决根本在于选用晚高峰 0 丢包的 IEPL/IPLC 企业内网专线。"
+  },
+  {
+    question: "国内访问 GitHub 速度极慢或克隆代码超时，有哪些免代理与代理的最佳解决方案？",
+    answer: "GitHub 属于典型的部分资源受阻。如果临时没有代理，可以通过修改本地 hosts 文件将 github.global.ssl.fastly.net 解析到最优 CDN 节点，或使用国内开源镜像站（如 ghproxy、FastGit）；如果有代理客户端，务必在 Clash Verge 或 Shadowrocket 中将 github.com 与 raw.githubusercontent.com 规则从‘直连 (Direct)’强制切换为‘走代理 (PROXY)’，并开启 TUN 模式接管 Git 命令行终端流量。"
+  },
+  {
+    question: "国内访问 ChatGPT 提示‘Not available in your country’的核心诱因与根治方案？",
+    answer: "OpenAI 的地区限制判定是由前端 IP 地理库实时决定的。核心诱因包括：1. 节点选用了香港或澳门节点（官方不支持区域）；2. 浏览器缓存中残留了旧的地区定位 Cookie；3. 客户端开启了全局代理但 DNS 解析泄露了国内真实运营商 IP；4. 节点 IP 属于机房广播段已被拉黑。根治方案：在客户端切换至美国或日本的原生双 ISP 专线节点（如光速云），清除浏览器全部缓存或使用隐私无痕窗口，并在客户端内开启 TUN 虚拟网卡防护。"
   }
 ];
 
@@ -210,12 +223,88 @@ const errorCodeList = [
   { code: "ERR_CONNECTION_RESET", type: "连接被重置 (RST)", cause: "未加密的数据包在经过公共网络时被国家防火墙检测到明文特征并强制重置", fix: "使用抗主动探测的 VLESS Reality、Trojan 或 IEPL 专线" },
   { code: "SSL_ERROR_SYSCALL", type: "底层安全握手失败", cause: "系统时间偏差超过 60 秒，或本地杀软篡改了系统的根证书颁发信任链", fix: "校准系统互联网时间，在杀软中关闭‘HTTPS 流量扫描’" }
 ];
+
+// 12 大海外泛访问与痛点场景极速解决指引
+const overseasScenarios = [
+  {
+    category: "1. 泛访问需求",
+    symptom: "国外网站打不开 / 网页一直转圈 / 连接超时 (ERR_TIMED_OUT)",
+    coreReason: "目标服务器位于境外公网，受国际出口带宽拥堵、DNS 污染或骨干网防火墙阻断影响。",
+    solution: "1. 开启代理客户端规则模式并连接延迟较低的日本/香港节点；2. 若已开启代理仍超时，检查系统代理开关是否死锁；3. 更换加密专线绕开公网拥堵。"
+  },
+  {
+    category: "2. ChatGPT 与海外 AI",
+    symptom: "国内怎么用 ChatGPT / 提示地区不支持 / Claude 提示封号",
+    coreReason: "OpenAI 与 Anthropic 严控机房数据中心 IP。误用香港节点或普通广播 IP 会直接触发风控拉黑。",
+    solution: "1. 严禁选用香港节点，切换至美国或日本的原生双 ISP 节点；2. 开启客户端 TUN 虚拟网卡模式防 DNS 泄露；3. 清理浏览器 Cookie 后开启无痕窗口登录。"
+  },
+  {
+    category: "3. Google 核心生态",
+    symptom: "Google 搜索打不开 / Gmail 无法同步 / 谷歌学术连接超时",
+    coreReason: "Google 所有 IP 段均在中国大陆处于深度阻断状态，任何直连请求均会被 TCP RST 强制重置。",
+    solution: "1. 导入标准节点订阅并在客户端开启系统代理；2. 在分流规则中确认 google.com 走 PROXY 策略；3. 若使用 Chrome 浏览器，关闭‘安全 DNS’避免与本地代理冲突。"
+  },
+  {
+    category: "4. YouTube 与海外流媒体",
+    symptom: "YouTube 4K 播放频繁缓冲 / Netflix 提示代理 / Disney+ 黑屏",
+    coreReason: "节点带宽虚标超售导致晚高峰下行受阻；落地 IP 缺乏原生流媒体版权库授权证书。",
+    solution: "1. 切换至带有‘流媒体全解锁’或‘Netflix 4K’标识的专线节点；2. 在客户端测速中选择晚高峰丢包低于 0.1% 的 IEPL 专线；3. 退出流媒体 App 重新登录。"
+  },
+  {
+    category: "5. 海外社交平台",
+    symptom: "TikTok 显示无网络 / Instagram 图片打不开 / Telegram 连不上",
+    coreReason: "TikTok 检测 SIM 卡运营商与系统语言；Telegram 使用特定 MTProto 端口易受运营商阻断。",
+    solution: "1. 拔除国内 SIM 卡或使用无卡备用机，选用美国/英国原生住宅 IP；2. Telegram 在设置中配置本地 Socks5 代理（127.0.0.1:7890）；3. 开启 TUN 模式全局接管。"
+  },
+  {
+    category: "6. 程序员与开发者需求",
+    symptom: "GitHub clone 速度仅几十 KB / Docker Hub 拉取失败 / npm 依赖超时",
+    coreReason: "终端命令行与开发工具默认不自动走系统的图形界面代理，Git 依然尝试走国内直连网络。",
+    solution: "1. 在终端执行 git config --global http.proxy http://127.0.0.1:7890；2. 在 Clash Verge 中开启 TUN 虚拟网卡模式接管终端；3. Docker 配置海外加速镜像代理。"
+  },
+  {
+    category: "7. 学习、留学与论文资料",
+    symptom: "谷歌学术 (Google Scholar) 无法访问 / 海外大学教务与 Coursera 进不去",
+    coreReason: "海外高校内部系统开启了异地安全防护，或常规学术数据库在大陆直连握手被墙。",
+    solution: "1. 使用高校同国家/地区的优质中转节点建立稳定长连接；2. 在客户端规则模式中加入 scholar.google.com 直达分流策略；3. 避免高频并发刷新文献页面。"
+  },
+  {
+    category: "8. 跨境电商与海外办公",
+    symptom: "亚马逊卖家后台打不开 / Shopify 加载慢 / PayPal/Stripe 登录失败",
+    coreReason: "跨境店铺多账号防关联风控极严，普通免费节点由于多用户共用出口极易触发平台连带封店。",
+    solution: "1. 坚决杜绝在卖家后台使用免费公开节点；2. 选用提供静态独立原生住宅双 ISP IP 的合规企业专线；3. 配合防关联指纹浏览器（如 AdsPower）配置专属代理。"
+  },
+  {
+    category: "9. 游戏与国际服联机",
+    symptom: "Steam 社区与商店错误 118 / 外服游戏延迟高、掉线严重",
+    coreReason: "Steam 社区 API 被公网阻断；国际服游戏对 UDP 数据包丢包与网络抖动（Jitter）容忍度极低。",
+    solution: "1. 客户端开启 TUN 模式并选用支持完整 UDP 转发的专线节点；2. 日服/韩服游戏优选物理延迟 40ms 以内的香港/日本专线；3. 配合游戏专用加速器组合运行。"
+  },
+  {
+    category: "10. 手机、电脑与家庭设备",
+    symptom: "手机能用电脑不能用 / 苹果 iPhone 打不开国外网站 / 电视端无网络",
+    coreReason: "各操作系统网络安全策略不同（如 macOS 门禁、Windows 防火墙端口冲突、TV 端无法安装常见客户端）。",
+    solution: "1. 电脑端排查 7890 端口占用与杀软拦截；2. 苹果端推荐 Shadowrocket，安卓端使用 Clash Meta；3. 电视与多设备建议在软路由器上部署 OpenWrt 全局透明分流。"
+  },
+  {
+    category: "11. 常见底层网络错误码",
+    symptom: "网页显示 ERR_CONNECTION_RESET / 连接已拒绝 / DNS 解析失败",
+    coreReason: "数据包明文特征暴露被阻断，或客户端异常关闭导致本地代理端口残留死锁。",
+    solution: "1. 前往系统网络设置手动关闭‘使用代理服务器’；2. 选用抗深度探测协议（VLESS Reality、Hysteria 2、IEPL 专线）；3. 手动刷新系统 DNS 缓存（ipconfig /flushdns）。"
+  },
+  {
+    category: "12. 寻找终极解决方案",
+    symptom: "厌倦了到处找免费节点频繁失效 / 晚高峰卡顿断流 / 寻求省心稳定主力",
+    coreReason: "免费资源本质为无保障公网中转与被风控广播 IP，无法从底层提供确定性带宽保障。",
+    solution: "1. 彻底弃用不稳定的免费公共节点；2. 选用 2026 金牌榜首【光速云】2.5Gbps IEPL 独立物理专线；3. 使用本站专属 8 折优惠码【AMM】，单月仅需十余元即可换取全天候极速稳定。"
+  }
+];
 ---
 
 <Layout
-  title="机场网络排障数据库 — 节点超时·订阅失败·网页打不开·Access Denied排查【2026大全】"
-  description="出海网络故障全景自救决策库：深度汇总 16 大高频故障场景与 8 种底层报错代码修复清单。彻底解决机场连不上、节点全部超时、系统代理死锁、微信打不开、订阅无法更新与 ChatGPT Access Denied 报错。"
-  keywords="机场连不上, 节点全部超时, 订阅更新失败, Connection timed out, Access Denied, 网页打不开, 系统代理死锁, 机场排障, 机场榜一"
+  title="海外网站打不开怎么办？2026 节点超时、连接重置与常见网络故障全排查指南 | 机场榜一"
+  description="海外网站打不开、国外网页一直转圈、ChatGPT/Google/GitHub 访问失败怎么办？机场榜一提供 2026 权威排障指南：涵盖节点全部超时、TIMEOUT、订阅更新失败、WiFi能用手机流量不能用及 12 类海外泛访问痛点场景的专业解决方案。"
+  keywords="海外网站打不开, 国外网站打不开, 节点全部超时, 机场连不上, 国内怎么用ChatGPT, GitHub打不开, Google打不开, YouTube打不开, 订阅更新失败, 连接被重置, 机场节点全红, TIMEOUT, Access Denied, 机场榜一"
 >
   <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
   <JsonLd type="FAQPage" faqItems={faqItems} />
@@ -223,14 +312,17 @@ const errorCodeList = [
   <!-- 页面头部 -->
   <section class="relative z-20 site-container my-10 md:my-14">
     <PageHeader
-      title="机场网络排障与全场景故障自查中心"
-      description="连接超时？订阅更新失败？提示 Access Denied 1020？依据故障症状与底层原理快速自查定位，5 分钟内彻底排除本地配置冲突、系统代理死锁与海外平台风控拦截。"
+      title="海外网站打不开与网络故障全景排查自救中心"
+      description="国外网站打不开？ChatGPT 提示地区不支持？节点全部超时？依据故障症状与底层原理快速自查定位，5 分钟内彻底排除本地配置冲突、系统代理死锁与海外平台风控拦截。"
     />
 
     <!-- 快速导航胶囊 -->
     <div class="flex flex-wrap gap-2 pt-6">
       <a href="#quick-funnel" class="px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold hover:bg-primary/20 transition-colors">
         ⏱️ 一分钟极速自检
+      </a>
+      <a href="#overseas-solutions" class="px-3.5 py-1.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-semibold hover:bg-blue-500/20 transition-colors">
+        🌐 12大海外网站打不开解决指引
       </a>
       <a href="#trouble-knowledge" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
         📚 四大故障知识库 (16场景)
@@ -281,6 +373,47 @@ const errorCodeList = [
               <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
                 {item.desc}
               </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 🌐 模块：12 大海外泛访问与痛点场景极速解决指引 -->
+  <section class="py-10 site-container" id="overseas-solutions">
+    <div class="p-6 md:p-10 rounded-2xl bg-bg-secondary dark:bg-neutral-800/80 border border-primary/20">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+        <div>
+          <div class="mb-2 inline-block">
+            <Badge variant="primary">海外泛访问痛点专题</Badge>
+          </div>
+          <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            12 大海外网站打不开与应用访问受阻解决指引
+          </h2>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+            覆盖 AI、开发、流媒体、社交、电商等全场景，先给结论再提供可执行排查步骤
+          </p>
+        </div>
+        <span class="text-xs text-neutral-400 font-mono">12 Scenarios Solution Hub</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {overseasScenarios.map((item) => (
+          <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-900/60 border border-primary/10 hover:border-primary/30 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-primary font-mono">{item.category}</span>
+              </div>
+              <h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+                {item.symptom}
+              </h3>
+              <div class="text-[11px] text-neutral-500 dark:text-neutral-400 mb-3 leading-relaxed">
+                <strong class="text-neutral-700 dark:text-neutral-300">根因：</strong>{item.coreReason}
+              </div>
+            </div>
+            <div class="pt-3 border-t border-primary/10 text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed bg-primary/5 dark:bg-neutral-800/50 p-2.5 rounded-lg">
+              <strong class="text-primary font-semibold">排查步骤：</strong>{item.solution}
             </div>
           </div>
         ))}

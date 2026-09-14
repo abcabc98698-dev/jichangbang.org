@@ -9,14 +9,17 @@ interface Props {
 	title?: string | undefined;
 	description?: string | undefined;
 	keywords?: string | undefined;
+	url?: string | undefined;
+	canonical?: string | undefined;
+	ogImage?: string | undefined;
+	robots?: string | undefined;
+	type?: 'website' | 'article' | undefined;
+	publishedTime?: string | Date | undefined;
+	modifiedTime?: string | Date | undefined;
+	author?: string | undefined;
+	category?: string | undefined;
+	tags?: string[] | undefined;
 }
-
-const {
-	title,
-	description,
-	keywords
-} = Astro.props;
-
 
 import "../styles/global.css";
 import "aos/dist/aos.css";
@@ -28,11 +31,7 @@ import '../styles/article-enhancements.css';
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <Meta
-      title = {title}
-      description = {description}
-      keywords = {keywords}
-    />
+    <Meta {...Astro.props} url={Astro.props.url || Astro.props.canonical} />
     <JsonLd type="Organization" />
     <TrackGa />
     <!-- Used to add dark mode right away, adding here prevents any flicker -->

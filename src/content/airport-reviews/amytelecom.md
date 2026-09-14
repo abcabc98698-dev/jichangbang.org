@@ -5,7 +5,7 @@ targetBrand: "AmyTelecom"
 lastUpdated: "2026-09-14"
 ---
 
-# AmyTelecom 深度评测与全维选购指南
+## AmyTelecom 深度评测与全维选购指南
 
 ## 一、评测前言与核心结论速览
 
