@@ -245,6 +245,130 @@ const breadcrumbs = [
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- 左侧主体内容 -->
       <div class="lg:col-span-2 space-y-8">
+        {/* 1. 详细套餐规格（如果有 packages，始终保留展示，保障转化） */}
+        {airport.packages && airport.packages.length > 0 && (
+          <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+            <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
+              <Sparkles class="w-5 h-5 text-primary" /> {airport.name} 热门主推套餐资费
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {airport.packages.map((pkg, idx) => (
+                <div class:list={[
+                  "p-4 rounded-xl border flex flex-col justify-between transition-all",
+                  idx === 1
+                    ? "bg-primary/5 dark:bg-primary/10 border-primary shadow-sm"
+                    : "bg-bg-primary dark:bg-neutral-800/80 border-primary/10"
+                ]}>
+                  <div>
+                    <div class="flex items-center justify-between mb-2">
+                      <h4 class="font-bold text-sm text-neutral-900 dark:text-neutral-100">{pkg.name}</h4>
+                      {idx === 1 && <span class="text-[10px] px-2 py-0.5 rounded bg-primary text-white font-semibold">主推款</span>}
+                    </div>
+                    <div class="text-lg font-black text-primary font-brand mb-1">{pkg.price}</div>
+                    <div class="text-xs text-neutral-500 mb-3">流量：<strong class="text-neutral-700 dark:text-neutral-300">{pkg.traffic}</strong> · 线路：{pkg.line}</div>
+                    <ul class="text-[11px] space-y-1.5 text-neutral-600 dark:text-neutral-300 mb-4">
+                      {pkg.features.map(feat => (
+                        <li class="flex items-center gap-1.5">
+                          <span class="text-emerald-500 font-bold">✓</span> {feat}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button url={airport.affiliateUrl} target="_blank" type={idx === 1 ? "fill" : "outline"} className="text-xs w-full justify-center">
+                    立即订阅
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 2. 晚高峰测速与解锁实测截图展厅（如果有截图，始终保留展示，保障真实证据） */}
+        {airport.screenshots && airport.screenshots.length > 0 && (
+          <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                <ImageIcon class="w-5 h-5 text-primary" /> 晚高峰真实测速与流媒体解锁截图
+              </h2>
+              <span class="text-xs text-neutral-400">真实设备本地跑测</span>
+            </div>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
+              以下截图为 2026 年最新实测采集，涵盖北方联通、南方电信以及移动多网晚高峰测速、千兆宽带跑满带宽及 Netflix/Disney+/ChatGPT 原生解锁矩阵：
+            </p>
+            <div class:list={[
+              "gap-4",
+              airport.screenshots?.length === 1
+                ? "flex justify-center max-w-3xl mx-auto"
+                : "grid grid-cols-1 sm:grid-cols-2"
+            ]}>
+              {airport.screenshots.map((imgSrc, i) => (
+                <div class:list={[
+                  "rounded-xl overflow-hidden border border-primary/15 bg-neutral-900 group",
+                  airport.screenshots?.length === 1 ? "w-full shadow-md" : ""
+                ]}>
+                  <a href={imgSrc} target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={imgSrc}
+                      alt={`${airport.name} 真实晚高峰测速与解锁实测图 ${i + 1}`}
+                      class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </a>
+                  <div class="p-2 text-center text-[11px] text-neutral-400 bg-neutral-800">
+                    实测节点样本 #{i + 1}（点击可看大图）
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 3. 优缺点与人群画像（始终保留展示，直观定性） */}
+        {airport.pros && airport.pros.length > 0 && (
+          <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+            <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-4">
+              客观优缺点与适合人群画像
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <span class="text-xs font-bold text-emerald-500 flex items-center gap-1 mb-2">
+                  <CheckCircle2 class="w-4 h-4" /> 核心优势 (Pros)
+                </span>
+                <ul class="text-xs space-y-2 text-neutral-600 dark:text-neutral-300">
+                  {airport.pros.map(pro => (
+                    <li class="flex items-start gap-1.5">
+                      <span class="text-emerald-500 font-bold">•</span>
+                      <span>{pro}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <span class="text-xs font-bold text-rose-500 flex items-center gap-1 mb-2">
+                  <XCircle class="w-4 h-4" /> 不足与注意事项 (Cons)
+                </span>
+                <ul class="text-xs space-y-2 text-neutral-600 dark:text-neutral-300">
+                  {airport.cons.map(con => (
+                    <li class="flex items-start gap-1.5">
+                      <span class="text-rose-500 font-bold">•</span>
+                      <span>{con}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {airport.targetUsers && airport.targetUsers.length > 0 && (
+              <div class="mt-6 pt-4 border-t border-dashed border-neutral-200 dark:border-neutral-700 text-xs">
+                <span class="font-bold text-neutral-800 dark:text-neutral-100 block mb-1">适合人群画像：</span>
+                <p class="text-neutral-500">{airport.targetUsers.join('、')}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 4. 深度评测长文专栏（存在万字评测时展示，无评测时走兜底） */}
         {RenderedContent ? (
           <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 shadow-sm space-y-6">
             <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-primary/10">
@@ -302,44 +426,6 @@ const breadcrumbs = [
               </div>
             </div>
 
-            {/* 详细套餐规格（如果有 packages） */}
-            {airport.packages && airport.packages.length > 0 && (
-              <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
-                <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-                  <Sparkles class="w-5 h-5 text-primary" /> {airport.name} 热门主推套餐资费
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {airport.packages.map((pkg, idx) => (
-                    <div class:list={[
-                      "p-4 rounded-xl border flex flex-col justify-between transition-all",
-                      idx === 1
-                        ? "bg-primary/5 dark:bg-primary/10 border-primary shadow-sm"
-                        : "bg-bg-primary dark:bg-neutral-800/80 border-primary/10"
-                    ]}>
-                      <div>
-                        <div class="flex items-center justify-between mb-2">
-                          <h4 class="font-bold text-sm text-neutral-900 dark:text-neutral-100">{pkg.name}</h4>
-                          {idx === 1 && <span class="text-[10px] px-2 py-0.5 rounded bg-primary text-white font-semibold">主推款</span>}
-                        </div>
-                        <div class="text-lg font-black text-primary font-brand mb-1">{pkg.price}</div>
-                        <div class="text-xs text-neutral-500 mb-3">流量：<strong class="text-neutral-700 dark:text-neutral-300">{pkg.traffic}</strong> · 线路：{pkg.line}</div>
-                        <ul class="text-[11px] space-y-1.5 text-neutral-600 dark:text-neutral-300 mb-4">
-                          {pkg.features.map(feat => (
-                            <li class="flex items-center gap-1.5">
-                              <span class="text-emerald-500 font-bold">✓</span> {feat}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <Button url={airport.affiliateUrl} target="_blank" type={idx === 1 ? "fill" : "outline"} className="text-xs w-full justify-center">
-                        立即订阅
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             <!-- 场景解锁深度实测 -->
             <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
               <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-3">
@@ -393,87 +479,6 @@ const breadcrumbs = [
               <p class="text-[11px] text-neutral-400 mt-3 italic">
                 * 声明：AI 与流媒体可用性受海外服务商最新防风控规则影响，本站定期轮询实测，请以实际节点测试为准。
               </p>
-            </div>
-
-            {/* 晚高峰测速与解锁实测截图展厅 */}
-            {airport.screenshots && airport.screenshots.length > 0 && (
-              <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
-                <div class="flex items-center justify-between mb-4">
-                  <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-                    <ImageIcon class="w-5 h-5 text-primary" /> 三、晚高峰真实测速与流媒体解锁截图
-                  </h2>
-                  <span class="text-xs text-neutral-400">真实设备本地跑测</span>
-                </div>
-                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-                  以下截图为 2026 年最新实测采集，涵盖北方联通、南方电信以及移动多网晚高峰测速、千兆宽带跑满带宽及 Netflix/Disney+/ChatGPT 原生解锁矩阵：
-                </p>
-                <div class:list={[
-                  "gap-4",
-                  airport.screenshots?.length === 1
-                    ? "flex justify-center max-w-3xl mx-auto"
-                    : "grid grid-cols-1 sm:grid-cols-2"
-                ]}>
-                  {airport.screenshots.map((imgSrc, i) => (
-                    <div class:list={[
-                      "rounded-xl overflow-hidden border border-primary/15 bg-neutral-900 group",
-                      airport.screenshots?.length === 1 ? "w-full shadow-md" : ""
-                    ]}>
-                      <a href={imgSrc} target="_blank" rel="noopener noreferrer">
-                        <img
-                          src={imgSrc}
-                          alt={`${airport.name} 真实晚高峰测速与解锁实测图 ${i + 1}`}
-                          class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
-                          loading="lazy"
-                        />
-                      </a>
-                      <div class="p-2 text-center text-[11px] text-neutral-400 bg-neutral-800">
-                        实测节点样本 #{i + 1}（点击可看大图）
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <!-- 优缺点与人群画像 -->
-            <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
-              <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-4">
-                四、客观优缺点与适合人群
-              </h2>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <span class="text-xs font-bold text-emerald-500 flex items-center gap-1 mb-2">
-                    <CheckCircle2 class="w-4 h-4" /> 核心优势 (Pros)
-                  </span>
-                  <ul class="text-xs space-y-2 text-neutral-600 dark:text-neutral-300">
-                    {airport.pros.map(pro => (
-                      <li class="flex items-start gap-1.5">
-                        <span class="text-emerald-500 font-bold">•</span>
-                        <span>{pro}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <span class="text-xs font-bold text-rose-500 flex items-center gap-1 mb-2">
-                    <XCircle class="w-4 h-4" /> 不足与注意事项 (Cons)
-                  </span>
-                  <ul class="text-xs space-y-2 text-neutral-600 dark:text-neutral-300">
-                    {airport.cons.map(con => (
-                      <li class="flex items-start gap-1.5">
-                        <span class="text-rose-500 font-bold">•</span>
-                        <span>{con}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div class="mt-6 pt-4 border-t border-dashed border-neutral-200 dark:border-neutral-700 text-xs">
-                <span class="font-bold text-neutral-800 dark:text-neutral-100 block mb-1">适合人群画像：</span>
-                <p class="text-neutral-500">{airport.targetUsers.join('、')}</p>
-              </div>
             </div>
 
             {/* 非 Affiliate 引流页面：横向对比表格（引导至光速云） */}
