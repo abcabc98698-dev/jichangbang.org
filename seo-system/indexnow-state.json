@@ -8,22 +8,6 @@
     "https://jichangbang.org/recommend": "initial_seed",
     "https://jichangbang.org/ranking": "initial_seed",
     "https://jichangbang.org/reviews": "initial_seed",
-    "https://jichangbang.org/reviews/yuzhou": "initial_seed",
-    "https://jichangbang.org/reviews/breeze": "initial_seed",
-    "https://jichangbang.org/reviews/xingdaomeng": "initial_seed",
-    "https://jichangbang.org/reviews/sujie": "initial_seed",
-    "https://jichangbang.org/reviews/yifanyun": "initial_seed",
-    "https://jichangbang.org/reviews/weitu": "initial_seed",
-    "https://jichangbang.org/reviews/sogoyun": "initial_seed",
-    "https://jichangbang.org/reviews/lingmao": "initial_seed",
-    "https://jichangbang.org/reviews/guangnianti": "initial_seed",
-    "https://jichangbang.org/reviews/kuaili": "initial_seed",
-    "https://jichangbang.org/reviews/kexinyun": "initial_seed",
-    "https://jichangbang.org/reviews/ermaoyun": "initial_seed",
-    "https://jichangbang.org/reviews/quanqiuyun": "initial_seed",
-    "https://jichangbang.org/reviews/jilianyun": "initial_seed",
-    "https://jichangbang.org/reviews/u1s1": "initial_seed",
-    "https://jichangbang.org/reviews/wuyou": "initial_seed",
     "https://jichangbang.org/providers": "initial_seed",
     "https://jichangbang.org/pricing": "initial_seed",
     "https://jichangbang.org/compare": "initial_seed",
@@ -40,8 +24,7 @@
     "https://jichangbang.org/wiki/launching-v1-0": "initial_seed",
     "https://jichangbang.org/about": "initial_seed",
     "https://jichangbang.org/free": "2026-09-14T04:19:29.316Z",
-    "https://jichangbang.org/reviews/guangsu": "2026-09-14T04:19:29.316Z",
-    "https://jichangbang.org/reviews/feimao": "2026-09-14T05:30:51.624Z"
+    "https://jichangbang.org/reviews/guangsu": "2026-09-14T04:19:29.316Z"
   },
   "history": [
     {
