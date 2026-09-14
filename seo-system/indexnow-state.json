@@ -2,7 +2,7 @@
   "host": "jichangbang.org",
   "key": "8d7f2b9a4c1e6f3085a2b1c4e9d7f023",
   "keyLocation": "https://jichangbang.org/8d7f2b9a4c1e6f3085a2b1c4e9d7f023.txt",
-  "lastSubmissionTime": "2026-09-14T04:19:29.316Z",
+  "lastSubmissionTime": "2026-09-14T05:30:51.624Z",
   "trackedUrls": {
     "https://jichangbang.org/": "initial_seed",
     "https://jichangbang.org/recommend": "initial_seed",
@@ -10,7 +10,6 @@
     "https://jichangbang.org/reviews": "initial_seed",
     "https://jichangbang.org/reviews/yuzhou": "initial_seed",
     "https://jichangbang.org/reviews/breeze": "initial_seed",
-    "https://jichangbang.org/reviews/feimao": "initial_seed",
     "https://jichangbang.org/reviews/xingdaomeng": "initial_seed",
     "https://jichangbang.org/reviews/sujie": "initial_seed",
     "https://jichangbang.org/reviews/yifanyun": "initial_seed",
@@ -41,7 +40,8 @@
     "https://jichangbang.org/wiki/launching-v1-0": "initial_seed",
     "https://jichangbang.org/about": "initial_seed",
     "https://jichangbang.org/free": "2026-09-14T04:19:29.316Z",
-    "https://jichangbang.org/reviews/guangsu": "2026-09-14T04:19:29.316Z"
+    "https://jichangbang.org/reviews/guangsu": "2026-09-14T04:19:29.316Z",
+    "https://jichangbang.org/reviews/feimao": "2026-09-14T05:30:51.624Z"
   },
   "history": [
     {
@@ -50,6 +50,13 @@
       "urls": [
         "https://jichangbang.org/free",
         "https://jichangbang.org/reviews/guangsu"
+      ]
+    },
+    {
+      "timestamp": "2026-09-14T05:30:51.624Z",
+      "submittedCount": 1,
+      "urls": [
+        "https://jichangbang.org/reviews/feimao"
       ]
     }
   ]
