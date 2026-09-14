@@ -44,7 +44,11 @@
 		"build": "astro check && astro build",
 		"preview": "astro preview",
 		"astro": "astro",
-		"check": "biome check --apply-unsafe ."
+		"check": "biome check --apply-unsafe .",
+		"audit": "node scripts/seo-geo-audit.mjs",
+		"audit:url": "node scripts/seo-url-audit.mjs",
+		"audit:geo": "node scripts/seo-geo-audit.mjs",
+		"indexnow": "node scripts/indexnow.mjs"
 	},
 	"devDependencies": {
 		"@astrojs/check": "^0.9.9",

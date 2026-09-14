@@ -32,5 +32,16 @@ const changelog = defineCollection({
 	}),
 });
 
+const airportReviews = defineCollection({
+	loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/airport-reviews' }),
+	schema: z.object({
+		title: z.string(),
+		description: z.string(),
+		publishDate: z.coerce.date().optional(),
+		targetBrand: z.string().optional(),
+		lastUpdated: z.string().optional(),
+	}),
+});
+
 // 4. 导出一个 `collections` 对象来注册你的集合
-export const collections = { post, changelog };
+export const collections = { post, changelog, airportReviews };

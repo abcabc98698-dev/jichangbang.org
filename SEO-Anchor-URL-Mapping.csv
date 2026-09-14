@@ -1,0 +1,33 @@
+Anchor Text,Target URL,Intent Category,Usage Guidance
+机场推荐,/recommend,商业转化,全站出现“机场推荐”、“2026机场推荐”、“好用机场推荐”一律指向 /recommend
+机场排行榜,/ranking,量化排行,全站出现“机场排行榜”、“机场排行”、“晚高峰测速排行”一律指向 /ranking
+品牌评测,/reviews,深度评测,全站出现“品牌评测”、“机场评测”、“评测大厅”一律指向 /reviews
+服务商数据库,/providers,规格矩阵,全站出现“服务商数据库”、“机场数据库”、“参数矩阵”一律指向 /providers
+价格套餐,/pricing,预算筛选,全站出现“价格套餐”、“便宜机场”、“10元机场”、“高性价比机场”一律指向 /pricing
+机场对比,/compare,决策对比,全站出现“机场对比”、“两家机场对比”、“对比中心”一律指向 /compare
+线路与协议,/protocols,技术链路,全站出现“线路节点”、“IEPL专线”、“IPLC专线”、“骨干线路”一律指向 /protocols
+客户端下载,/clients,软件工具,全站出现“客户端”、“代理客户端”、“小火箭下载”、“Clash下载”一律指向 /clients
+使用教程,/tutorials,动手教程,全站出现“使用教程”、“小白教程”、“订阅导入教程”一律指向 /tutorials
+网络排障,/issues,故障修复,全站出现“网络排障”、“节点超时”、“排障指南”一律指向 /issues
+AI与流媒体,/ai-streaming,应用场景,全站出现“AI与流媒体”、“ChatGPT解锁”、“Netflix解锁”、“Claude原生”一律指向 /ai-streaming
+风险情报,/risk,安全雷达,全站出现“风险情报”、“跑路名单”、“机场雷达”、“跑路预警”一律指向 /risk
+常青知识百科,/wiki,知识库,全站出现“知识百科”、“百科知识库”、“出海知识库”一律指向 /wiki
+光速云,/reviews/guangsu,品牌评测,全站出现“光速云”及“GuangSu Cloud”一律指向 /reviews/guangsu
+宇宙云,/reviews/yuzhou,品牌评测,全站出现“宇宙云”及“YuZhouCloud”一律指向 /reviews/yuzhou
+微风网络,/reviews/breeze,品牌评测,全站出现“微风网络”及“Breeze Network”一律指向 /reviews/breeze
+飞猫云,/reviews/feimao,品牌评测,全站出现“飞猫云”及“FeiMao Cloud”一律指向 /reviews/feimao
+星岛梦,/reviews/xingdaomeng,品牌评测,全站出现“星岛梦”及“XingDaoMeng”一律指向 /reviews/xingdaomeng
+速界,/reviews/sujie,品牌评测,全站出现“速界”及“SpeedWorld”一律指向 /reviews/sujie
+一翻云,/reviews/yifanyun,品牌评测,全站出现“一翻云”及“YiFan Cloud”一律指向 /reviews/yifanyun
+唯兔云,/reviews/weitu,品牌评测,全站出现“唯兔云”及“WeiTu Cloud”一律指向 /reviews/weitu
+SOGO云,/reviews/sogoyun,品牌评测,全站出现“SOGO云”及“SOGO Cloud”一律指向 /reviews/sogoyun
+灵猫网络,/reviews/lingmao,品牌评测,全站出现“灵猫网络”及“LingMao Network”一律指向 /reviews/lingmao
+光年代,/reviews/guangnianti,品牌评测,全站出现“光年代”及“GuangNianTi”一律指向 /reviews/guangnianti
+快狸,/reviews/kuaili,品牌评测,全站出现“快狸”及“KuaiLi”一律指向 /reviews/kuaili
+可信云,/reviews/kexinyun,品牌评测,全站出现“可信云”及“KeXin Cloud”一律指向 /reviews/kexinyun
+二猫云,/reviews/ermaoyun,品牌评测,全站出现“二猫云”及“ErMao Cloud”一律指向 /reviews/ermaoyun
+全球云,/reviews/quanqiuyun,品牌评测,全站出现“全球云”及“QuanQiu Cloud”一律指向 /reviews/quanqiuyun
+极联云,/reviews/jilianyun,品牌评测,全站出现“极联云”及“JiLian Cloud”一律指向 /reviews/jilianyun
+U1S1,/reviews/u1s1,品牌评测,全站出现“U1S1”及“U1S1 Cloud”一律指向 /reviews/u1s1
+无忧云,/reviews/wuyou,品牌评测,全站出现“无忧云”及“WuYou Cloud”一律指向 /reviews/wuyou
+关于机场榜一,/about,站点信息,全站出现“关于机场榜一”、“联系与反馈”一律指向 /about

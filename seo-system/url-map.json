@@ -1,0 +1,221 @@
+{
+  "mappings": [
+    {
+      "keyword": "机场推荐",
+      "searchIntent": "商业选购与分层推荐",
+      "canonicalUrl": "https://jichangbang.org/recommend",
+      "mappedToExisting": true,
+      "pageType": "Pillar",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "2026机场推荐",
+        "好用机场推荐",
+        "靠谱机场推荐",
+        "稳定机场推荐",
+        "机场哪个好",
+        "最新机场推荐"
+      ]
+    },
+    {
+      "keyword": "机场排行榜",
+      "searchIntent": "综合打分与晚高峰实测天梯排行",
+      "canonicalUrl": "https://jichangbang.org/ranking",
+      "mappedToExisting": true,
+      "pageType": "Pillar",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "机场排名",
+        "晚高峰测速排行",
+        "机场综合打分",
+        "专线机场天梯榜"
+      ]
+    },
+    {
+      "keyword": "机场深度评测",
+      "searchIntent": "客观实测数据与测速大厅",
+      "canonicalUrl": "https://jichangbang.org/reviews",
+      "mappedToExisting": true,
+      "pageType": "Pillar",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "机场评测大厅",
+        "晚高峰测速截图",
+        "机场测评汇总",
+        "机场测速图"
+      ]
+    },
+    {
+      "keyword": "光速云评测",
+      "searchIntent": "光速云品牌词深入调研与官网优惠",
+      "canonicalUrl": "https://jichangbang.org/reviews/guangsu",
+      "mappedToExisting": true,
+      "pageType": "Brand",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "光速云怎么样",
+        "光速云官网",
+        "光速云优惠码",
+        "光速云晚高峰测速",
+        "GuangSu Cloud"
+      ]
+    },
+    {
+      "keyword": "宇宙云评测",
+      "searchIntent": "宇宙云品牌词调研与15元月付体验",
+      "canonicalUrl": "https://jichangbang.org/reviews/yuzhou",
+      "mappedToExisting": true,
+      "pageType": "Brand",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "宇宙云怎么样",
+        "宇宙云官网",
+        "宇宙云优惠码",
+        "15元月付专线"
+      ]
+    },
+    {
+      "keyword": "便宜机场推荐",
+      "searchIntent": "低价格门槛与按量计费筛选",
+      "canonicalUrl": "https://jichangbang.org/pricing",
+      "mappedToExisting": true,
+      "pageType": "Cluster",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "10元机场",
+        "15元机场",
+        "便宜机场",
+        "高性价比机场",
+        "不限时按量机场",
+        "机场价格计算器"
+      ]
+    },
+    {
+      "keyword": "机场服务商数据库",
+      "searchIntent": "全网收录服务商底层技术规格矩阵",
+      "canonicalUrl": "https://jichangbang.org/providers",
+      "mappedToExisting": true,
+      "pageType": "Pillar",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "机场数据库",
+        "机场参数大盘",
+        "服务商技术矩阵",
+        "机场起步资费表"
+      ]
+    },
+    {
+      "keyword": "机场对比",
+      "searchIntent": "两家或多家服务商客观横向对比",
+      "canonicalUrl": "https://jichangbang.org/compare",
+      "mappedToExisting": true,
+      "pageType": "Comparison",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "两家机场对比",
+        "机场怎么比较",
+        "光速云对比宇宙云",
+        "IEPL专线对比公网中转"
+      ]
+    },
+    {
+      "keyword": "线路与协议",
+      "searchIntent": "底层网络架构与传输协议深度科普",
+      "canonicalUrl": "https://jichangbang.org/protocols",
+      "mappedToExisting": true,
+      "pageType": "Cluster",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "IEPL专线原理",
+        "IPLC专线是什么",
+        "BGP隧道中转",
+        "VLESS协议",
+        "节点倍率"
+      ]
+    },
+    {
+      "keyword": "代理客户端下载",
+      "searchIntent": "全平台科学上网软件获取与官方发布通道",
+      "canonicalUrl": "https://jichangbang.org/clients",
+      "mappedToExisting": true,
+      "pageType": "Cluster",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "Clash Verge下载",
+        "Shadowrocket小火箭",
+        "v2rayN官网下载",
+        "Stash下载",
+        "代理客户端"
+      ]
+    },
+    {
+      "keyword": "机场使用教程",
+      "searchIntent": "新手订阅导入与分流配置实操指南",
+      "canonicalUrl": "https://jichangbang.org/tutorials",
+      "mappedToExisting": true,
+      "pageType": "Pillar",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "订阅导入教程",
+        "分流规则设置",
+        "TUN网卡接管",
+        "科学上网新手教程"
+      ]
+    },
+    {
+      "keyword": "网络排障",
+      "searchIntent": "节点超时与打不开网页自救排查",
+      "canonicalUrl": "https://jichangbang.org/issues",
+      "mappedToExisting": true,
+      "pageType": "Troubleshooting",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "节点全部超时",
+        "开启代理打不开网页",
+        "代理无法连接",
+        "系统代理死锁",
+        "DNS污染"
+      ]
+    },
+    {
+      "keyword": "ChatGPT解锁机场",
+      "searchIntent": "海外 AI 模型与流媒体风控突破",
+      "canonicalUrl": "https://jichangbang.org/ai-streaming",
+      "mappedToExisting": true,
+      "pageType": "Cluster",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "Claude原生住宅IP",
+        "Netflix 4K全区解锁",
+        "TikTok家宽IP",
+        "ChatGPT语音解锁"
+      ]
+    },
+    {
+      "keyword": "机场风险情报",
+      "searchIntent": "失联监测与跑路预警雷达",
+      "canonicalUrl": "https://jichangbang.org/risk",
+      "mappedToExisting": true,
+      "pageType": "Risk",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "机场跑路名单",
+        "机场失联监控",
+        "机场黑名单",
+        "避坑指南"
+      ]
+    },
+    {
+      "keyword": "常青知识百科",
+      "searchIntent": "出海网络权威常青百科知识库",
+      "canonicalUrl": "https://jichangbang.org/wiki",
+      "mappedToExisting": true,
+      "pageType": "Pillar",
+      "action": "SERVE_EXISTING",
+      "subsumedKeywords": [
+        "出海网络知识库",
+        "专线物理科普",
+        "住宅家宽IP辨析"
+      ]
+    }
+  ]
+}

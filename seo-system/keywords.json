@@ -1,0 +1,354 @@
+[
+  {
+    "keyword": "机场推荐",
+    "intent": "Commercial / Transactional",
+    "pageType": "Pillar",
+    "targetUrl": "https://jichangbang.org/recommend",
+    "existingUrl": "https://jichangbang.org/recommend",
+    "createNewPage": false,
+    "category": "Recommendation",
+    "cluster": "Airport Recommendation",
+    "priority": "A",
+    "commercialValue": "High",
+    "secondaryKeywords": [
+      "2026机场推荐",
+      "机场哪个好",
+      "靠谱机场推荐",
+      "好用机场推荐",
+      "稳定机场推荐",
+      "新手机场选购"
+    ],
+    "relatedEntities": [
+      "光速云",
+      "宇宙云",
+      "微风网络",
+      "飞猫云"
+    ]
+  },
+  {
+    "keyword": "机场排行榜",
+    "intent": "Quantitative Ranking / Informational",
+    "pageType": "Pillar",
+    "targetUrl": "https://jichangbang.org/ranking",
+    "existingUrl": "https://jichangbang.org/ranking",
+    "createNewPage": false,
+    "category": "Ranking",
+    "cluster": "Airport Ranking",
+    "priority": "A",
+    "commercialValue": "High",
+    "secondaryKeywords": [
+      "机场测速排行",
+      "机场晚高峰排名",
+      "机场综合天梯榜",
+      "专线机场跑分"
+    ],
+    "relatedEntities": [
+      "光速云",
+      "宇宙云",
+      "一翻云",
+      "速界"
+    ]
+  },
+  {
+    "keyword": "机场深度评测",
+    "intent": "In-depth Review / Investigation",
+    "pageType": "Pillar",
+    "targetUrl": "https://jichangbang.org/reviews",
+    "existingUrl": "https://jichangbang.org/reviews",
+    "createNewPage": false,
+    "category": "Reviews",
+    "cluster": "Brand Reviews",
+    "priority": "A",
+    "commercialValue": "High",
+    "secondaryKeywords": [
+      "机场实测报告",
+      "晚高峰测速截图",
+      "机场测评大厅",
+      "机场测速图"
+    ],
+    "relatedEntities": [
+      "光速云",
+      "宇宙云",
+      "微风网络",
+      "星岛梦",
+      "速界"
+    ]
+  },
+  {
+    "keyword": "光速云评测",
+    "intent": "Brand Investigation / High Intent Purchase",
+    "pageType": "Brand",
+    "targetUrl": "https://jichangbang.org/reviews/guangsu",
+    "existingUrl": "https://jichangbang.org/reviews/guangsu",
+    "createNewPage": false,
+    "category": "Reviews",
+    "cluster": "Brand Reviews",
+    "priority": "A",
+    "commercialValue": "High",
+    "secondaryKeywords": [
+      "光速云怎么样",
+      "光速云官网",
+      "光速云优惠码",
+      "光速云晚高峰测速",
+      "GuangSu Cloud"
+    ],
+    "relatedEntities": [
+      "光速云"
+    ]
+  },
+  {
+    "keyword": "宇宙云评测",
+    "intent": "Brand Investigation / Budget Purchase",
+    "pageType": "Brand",
+    "targetUrl": "https://jichangbang.org/reviews/yuzhou",
+    "existingUrl": "https://jichangbang.org/reviews/yuzhou",
+    "createNewPage": false,
+    "category": "Reviews",
+    "cluster": "Brand Reviews",
+    "priority": "A",
+    "commercialValue": "High",
+    "secondaryKeywords": [
+      "宇宙云怎么样",
+      "宇宙云官网",
+      "宇宙云优惠码",
+      "15元月付机场"
+    ],
+    "relatedEntities": [
+      "宇宙云"
+    ]
+  },
+  {
+    "keyword": "便宜机场推荐",
+    "intent": "Budget / Price Calculation",
+    "pageType": "Cluster",
+    "targetUrl": "https://jichangbang.org/pricing",
+    "existingUrl": "https://jichangbang.org/pricing",
+    "createNewPage": false,
+    "category": "Pricing",
+    "cluster": "Airport Recommendation",
+    "priority": "A",
+    "commercialValue": "High",
+    "secondaryKeywords": [
+      "10元机场",
+      "15元机场",
+      "机场价格计算器",
+      "不限时按量机场",
+      "低价机场"
+    ],
+    "relatedEntities": [
+      "微风网络",
+      "星岛梦",
+      "宇宙云",
+      "唯兔云"
+    ]
+  },
+  {
+    "keyword": "机场服务商数据库",
+    "intent": "Structured Directory / Database Query",
+    "pageType": "Pillar",
+    "targetUrl": "https://jichangbang.org/providers",
+    "existingUrl": "https://jichangbang.org/providers",
+    "createNewPage": false,
+    "category": "Database",
+    "cluster": "Provider Database",
+    "priority": "B",
+    "commercialValue": "Medium",
+    "secondaryKeywords": [
+      "机场参数大盘",
+      "机场协议矩阵",
+      "机场起步门槛",
+      "专线服务商清单"
+    ],
+    "relatedEntities": [
+      "18家服务商"
+    ]
+  },
+  {
+    "keyword": "机场对比",
+    "intent": "Comparative Evaluation",
+    "pageType": "Comparison",
+    "targetUrl": "https://jichangbang.org/compare",
+    "existingUrl": "https://jichangbang.org/compare",
+    "createNewPage": false,
+    "category": "Comparison",
+    "cluster": "Airport Comparison",
+    "priority": "B",
+    "commercialValue": "High",
+    "secondaryKeywords": [
+      "光速云对比宇宙云",
+      "机场怎么比较",
+      "专线对比中转",
+      "两家机场PK"
+    ],
+    "relatedEntities": [
+      "光速云",
+      "宇宙云"
+    ]
+  },
+  {
+    "keyword": "线路与协议",
+    "intent": "Technical Architecture / Informational",
+    "pageType": "Cluster",
+    "targetUrl": "https://jichangbang.org/protocols",
+    "existingUrl": "https://jichangbang.org/protocols",
+    "createNewPage": false,
+    "category": "Protocols",
+    "cluster": "Technical Knowledge",
+    "priority": "B",
+    "commercialValue": "Medium",
+    "secondaryKeywords": [
+      "IEPL专线原理",
+      "IPLC专线是什么",
+      "BGP隧道中转",
+      "VLESS协议",
+      "节点倍率计算"
+    ],
+    "relatedEntities": [
+      "IEPL",
+      "IPLC",
+      "BGP",
+      "VLESS"
+    ]
+  },
+  {
+    "keyword": "代理客户端下载",
+    "intent": "Software Download / Tool Discovery",
+    "pageType": "Cluster",
+    "targetUrl": "https://jichangbang.org/clients",
+    "existingUrl": "https://jichangbang.org/clients",
+    "createNewPage": false,
+    "category": "Clients",
+    "cluster": "Tools & Downloads",
+    "priority": "A",
+    "commercialValue": "Medium",
+    "secondaryKeywords": [
+      "Clash Verge下载",
+      "Shadowrocket小火箭",
+      "v2rayN下载",
+      "Stash下载",
+      "翻墙客户端"
+    ],
+    "relatedEntities": [
+      "Clash Verge Rev",
+      "Shadowrocket",
+      "v2rayN",
+      "Surge"
+    ]
+  },
+  {
+    "keyword": "机场使用教程",
+    "intent": "Actionable How-To / Configuration",
+    "pageType": "Pillar",
+    "targetUrl": "https://jichangbang.org/tutorials",
+    "existingUrl": "https://jichangbang.org/tutorials",
+    "createNewPage": false,
+    "category": "Tutorials",
+    "cluster": "Actionable Tutorials",
+    "priority": "A",
+    "commercialValue": "Medium",
+    "secondaryKeywords": [
+      "订阅导入教程",
+      "分流规则设置",
+      "TUN虚拟网卡配置",
+      "科学上网新手配置"
+    ],
+    "relatedEntities": [
+      "Clash",
+      "小火箭",
+      "v2rayN"
+    ]
+  },
+  {
+    "keyword": "网络排障",
+    "intent": "Diagnostic / Problem Resolution",
+    "pageType": "Troubleshooting",
+    "targetUrl": "https://jichangbang.org/issues",
+    "existingUrl": "https://jichangbang.org/issues",
+    "createNewPage": false,
+    "category": "Troubleshooting",
+    "cluster": "Network Troubleshooting",
+    "priority": "A",
+    "commercialValue": "Medium",
+    "secondaryKeywords": [
+      "节点全部超时",
+      "开启代理打不开网页",
+      "连不上外网",
+      "系统代理失效",
+      "TUN网卡冲突"
+    ],
+    "relatedEntities": [
+      "Windows网络设置",
+      "DNS",
+      "系统代理"
+    ]
+  },
+  {
+    "keyword": "ChatGPT解锁机场",
+    "intent": "Scenario Specific / AI & Streaming",
+    "pageType": "Cluster",
+    "targetUrl": "https://jichangbang.org/ai-streaming",
+    "existingUrl": "https://jichangbang.org/ai-streaming",
+    "createNewPage": false,
+    "category": "Scenes",
+    "cluster": "AI & Streaming Unlock",
+    "priority": "A",
+    "commercialValue": "High",
+    "secondaryKeywords": [
+      "Claude原生住宅IP",
+      "Netflix 4K非自制剧解锁",
+      "TikTok原生家宽IP",
+      "流媒体解锁机场"
+    ],
+    "relatedEntities": [
+      "ChatGPT 4o",
+      "Claude 3.7",
+      "Netflix",
+      "TikTok"
+    ]
+  },
+  {
+    "keyword": "机场风险情报",
+    "intent": "Trust Verification / Warning",
+    "pageType": "Risk",
+    "targetUrl": "https://jichangbang.org/risk",
+    "existingUrl": "https://jichangbang.org/risk",
+    "createNewPage": false,
+    "category": "Risk",
+    "cluster": "Risk Intelligence",
+    "priority": "B",
+    "commercialValue": "Medium",
+    "secondaryKeywords": [
+      "机场跑路名单",
+      "机场失联",
+      "避坑指南",
+      "机场黑名单",
+      "节点检修监控"
+    ],
+    "relatedEntities": [
+      "实时雷达"
+    ]
+  },
+  {
+    "keyword": "出海网络常青知识百科",
+    "intent": "Educational / Authority Knowledge",
+    "pageType": "Pillar",
+    "targetUrl": "https://jichangbang.org/wiki",
+    "existingUrl": "https://jichangbang.org/wiki",
+    "createNewPage": false,
+    "category": "Wiki",
+    "cluster": "Evergreen Knowledge Base",
+    "priority": "B",
+    "commercialValue": "Low",
+    "secondaryKeywords": [
+      "专线物理原理",
+      "住宅IP与机房IP区别",
+      "抗封锁技术科普",
+      "晚高峰丢包成因"
+    ],
+    "relatedEntities": [
+      "GFW",
+      "海底光缆",
+      "ISP住宅IP"
+    ]
+  }
+]

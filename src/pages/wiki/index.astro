@@ -1,0 +1,38 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import BlogSection from "@/components/sections/BlogSection.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "知识百科", url: "/wiki" }
+];
+---
+
+<Layout
+  title="出海网络常青知识百科 — 专线原理·住宅IP·抗封锁技术【2026百科】"
+  description="机场榜一知识百科专栏：发布专线原理深度科普、住宅家宽 IP 与机房 IP 辨析、晚高峰网络抖动成因以及出海网络抗封锁核心知识。"
+  keywords="机场百科, 出海网络知识库, IEPL专线原理, 住宅IP科普, 机场选购指南, 机场榜一"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+
+  <section class="relative z-20 site-container my-10 md:my-16">
+    <PageHeader
+      title="出海网络常青知识百科"
+      description="去伪存真，系统拆解物理专线、海外 IP 归属、晚高峰 QoS 策略与客户端底层的常青知识库。"
+    />
+  </section>
+
+  <section class="relative z-20 site-container mb-16">
+    <BlogSection
+      title=""
+      listPage={true}
+      pagination={{
+        enable: false,
+        currentPage: 1
+      }}
+      postsPerPage={12}
+    />
+  </section>
+</Layout>

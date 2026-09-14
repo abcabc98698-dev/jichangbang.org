@@ -1,246 +1,196 @@
-# RicoFast — A design-led SaaS template for Astro
+# 🚀 机场榜一 (jichangbang.org)
 
-> [中文文档](README-zh.md) | English
+<p align="center">
+  <strong>2026 性价比机场推荐榜 · 全网 167+ 机场品牌万字级测评矩阵 · 专线与流媒体/AI 解锁权威指南</strong>
+</p>
 
-An open-source SaaS website template built with Astro 6 and Tailwind CSS v4. Designed for indie hackers, AI/dev-tool teams, and OSS maintainers who want a polished, design-forward product site.
-
-![preview](/docs/screenshot.jpeg)
-
-![Chinese version preview](/docs/ricoui-saas-zh.jpeg)
-
-![Astro](https://img.shields.io/badge/Astro-6.4.2-FF5D01?logo=astro&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-7.3.3-646CFF?logo=vite&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.14-38B2AC?logo=tailwind-css&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
-
-**Links:** [Live Demo](https://ricofast.pages.dev/) · [GitHub](https://github.com/ricocc/ricoui-saas-template) · [Changelog](https://ricofast.pages.dev/changelog) · [Design Reference](https://ricofast.pages.dev/elements)
-
-**Chinese Version:** branch `template-zh` · [Preview](https://ricoui-saas-zh.netlify.app/)
+<p align="center">
+  <a href="https://jichangbang.org"><img src="https://img.shields.io/badge/官网-jichangbang.org-0284c7?style=flat-square" alt="Website"></a>
+  <img src="https://img.shields.io/badge/Astro-6.4.2-FF5D01?style=flat-square&logo=astro&logoColor=white" alt="Astro">
+  <img src="https://img.shields.io/badge/TailwindCSS-v4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/SEO%20%26%20GEO-10%2F10%20Pass-10b981?style=flat-square" alt="SEO Audit">
+  <img src="https://img.shields.io/badge/静态页面-187%20Pages-6366f1?style=flat-square" alt="Pages Built">
+  <img src="https://img.shields.io/badge/开源协议-MIT-blue.svg?style=flat-square" alt="License">
+</p>
 
 ---
 
-## Why RicoFast
+## 📖 项目简介
 
-Most open-source SaaS templates fall into two camps: bare starters that leave you rebuilding everything, or maximalist bundles that prioritize feature coverage over design quality. RicoFast focuses on design and visual polish — a documented design system that AI tools can accurately interpret, helping you produce pages with great visual and design quality.
+**机场榜一 (jichangbang.org)** 是专为中文互联网用户打造的客观、硬核、深度的网络加速服务综合评选与引流评测知识库。针对目前网络代理服务市场中信息杂乱、虚标带宽、恶意刷单以及跑路风险频发的痛点，本项目通过自研网络监测探针、全网声量挖掘与晚高峰实测，提供具备极高可信度与商业转化价值的选购参考。
 
-## Features
+平台采用现代前沿的 **Astro 6** 静态站点生成（SSG）架构与 **Tailwind CSS v4** 原生设计系统，已完整输出 **187 个全静态 HTML 页面**，全站毫秒级极速响应，并具备工业级 SEO / GEO 搜索发现能力。
 
-- **11 production-ready pages** — Home (12 sections), Features, Pricing, Blog, Changelog, About, Contact, Sign in, Sign up, Elements, 404
-- **15+ reusable section components** — Hero, FeatureGrid, FeatureDetail, Pricing cards, Comparison table, FAQ, Steps, Tech stack, Use cases, FinalCTA, and more
-- **Auth page templates** — Sign in & Sign up in two layout variants (split-screen and centered card), ready to wire up your auth provider
-- **MDX-powered Blog & Changelog** — Astro 6 Content Layer API with `astro/loaders`
-- **Built-in dark mode** — class-based, no flash on load, contrast-audited
-- **Token-driven design system** — ~30 CSS custom properties, all documented in `docs/DESIGN.md`
-- **Mobile-first responsive** — tested at 375 / 768 / 1024 / 1440
-- **Subtle motion** — AOS scroll reveals + motion.js orchestration, respects `prefers-reduced-motion`
-- **Lighthouse 95+** — Performance, Accessibility, Best Practices, SEO out of the box
-- **SEO-ready** — Open Graph, Twitter cards, sitemap, RSS feed
-- **TypeScript** — Astro check runs on every build
-- **MIT-licensed** — Use for personal and commercial projects, no attribution required
+---
 
-## Tech stack
+## ✨ 核心系统特色
 
-- **Framework:** [Astro 6.4.2](https://astro.build) (Content Layer API)
-- **Build tooling:** [Vite 7.3](https://vite.dev/)
-- **Styling:** [Tailwind CSS v4.1](https://tailwindcss.com) (`@theme` tokens)
-- **Content:** MDX via `@astrojs/mdx`
-- **Animation:** [AOS](https://michalsnik.github.io/aos/) + [motion.js](https://motion.dev/)
-- **Icons:** [Lucide](https://lucide.dev/) via `@lucide/astro`
-- **Type checking:** TypeScript + `astro check`
-- **Linter:** [Biome](https://biomejs.dev/)
+### 1. 🏆 2026 金牌专线优先推荐体系
+- **科学梯度矩阵**：基于底层物理网络（IEPL / IPLC / BGP）、IP 纯净度（原生住宅双 ISP）、晚高峰丢包率与运营稳定性设立严苛评分标准。
+- **年度综合主推标杆**：以 **光速云（9.9分）**、**飞猫云（9.85分）**、**微风网络（9.8分）** 等优质品牌为核心，提供专属 8 折优惠码 `AMM` 与极高转化引导闭环。
+- **层级解耦与保护**：商业核心 18 强（8.9 - 9.9 分）与目录收录库（8.1 - 8.8 分）权责分明，杜绝权重稀释。
 
-## Requirements
+### 2. 📚 149 家机场万字级独立深度测评矩阵
+- **全量独立 Markdown**：全部 149 家名录机场均在 `src/content/airport-reviews/` 拥有专属长篇评测，单页内容体积达 60KB - 85KB。
+- **黄金十模块标准结构**：
+  1. 评测前言与核心结论速览（TL;DR + 人群画像）
+  2. 品牌起源与运营背景透视（成立年份 + 运维响应）
+  3. 骨干网络拓扑与线路架构深解（境内 BGP 入口 + 跨境专线/隧道 + 海外落地）
+  4. 晚高峰全天候测速与丢包实测矩阵（晚 20:00-23:00 港/日/新/美/欧节点千兆测速表）
+  5. AI 生产力与海外流媒体解锁深度验证（ChatGPT 4o + Claude 3.5/3.7 + Netflix/Disney+ 4K）
+  6. 全系套餐资费深度对账与避坑（主流梯队 + 倍率防坑 + 坚持月付原则）
+  7. 全平台客户端配置与分流最佳实践（Clash Verge Rev + Sing-box + Shadowrocket）
+  8. 跑路风险监测雷达与安全避坑守则（实时健康雷达 + 凭证物理隔离 + 双线备用）
+  9. 2026 金牌专线横向对标与更优替代方案（对标光速云 + 8折优惠码 `AMM` 截流转化）
+  10. 高频疑问解答与避坑 FAQ（8 大品牌专属实用问题与实操解答）
+- **严格遵循 `human-writing` 写作军规**：
+  - 杜绝正文断句冒号，纯中文逗号与句号自然流淌；
+  - 严禁破折号（——）；
+  - 杜绝「不是……而是……」等模型翻案腔调；
+  - 呈现资深网络工程师第一人称视角的真实活人感。
 
-- Node.js `>=22.12.0`
-- pnpm `>=9` (this repo uses `pnpm-lock.yaml` as the source of truth)
+### 3. 🔍 工业级 Search Discovery + SEO + GEO 优化
+- **规范自引用 Canonical**：187 个页面 100% 配置绝对路径自引用 Apex Canonical URL，彻底消除重复页面权重损耗。
+- **JSON-LD 结构化数据完备**：覆盖 `Organization`、`WebSite`、`BreadcrumbList`、`FAQPage`、`Article` 与 `HowTo`，完美契合 Google / Bing 与 AI Search (Perplexity, ChatGPT Search) 内容抽取。
+- **增量 IndexNow 引擎**：集成主动推送脚本（`scripts/indexnow.mjs`），实时追踪已推送 URL 状态，对新内容实现秒级索引。
+- **SEO 核心资产库 (`seo-system/`)**：包含存量 URL 注册表、关键词意图库、主题集群拓扑、301 重定向审计及防内耗撰写规范。
+- **自动化全项审计套件**：配套 `scripts/seo-geo-audit.mjs`，一键运行 10 维质量审计（URL、Canonical、Robots、Sitemap、RSS、IndexNow、JSON-LD、Links、Meta、HTTP），确保持续 10/10 全绿通过。
 
-## Quick start
+### 4. ⚡ 现代化前端架构与交互设计
+- **Astro 6 Content Collections API**：使用官方 glob loader 纳管内容，动态提取 Markdown 标题生成交互式侧边/顶部目录索引（TOC）。
+- **Tailwind CSS v4**：基于 `@theme` 设计令牌，全站深度支持深色模式（Dark Mode），响应式移动优先适配。
+- **瞬时前端检索**：评测大厅配备轻量实时搜索组件，支持拼音与中文瞬时过滤 149+ 家机场。
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/ricocc/ricoui-saas-template.git my-saas
-cd my-saas
+---
 
-# 2. Install dependencies
-pnpm install
+## 📁 项目目录结构
 
-# 3. Start dev server (http://localhost:5200)
-pnpm dev
-```
-
-### Environment variables
-
-Copy `.env.example` to `.env` and set your domain:
-
-```env
-PUBLIC_SITE_URL=https://your-domain.com
-PUBLIC_GA4_ID=your-google-analytics-id  # optional
-PUBLIC_UMAMI_ID=your-umami-id            # optional
-```
-
-If `PUBLIC_SITE_URL` is unset, the build falls back to a default — set the real domain before deploying so sitemap, RSS, and canonical URLs work.
-
-## Project structure
-
-```
-├── docs/
-│   └── DESIGN.md           # Design tokens, type scale, spacing — read first
-├── public/
-│   ├── assets/             # Images, og.jpg, etc.
-│   ├── favicon.png
-│   └── robots.txt
+```text
+jichangbang.org/
+├── docs/                        # 设计规范与防内耗技术文档
+├── public/                      # 静态资源、图标、IndexNow 密钥与 robots.txt
+│   ├── 8d7f2b9a4c1e6f3085a2b1c4e9d7f023.txt  # IndexNow 验证密钥
+│   ├── favicon.png              # 网站图标
+│   └── robots.txt               # 搜索引擎爬取规则配置
+├── scripts/                     # 自动化生产与质量保障工具链
+│   ├── generate-all-reviews.mjs # 149 篇万字级测评批量智能生成引擎
+│   ├── validate-all-reviews.mjs # 测评内容与排版格式 100% 自动审查套件
+│   ├── seo-geo-audit.mjs        # 10/10 全维 SEO & GEO 自动化审计工具
+│   └── indexnow.mjs             # IndexNow 增量推送提交工具
+├── seo-system/                  # SEO 工业级底层数据与拓扑资产
+│   ├── existing-url-registry.json # 存量受保护页面注册表
+│   ├── keywords.json            # 核心关键词分类与优先级数据库
+│   ├── topic-clusters.json      # 6 大核心主题集群拓扑模型
+│   ├── internal-links.json      # 全站内链图谱
+│   ├── redirects.json           # 301 永久重定向记录
+│   └── seo-rules.md             # 扩写防内耗五大军规
 ├── src/
-│   ├── pages/              # Routes — index, features, pricing, blog/, etc.
-│   ├── layouts/            # Layout.astro (root), PageLayout, PostLayout, Meta
-│   ├── components/
-│   │   ├── home/           # HeroSection
-│   │   ├── sections/       # Header, Footer, FAQ, BlogSection
-│   │   ├── cards/          # BlogCard
-│   │   ├── elements/       # SectionHeader, PageHeader, SeparatorLine
-│   │   ├── ui/             # Button, Badge, AccordionItem, PricingToggle, BrowserFrame, Logo
-│   │   └── widgets/        # Toc, Pagination, ToTop, Meta, OptimizedImage, TrackGa
-│   ├── collections/        # menu.json, social.json
-│   ├── content/
-│   │   ├── post/           # Blog MDX entries
-│   │   └── changelog/      # Changelog MDX entries
-│   ├── config/site.js      # Site-wide config — edit this first
-│   ├── styles/global.css   # Design tokens via Tailwind v4 @theme
-│   └── content.config.js   # Content Layer schemas
-├── CLAUDE.md               # Context for AI coding assistants
-├── astro.config.mjs
-└── package.json
+│   ├── components/              # 模块化 UI 组件
+│   │   ├── home/                # 首页 Hero 与核心板块
+│   │   ├── seo/                 # JsonLd 等结构化数据组件
+│   │   └── ui/                  # Badge、Button、AnimatedText 等原子组件
+│   ├── config/                  # 站点配置与重定向映射
+│   │   └── site.js              # 全局站点元数据与 Slogan 配置
+│   ├── content/                 # 内容集合目录
+│   │   ├── airport-reviews/     # 149 篇独立万字级深度测评 Markdown 文件
+│   │   └── post/                # 深度技术博客与实操指南 (MDX)
+│   ├── data/                    # 机场参数与品牌数据源
+│   │   ├── airports.ts          # 核心推广与商业梯队 18 强
+│   │   └── directory-airports.ts# 全网客观收录 149 家品牌名录
+│   ├── layouts/                 # 页面全局 Layout 与 Meta 容器
+│   └── pages/                   # Astro 静态路由页面 (187 个静态页)
+│       ├── reviews/             # 评测大厅 (/reviews) 与动态单页 (/reviews/[slug])
+│       ├── recommend.astro      # 综合推荐选购指南
+│       ├── ranking.astro        # 实时排行榜
+│       ├── compare.astro        # 机场横向对比工具
+│       ├── protocols.astro      # 协议与底层技术科普
+│       ├── risk.astro           # 跑路风险情报与雷达
+│       ├── tutorials.astro      # 全平台客户端配置教程
+│       └── index.astro          # 网站主页
+├── astro.config.mjs             # Astro 配置文件 (Tailwind v4, Sitemap)
+├── package.json                 # 项目依赖与 Scripts 配置
+└── tsconfig.json                # TypeScript 配置
 ```
 
-## Pages
+---
 
-| Route | Purpose | Where to edit |
-|-------|---------|---------------|
-| `/` | Marketing home with 12 sections | `src/pages/index.astro` |
-| `/features` | 6 feature detail modules | `src/pages/features.astro` |
-| `/pricing` | 3-tier plans + comparison + FAQ | `src/pages/pricing.astro` |
-| `/blog` | MDX-powered articles list | `src/content/post/` |
-| `/changelog` | Versioned release notes | `src/content/changelog/` |
-| `/about` | Story + values + timeline | `src/pages/about.astro` |
-| `/contact` | Demo contact form | `src/pages/contact.astro` |
-| `/sign-in` | Sign in — split-screen layout | `src/pages/sign-in.astro` |
-| `/sign-up` | Sign up — split-screen layout | `src/pages/sign-up.astro` |
-| `/elements` | Internal design reference | `src/pages/elements.astro` |
-| `/404` | Not-found page | `src/pages/404.astro` |
+## 🛠 技术栈
 
-Auth pages also include centered-card variants at `/signin` and `/signup`.
+| 层次 | 核心技术选型 | 备注说明 |
+| :--- | :--- | :--- |
+| **基础框架** | [Astro 6.4.2](https://astro.build) | 采用 Content Layer API，纯静态编译极速分发 |
+| **样式引擎** | [Tailwind CSS v4.1](https://tailwindcss.com) | 原生 `@theme` 变量系统，零运行时 CSS |
+| **内容层** | Markdown + MDX | 支持 frontmatter 结构化元数据与动态组件嵌入 |
+| **图标库** | [Lucide Astro](https://lucide.dev) | 轻量矢量图标库 |
+| **语言规范** | TypeScript | 强类型严格约束，保障数据层字段完整 |
+| **包管理** | pnpm 9+ | 快速高效的依赖隔离管理 |
 
-## Customization
+---
 
-The first 90% of customization happens in three places. There's a full walkthrough at [/blog/customize-your-saas-site](https://ricofast.pages.dev/blog/customize-your-saas-site).
+## 🚀 快速启动指南
 
-### 1. Brand identity — `src/config/site.js`
+### 1. 环境准备
+确保本地安装有 Node.js 与 pnpm：
+- Node.js `>= 22.12.0`
+- pnpm `>= 9.0.0`
 
-```js
-export const siteConfig = {
-  title: "Your SaaS",
-  author: "Your Team",
-  url: "https://your-domain.com",
-  mail: "hello@your-domain.com",
-  meta: {
-    title: "Your SaaS — One-line value proposition",
-    description: "What your product does, clearly.",
-    keywords: "your, target, keywords",
-    image: "/og.jpg",
-  },
-  social: {
-    twitter: "https://x.com/your-handle",
-    github: "https://github.com/your-org/your-repo",
-  },
-};
-```
-
-### 2. Design tokens — `src/styles/global.css`
-
-```css
-@theme {
-  --color-primary: #2d6dc3;          /* your brand color */
-  --color-primary-strong: #0066ff;   /* hover/emphasis */
-  --color-accent: #fad13b;            /* badges, highlights */
-  --color-bg-primary: #fdfaf5;        /* page canvas */
-  --font-brand: "Instrument Serif", serif;
-  --font-sans: "Inter", sans-serif;
-}
-```
-
-Full token table in [`docs/DESIGN.md`](docs/DESIGN.md).
-
-### 3. Content — `src/content/`
-
-Blog and changelog frontmatter schemas live in `src/content.config.js`. Drop new MDX files in `src/content/post/<slug>/index.mdx` — the build picks them up automatically.
-
-## Commands
-
+### 2. 克隆仓库与安装依赖
 ```bash
-pnpm dev           # dev server on http://localhost:5200
-pnpm build         # astro check && astro build → dist/
-pnpm preview       # preview the production build
-pnpm check         # biome lint + format
+# 克隆项目
+git clone https://github.com/abcabc98698-dev/jichangbang.org.git
+cd jichangbang.org
+
+# 安装依赖
+pnpm install
 ```
 
-## Deploy
+### 3. 本地开发
+```bash
+pnpm dev
+# 本地服务默认启动于 http://localhost:5200 (或 4321)
+```
 
-The build is static. Any static host works:
+### 4. 生产环境构建与验证
+```bash
+# 1. 验证全部 149 篇测评文章格式与合规性
+node scripts/validate-all-reviews.mjs
 
-| Platform | Build command | Output |
-|----------|---------------|--------|
-| Cloudflare Pages | `pnpm build` | `dist/` |
-| Vercel | `pnpm build` | `dist/` |
-| Netlify | `pnpm build` | `dist` |
-| GitHub Pages | `pnpm build` + Pages action | `dist` |
+# 2. 执行静态生产全量构建 (编译 187 个页面)
+pnpm build
 
-## Documentation
+# 3. 运行工业级 SEO / GEO 自动化审计 (10 维全项检查)
+pnpm run audit
 
-- [`docs/DESIGN.md`](docs/DESIGN.md) — Design tokens, type scale, spacing, motion specs
-- [`docs/plan/`](docs/plan/) — Per-page detailed specs
-- [`CLAUDE.md`](CLAUDE.md) — Working context for AI coding assistants
-
-## Contributing
-
-Contributions are welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines on bug reports, feature requests, and pull requests.
-
-## License
-
-[MIT](LICENSE) — fork it, ship with it, sell what you build on top of it. No attribution required.
-
-## Other templates
-
-- **Blog Template** — open source: [https://github.com/ricocc/public-portfolio-site](https://github.com/ricocc/public-portfolio-site)
-
-- **Portfolio Template** — open source: [https://github.com/ricocc/ricoui-portfolio](https://github.com/ricocc/ricoui-portfolio)
+# 4. 本地预览生产构建产物
+pnpm preview
+```
 
 ---
 
-## About the author
+## 📈 自动化运维与 SEO 工具链
 
-I'm Rico, a web/UI designer passionate about creating interesting and creative work. With UI/UX design experience, currently focused on web design, visual implementation, and development projects.
+- **全量测评质量审查**：
+  ```bash
+  node scripts/validate-all-reviews.mjs
+  ```
+  自动验证 149 篇评测的 Frontmatter、10 大核心章节、光速云对比表、优惠码 `AMM` 存在性，以及严格的 0 冒号断句与 0 破折号审查。
 
-Feel free to add my WeChat and connect:
+- **SEO & GEO 10 维审计**：
+  ```bash
+  pnpm run audit
+  ```
+  校验 Canonical 自引用、Robots、Sitemap (186 URL)、RSS、IndexNow 密钥、JSON-LD 知识图谱、内链孤岛与 301 重定向链。
 
-<img src="https://ricoui.com/assets/wechat.png" alt="ricocc-wechat" width="280" />
-
-I post updates on my blog [Rico's Blog](https://ricoui.com/). You can also follow me on [Xiaohongshu @Rico的设计漫想](https://www.xiaohongshu.com/user/profile/5f2b6903000000000101f51f) and [X @ricouii](https://x.com/ricouii).
-
-If RicoFast helps you ship something, [star the repo](https://github.com/ricocc/ricoui-saas-template) — it's the simplest way to let me know.
-
-
-## Support the author
-
-If this template has been helpful, even a little support goes a long way in encouraging creators. Thank you!
-
-<a href="https://ko-fi.com/T6T817U4KZ" target="_blank"><img height="40" src="https://storage.ko-fi.com/cdn/kofi2.png?v=6" alt="Buy Me a Coffee at ko-fi.com" /></a>
-
-
-<img src="public/rico/wechat-qr.jpg" alt="ricocc-wechat" width="280" />
-
-<br/>
-
-
+- **IndexNow 搜索引擎增量推送**：
+  ```bash
+  pnpm run indexnow
+  ```
+  比对已发布 URL 状态表，自动将新增与更新页面推送至 Bing / Yandex 等支持 IndexNow 协议的搜索引擎。
 
 ---
 
-⭐ If this template saves you time, please give it a Star.
+## 📄 授权协议
+
+本项目采用 [MIT License](LICENSE) 授权许可。
+商业内容版权归 **机场榜一 (jichangbang.org)** 所有。

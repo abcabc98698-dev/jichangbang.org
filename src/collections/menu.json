@@ -1,27 +1,39 @@
 [
 	{
-		"name": "Home",
+		"name": "首页",
 		"url": "/"
 	},
 	{
-		"name": "Pages",
+		"name": "机场推荐",
+		"url": "/recommend"
+	},
+	{
+		"name": "机场排行",
+		"url": "/ranking"
+	},
+	{
+		"name": "品牌评测",
+		"url": "/reviews"
+	},
+	{
+		"name": "价格套餐",
+		"url": "/pricing"
+	},
+	{
+		"name": "机场对比",
+		"url": "/compare"
+	},
+	{
+		"name": "更多专题",
 		"children": [
-			{ "name": "Features", "url": "/features" },
-			{ "name": "Pricing", "url": "/pricing" },
-			{ "name": "About", "url": "/about" },
-			{ "name": "Blog", "url": "/blog" },
-			{ "name": "Changelog", "url": "/changelog" },
-			{ "name": "Sign in", "url": "/sign-in" },
-			{ "name": "Sign up", "url": "/sign-up" },
-			{ "name": "404", "url": "/404" }
+			{ "name": "品牌数据库", "url": "/providers" },
+			{ "name": "线路与协议", "url": "/protocols" },
+			{ "name": "客户端下载", "url": "/clients" },
+			{ "name": "使用教程", "url": "/tutorials" },
+			{ "name": "网络排障", "url": "/issues" },
+			{ "name": "AI与流媒体", "url": "/ai-streaming" },
+			{ "name": "风险情报", "url": "/risk" },
+			{ "name": "知识百科", "url": "/wiki" }
 		]
-	},
-	{
-		"name": "Elements",
-		"url": "/elements"
-	},
-	{
-		"name": "Contact",
-		"url": "/contact"
 	}
 ]

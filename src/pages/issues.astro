@@ -1,0 +1,665 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import Badge from "@/components/ui/Badge.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import {
+  Wrench,
+  ShieldCheck,
+  Award,
+  Zap,
+  Sparkles,
+  Clock
+} from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "网络排障", url: "/issues" }
+];
+
+// 8组高价值网络排障深度长尾FAQ
+const faqItems = [
+  {
+    question: "为什么关闭客户端后电脑无法上网，必须重新打开 Clash 才能打开网页？",
+    answer: "这是因为客户端在退出时未能成功清除操作系统的全局代理设置。在开启系统代理模式时，客户端会将操作系统的网络设置指向本地回环端口（例如 127.0.0.1:7890）。若软件异常退出或强制结束进程，该端口设置依然残留在系统网络配置中，导致系统所有外发请求在寻找不存在的本地代理而形成死锁。解决方式非常简单，在 Windows 设置的‘网络和 Internet’中找到‘代理’选项，将‘使用代理服务器’开关手动关闭即可瞬间恢复正常上网。"
+  },
+  {
+    question: "本地系统时间与网络时间相差几十秒，为什么会导致所有节点握手超时？",
+    answer: "现代加密代理协议（例如 VMess、VLESS Reality 与 TLS 握手）深度依赖时间戳进行安全防重放攻击校验。客户端在与海外服务端发起认证通信时，服务端会对比客户端请求包中的时间戳。若本地系统时间与国际标准时间的偏差超过 60 到 90 秒，服务端安全机制会直接将其判定为恶意重放探测包并静默丢弃，表现为客户端测速全红超时。只需在操作系统时间设置中点击‘立即同步’互联网时间即可秒级解决。"
+  },
+  {
+    question: "为什么手机端连接机场完全正常，但电脑端却全部显示红色超时？",
+    answer: "同一套订阅在手机可用而在电脑不可用，说明机场服务端线路完全正常，故障出在电脑本地环境。通常由三类原因引起：第一，电脑本地杀毒软件或 Windows Defender 防火墙拦截了代理内核进程的网络出站权限；第二，电脑上同时运行了其他 VPN 软件或网页代理扩展插件，抢占了本地代理监听端口；第三，电脑本地时间未同步。建议关闭第三方杀毒软件并将 Clash 内核加入防火墙白名单，同时开启 TUN 模式排查本地端口冲突。"
+  },
+  {
+    question: "订阅链接导入客户端时提示 Subscription Failed 或 404 应该怎么解决？",
+    answer: "出现该提示代表客户端无法成功从服务商服务器拉取节点配置文件。首先应确认当前是否正处于断网状态，部分机场的订阅托管域名已被大陆公网直连屏蔽，此时需先借助已有临时可用节点或手机热点再点击更新。其次应登录机场用户官网后台，检查账户套餐是否已到期或流量耗尽，并尝试重新重置并复制最新的订阅链接。若依旧报错，可尝试在官网复制无需翻墙的备用订阅 URL 进行导入。"
+  },
+  {
+    question: "开启代理后为什么国内微信、百度打不开，国外网页也打不开？",
+    answer: "该现象属于典型的客户端路由配置冲突或 DNS 污染死循环。首先检查客户端当前运行模式是否被误设为了‘直连模式 (Direct)’或错误的全局代理模式。其次，在部分老旧的 Clash 配置文件中，若 DNS 模块被错误配置为仅使用海外不可达的 DNS 服务器，会导致本地所有域名的 IP 解析全部超时挂起。建议在客户端中切换至‘规则模式 (Rule)’，并在设置中开启系统默认内置的 Fake-IP 或 Redir-Host 模式，或切换至最新版本的 Clash Verge Rev 客户端。"
+  },
+  {
+    question: "访问 OpenAI 或 Claude 时提示 Access Denied 或 1020 报错该如何快速恢复？",
+    answer: "该报错代表当前节点的出口 IP 被 Cloudflare 边缘防火墙或 OpenAI 安全中心列入了高风险拦截名单。请按照四步进行自查修复：第一，确认当前出口未选择香港节点（OpenAI 与 Claude 官方从未支持香港地区）；第二，切换至日本、美国或新加坡等具备原生住宅双 ISP IP 的高纯净度专线节点；第三，在浏览器中开启无痕隐身窗口以隔离旧有的错误 Cookie 缓存；第四，在客户端设置中开启 TUN 虚拟网卡模式以防真实 DNS 发生泄漏。"
+  },
+  {
+    question: "客户端频繁提示端口 7890 被占用或无法启动核心该怎么处理？",
+    answer: "该故障说明系统中已有其他后台进程占用了 7890 监听端口。最常见的情况是之前运行的 Clash 内核未完全终止，仍在后台默默驻留。用户可打开任务管理器，在后台进程中查找名为 clash-meta、mihomo 或 xray 的进程并全部右键结束任务。或者直接在客户端软件的常规设置中，将‘混合代理端口’从默认的 7890 修改为 7892 或其他未被占用的端口号，随后重新启动内核即可顺利解决。"
+  },
+  {
+    question: "为什么我们强烈建议常备一条不限时按量付费的备用专线？",
+    answer: "在实际网络运维中，单一机场可能因骨干网故障、机房割接或域名受到短时攻击而暂时出现订阅无法刷新或节点抖动。如果手头仅有单一服务商，一旦遭遇突发故障便会陷入‘因无法翻墙而无法打开官网更新订阅’的死循环。常备一条像星岛梦那样永不过期的按量付费套餐，随用随扣不产生固定月租，在突发故障时能够充当最可靠的排障对照组与应急破局通道。"
+  }
+];
+
+// 一分钟极速自检五步法
+const quickSteps = [
+  {
+    step: "01",
+    title: "校准系统互联网时间",
+    desc: "误差超 60 秒会导致 TLS 握手直接被拒。在系统设置中点击‘立即同步时间’。",
+    iconColor: "text-amber-500"
+  },
+  {
+    step: "02",
+    title: "核实账户配额与账单",
+    desc: "登录机场后台，排查套餐是否到期，或当月流量耗尽触发系统自动熔断。",
+    iconColor: "text-blue-500"
+  },
+  {
+    step: "03",
+    title: "检查代理开关与死锁",
+    desc: "检查系统网络设置中‘使用代理服务器’开关，清除异常退出造成的 127.0.0.1 残留。",
+    iconColor: "text-purple-500"
+  },
+  {
+    step: "04",
+    title: "切换单一节点与地区",
+    desc: "避免单点机房临时割接维护误判为全网瘫痪，尝试切换至日本或新加坡节点测试。",
+    iconColor: "text-emerald-500"
+  },
+  {
+    step: "05",
+    title: "启动异构备用专线交叉验证",
+    desc: "启用第二备用梯子（如星岛梦按量节点），快速判定是本地宽带阻断还是单一服务商故障。",
+    iconColor: "text-primary"
+  }
+];
+
+// 四大故障分类专题知识库 (16 大场景)
+const troubleClusters = [
+  {
+    id: "connection",
+    title: "专题一：连接与超时类故障 (Connection & Timeout)",
+    desc: "解决节点全红超时、连上无法加载网页、微信百度死锁等高频连接异常",
+    items: [
+      {
+        problem: "节点全部显示红色超时 / Connection Timed Out",
+        cause: "三大概率诱因：本地系统时间偏差超过 60 秒导致 TLS 握手拒绝；套餐流量耗尽被后端关闭权限；本地宽带运营商拦截了当前入口 IP。",
+        solution: "第一步同步系统时间；第二步登录机场后台检查流量余额；第三步切换至手机移动热点再次测速，若热点正常则说明本地宽带入口受阻，可切换至其他城市入口节点。"
+      },
+      {
+        problem: "开启代理后微信、百度打不开，国外网页也打不开",
+        cause: "客户端未能正确建立本地中转监听，或由于软件异常强退导致操作系统网络代理设置被锁死在 127.0.0.1:7890 端口上。",
+        solution: "进入 Windows 设置 -> 网络和 Internet -> 代理，手动将‘使用代理服务器’开关关闭。随后在客户端软件设置中将代理模式切换为‘规则模式’并重新开启系统代理。"
+      },
+      {
+        problem: "节点测速有延迟，但访问任何网页均提示 DNS_PROBE_FINISHED_NXDOMAIN",
+        cause: "客户端的 DNS 解析模块被污染或上游 DNS 服务器失效，导致域名无法转换为实际 IP 地址。",
+        solution: "在客户端设置中将 DNS 模式调整为 Fake-IP 或开启 TUN 模式，同时建议将备用上游 DNS 填入 223.5.5.5（阿里 DNS）与 1.1.1.1（Cloudflare DNS）。"
+      },
+      {
+        problem: "手机端连接完全正常，但电脑端连接显示全部超时",
+        cause: "电脑本地防火墙或第三方杀毒软件（如 360、火绒、迈克菲）拦截了代理内核的出站流量，或本地 7890 端口被其他软件占用冲突。",
+        solution: "暂时退出杀毒软件，在 Windows 防火墙允许通过的应用中为 Clash 或 v2rayN 勾选专用与公用网络权限；在客户端常规设置中修改混合代理端口为 7892。"
+      }
+    ]
+  },
+  {
+    id: "subscription",
+    title: "专题二：订阅同步与配置类故障 (Subscription & Profile)",
+    desc: "解决订阅更新 404、节点列表为空、Invalid YAML 语法解析失败等配置异常",
+    items: [
+      {
+        problem: "订阅更新提示 Subscription Failed / 404 Not Found",
+        cause: "机场原订阅域名遭遇大陆运营商网络阻断，或者机场团队因域名污染更换了最新的订阅托管 API 地址。",
+        solution: "先连接手机热点或在已有可用节点保护下开启代理，勾选客户端的‘更新订阅时走代理’选项后再试；若仍失败，登录机场官网后台复制最新的免翻墙备用订阅链接。"
+      },
+      {
+        problem: "更新订阅后节点列表为空 (Empty Profile) 或仅有提示信息",
+        cause: "客户端使用的底层内核版本过低，无法解析包含 Shadowsocks 2022、VLESS Reality 或 Hysteria 2 等新式协议语法的配置节点。",
+        solution: "将客户端升级至最新的 Clash Verge Rev 或 v2rayN 正式版；同时检查机场后台账户是否欠费重置，重新复制专属链接后再次拉取。"
+      },
+      {
+        problem: "Clash 启动提示 Configuration Error / Invalid YAML 语法解析错误",
+        cause: "订阅链接中包含未转义的特殊字符，或者第三方订阅转换服务返回了畸形的 YAML 文本格式。",
+        solution: "在客户端配置列表中右键删除当前异常配置文件，重新粘贴原生订阅链接导入；严禁使用来源不明的第三方不可信订阅转换工具。"
+      },
+      {
+        problem: "客户端反复弹出更新提示，但点击下载更新一直超时卡死",
+        cause: "客户端内置的自动更新源指向 GitHub Releases，而国内网络在直连状态下访问 GitHub 极为缓慢甚至被重置。",
+        solution: "无需在软件内等待自动更新。直接访问本站客户端下载专区，通过官方国内加速通道直接下载最新安装包覆盖安装即可保留原配置升级。"
+      }
+    ]
+  },
+  {
+    id: "access-denied",
+    title: "专题三：海外网站风控与报错类故障 (Access Denied & Ban)",
+    desc: "解决 ChatGPT 1020 报错、Claude 封号、Cloudflare 5秒盾死循环等海外平台拦截",
+    items: [
+      {
+        problem: "OpenAI / ChatGPT 访问提示 Access Denied 或 1020 报错",
+        cause: "所选出口节点为香港 IP（官方不支持地区），或当前 IP 被大量滥用并触发了 Cloudflare Web Application Firewall 拦截规则。",
+        solution: "严禁选用香港节点。切换至日本、美国或新加坡的原生双 ISP 节点；清理浏览器 Cookie 或开启隐私无痕窗口；优先选用全节点双 ISP 的光速云专线。"
+      },
+      {
+        problem: "Claude 注册登录后立即弹出 Account Disabled 封号提示",
+        cause: "使用了普通云数据中心（如 AWS、GCP、阿里云海外）的机房 IP，触发了 Anthropic 极其严苛的机房 ASN 批量黑名单封禁模型。",
+        solution: "注册与对话必须且仅能使用真实海外居民家庭宽带的原生住宅双 ISP IP；固定单组出口节点，避免提问期间高频更换不同国家出口。"
+      },
+      {
+        problem: "Cloudflare 5秒盾 Turnstile 验证码反复打勾反复刷新死循环",
+        cause: "出口 IP 的风险欺诈分（Fraud Score）偏高，且客户端存在 DNS 或 WebRTC 泄漏，导致人机验证模型无法信任当前访问凭据。",
+        solution: "开启客户端的 TUN 虚拟网卡模式彻底杜绝真实 IP 泄漏；更换到低倍率纯净专线节点；在浏览器中禁用 WebRTC 扩展插件后重新刷新尝试。"
+      },
+      {
+        problem: "Netflix 奈飞仅显示官方自制剧，搜不到绝命毒师等版权影视剧",
+        cause: "当前节点已被 Netflix 算法识别为机房代理服务器，因此平台仅开放全球统一发行的自制剧，对第三方版权片库实施区域屏蔽。",
+        solution: "切换至标有‘流媒体全解锁’的原生住宅宽带节点；在客户端中清除 Netflix 缓存或退出账号重新登录，以重新触发地理位置判定。"
+      }
+    ]
+  },
+  {
+    id: "system-client",
+    title: "专题四：客户端运行与系统冲突类故障 (Client & System)",
+    desc: "解决 TUN 服务模式未安装、电脑重启无网络、macOS 安全拦截与手机休眠断连",
+    items: [
+      {
+        problem: "Clash Verge Rev 开启 TUN 模式提示需要安装服务模式 (Service Mode)",
+        cause: "TUN 模式需要在操作系统内核层面创建虚拟网卡接口，需要操作系统底层管理员权限支持方可正常安装驱动服务。",
+        solution: "在客户端软件设置中找到‘服务模式’或‘Service Mode’，点击右侧的‘安装’按钮；在系统弹出的 UAC 提权确认框中点击‘是’，安装成功后指示灯变绿即可正常开启 TUN 模式。"
+      },
+      {
+        problem: "电脑重启后无法上网，必须重新启动 Clash 才能恢复网络连接",
+        cause: "关机前未正常关闭系统代理开关，导致 Windows 系统注册表中的代理参数在开机后依然保持开启状态，而本地中转端口尚未启动。",
+        solution: "临时解决：在 Windows 设置中手动关闭代理服务器；根本解决：在 Clash 设置中开启‘开机自动启动’，或养成在关机前通过客户端菜单先关闭系统代理的良好习惯。"
+      },
+      {
+        problem: "macOS 提示‘无法打开，因为 Apple 无法检查其是否包含恶意软件’",
+        cause: "开源软件开发者未向苹果官方支付昂贵的年费开发者证书签名，触发了 macOS Gatekeeper 门禁系统的默认安全拦截。",
+        solution: "进入 Mac‘系统设置’ -> ‘隐私与安全性’，滑到下方安全性区域，会看到提示‘已阻止打开，因为来自身份不明的开发者’，点击右侧的‘仍然打开’并输入锁屏密码即可。"
+      },
+      {
+        problem: "手机端锁屏休眠十几分钟后，代理后台自动断连无法接收海外消息",
+        cause: "安卓系统或 iOS 系统的智能后台省电策略检测到代理应用在后台持续消耗流量，触发了杀后台机制或休眠断网保护。",
+        solution: "在安卓系统设置的‘应用管理’中找到代理软件，将电池策略改为‘无限制’或‘允许后台自启’，并在多任务后台界面为应用加锁；iOS 端建议使用能耗表现最佳的 Shadowrocket 小火箭。"
+      }
+    ]
+  }
+];
+
+// 常见报错代码字典速查表
+const errorCodeList = [
+  { code: "400 Bad Request", type: "请求格式错误", cause: "客户端发送的报文头过长或包含非法特殊字符，多发生在老旧客户端解析订阅时", fix: "升级客户端最新版本并重新导入原生订阅" },
+  { code: "403 Forbidden", type: "权限被拒绝", cause: "目标网站主动阻断了当前 IP 访问，通常因出口节点被列入海外黑名单", fix: "切换至原生住宅双 ISP 节点，或更换落地国家" },
+  { code: "404 Not Found", type: "资源不存在", cause: "订阅链接路径错误，或机场团队已废弃旧版订阅 API 托管地址", fix: "登录机场官网后台复制最新的有效专属订阅链接" },
+  { code: "429 Too Many Requests", type: "请求过于频繁", cause: "同节点有多名用户在同时高频请求该服务（如多人在同节点刷推特或提问）", fix: "切换至低负载节点，或使用独立独享专线节点" },
+  { code: "502 Bad Gateway", type: "上游网关错误", cause: "机场中转入口服务器未能成功连接到境外的落地出口服务器（隧道中断）", fix: "通常为服务商机房短时网络抖动，等待数分钟或切换其他节点" },
+  { code: "504 Gateway Timeout", type: "网关响应超时", cause: "跨境专线物理链路遭遇严重丢包，或目标海外网站服务器宕机响应超时", fix: "测速排查延迟与丢包率，切换到延迟更低的 IPLC 专线" },
+  { code: "ERR_CONNECTION_RESET", type: "连接被重置 (RST)", cause: "未加密的数据包在经过公共网络时被国家防火墙检测到明文特征并强制重置", fix: "使用抗主动探测的 VLESS Reality、Trojan 或 IEPL 专线" },
+  { code: "SSL_ERROR_SYSCALL", type: "底层安全握手失败", cause: "系统时间偏差超过 60 秒，或本地杀软篡改了系统的根证书颁发信任链", fix: "校准系统互联网时间，在杀软中关闭‘HTTPS 流量扫描’" }
+];
+---
+
+<Layout
+  title="机场网络排障数据库 — 节点超时·订阅失败·网页打不开·Access Denied排查【2026大全】"
+  description="出海网络故障全景自救决策库：深度汇总 16 大高频故障场景与 8 种底层报错代码修复清单。彻底解决机场连不上、节点全部超时、系统代理死锁、微信打不开、订阅无法更新与 ChatGPT Access Denied 报错。"
+  keywords="机场连不上, 节点全部超时, 订阅更新失败, Connection timed out, Access Denied, 网页打不开, 系统代理死锁, 机场排障, 机场榜一"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+  <JsonLd type="FAQPage" faqItems={faqItems} />
+
+  <!-- 页面头部 -->
+  <section class="relative z-20 site-container my-10 md:my-14">
+    <PageHeader
+      title="机场网络排障与全场景故障自查中心"
+      description="连接超时？订阅更新失败？提示 Access Denied 1020？依据故障症状与底层原理快速自查定位，5 分钟内彻底排除本地配置冲突、系统代理死锁与海外平台风控拦截。"
+    />
+
+    <!-- 快速导航胶囊 -->
+    <div class="flex flex-wrap gap-2 pt-6">
+      <a href="#quick-funnel" class="px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold hover:bg-primary/20 transition-colors">
+        ⏱️ 一分钟极速自检
+      </a>
+      <a href="#trouble-knowledge" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        📚 四大故障知识库 (16场景)
+      </a>
+      <a href="#interactive-tree" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        🌲 交互式排障决策树
+      </a>
+      <a href="#error-dictionary" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        📖 报错代码字典速查
+      </a>
+      <a href="#backup-strategy" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        🛡️ 异构备用梯子战略
+      </a>
+      <a href="#faq" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        ❓ 排障高频答疑
+      </a>
+    </div>
+  </section>
+
+  <!-- ⏱️ 模块一：一分钟极速自检五步漏斗 -->
+  <section class="py-6 site-container" id="quick-funnel">
+    <div class="p-6 md:p-10 rounded-2xl bg-gradient-to-br from-bg-secondary via-bg-secondary to-primary/5 dark:from-bg-secondary-dark dark:to-neutral-900 border border-primary/20 shadow-sm">
+      <div class="mb-6">
+        <div class="mb-2 inline-block">
+          <Badge variant="primary">极速自救指南</Badge>
+        </div>
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          一分钟极速自检五步排查法：90% 网络故障秒级恢复
+        </h2>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+          无需深厚网络技术底子，按照标准五步排查顺序依次操作，快速定位并消除故障源
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {quickSteps.map((item) => (
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10 flex flex-col justify-between hover:border-primary/30 transition-colors">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class={`font-mono text-lg font-black ${item.iconColor}`}>
+                  {item.step}
+                </span>
+                <Clock class="w-4 h-4 text-neutral-400" />
+              </div>
+              <h3 class="font-bold text-sm text-neutral-900 dark:text-neutral-100 mb-1.5">
+                {item.title}
+              </h3>
+              <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                {item.desc}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 🌲 模块二：交互式故障自查决策树 -->
+  <section class="py-10 site-container" id="interactive-tree">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+      <div class="mb-6">
+        <div class="mb-2 inline-block">
+          <Badge variant="accent">动态决策诊断</Badge>
+        </div>
+        <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          交互式故障症状诊断决策树
+        </h2>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+          点击您当前遇到的具体故障表象，即刻展开最契合的底层根因与排查行动清单
+        </p>
+      </div>
+
+      <!-- 症状切换按钮组 -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <button
+          id="btn-symptom-timeout"
+          class="diag-btn active px-4 py-3 rounded-xl text-xs font-bold transition-all border text-left bg-primary text-white border-primary"
+        >
+          ❌ 节点全红全部超时
+        </button>
+        <button
+          id="btn-symptom-deadlock"
+          class="diag-btn px-4 py-3 rounded-xl text-xs font-bold transition-all border text-left bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-primary/10 hover:border-primary/40"
+        >
+          🔒 国内国外网页都打不开
+        </button>
+        <button
+          id="btn-symptom-sub"
+          class="diag-btn px-4 py-3 rounded-xl text-xs font-bold transition-all border text-left bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-primary/10 hover:border-primary/40"
+        >
+          🔄 订阅更新失败 / 404
+        </button>
+        <button
+          id="btn-symptom-ai"
+          class="diag-btn px-4 py-3 rounded-xl text-xs font-bold transition-all border text-left bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-primary/10 hover:border-primary/40"
+        >
+          🚫 ChatGPT / Claude 报错
+        </button>
+      </div>
+
+      <!-- 诊断结果展示面板 -->
+      <div id="diag-panel" class="p-6 rounded-xl bg-bg-primary dark:bg-neutral-800 border-2 border-primary/20 space-y-4">
+        <div class="flex items-center gap-2">
+          <span id="diag-badge" class="px-2.5 py-0.5 rounded-full bg-amber-500 text-white text-xs font-bold">
+            症状诊断：节点全部超时
+          </span>
+          <span class="text-xs text-neutral-400">预计排查耗时：2 分钟</span>
+        </div>
+
+        <h3 id="diag-title" class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+          核心根因：时间未同步、配额熔断或本地端口死锁
+        </h3>
+
+        <div id="diag-steps" class="space-y-2 text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+          <p><strong>第一排查动作：</strong>在操作系统时间设置中确认是否开启了‘自动设置时间’，点击‘立即同步’。时间误差超过 60 秒会直接导致 TLS 握手握手拒绝。</p>
+          <p><strong>第二排查动作：</strong>登录机场后台检查账单配额，确认当月流量是否用尽导致后端服务自动切断连接。</p>
+          <p><strong>第三排查动作：</strong>切换手机热点测试，若手机热点能测通而家里宽带测不通，代表当地三大运营商骨干网出现临时入口阻断，可联系机场工单或切换至第二备用梯子。</p>
+        </div>
+
+        <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-primary/10">
+          <span class="text-xs text-neutral-500">
+            对照组自查方案：启用 <a href="/reviews/xingdaomeng" class="text-primary font-bold hover:underline">星岛梦不限时按量专线</a> 进行双向交叉测试
+          </span>
+          <a
+            id="diag-link"
+            href="#connection"
+            class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+          >
+            查看该专题详尽知识库 ↓
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📚 模块三：四大核心故障专题知识库 (16 大场景) -->
+  <section class="py-10 site-container space-y-12" id="trouble-knowledge">
+    <div class="mb-4">
+      <div class="mb-2 inline-block">
+        <Badge variant="primary">故障百科全书</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        四大核心故障专题知识库与根因清单
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        深度解析 16 大高频网络故障诱发机理，提供权威、安全、经过验证的标准修复方案
+      </p>
+    </div>
+
+    {troubleClusters.map((cluster) => (
+      <div id={cluster.id} class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+        <div class="mb-6 pb-4 border-b border-primary/10">
+          <h3 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+            <Wrench class="w-5 h-5 text-primary" />
+            {cluster.title}
+          </h3>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+            {cluster.desc}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {cluster.items.map((item, idx) => (
+            <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10 flex flex-col justify-between hover:border-primary/30 transition-colors">
+              <div class="space-y-3">
+                <div class="flex items-start gap-2">
+                  <span class="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-mono font-bold flex-shrink-0 mt-0.5">
+                    {idx + 1}
+                  </span>
+                  <h4 class="font-bold text-sm text-neutral-900 dark:text-neutral-100">
+                    {item.problem}
+                  </h4>
+                </div>
+
+                <div class="text-xs space-y-2 text-neutral-600 dark:text-neutral-300">
+                  <p class="leading-relaxed">
+                    <strong class="text-neutral-800 dark:text-neutral-200">故障诱因：</strong>
+                    {item.cause}
+                  </p>
+                  <div class="p-3 rounded-lg bg-primary/5 dark:bg-primary/10 text-neutral-700 dark:text-neutral-200 border border-primary/10 leading-relaxed">
+                    <strong class="text-primary font-bold">推荐修复步骤：</strong>
+                    {item.solution}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <!-- 📖 模块四：常见网络报错代码字典速查表 -->
+  <section class="py-10 site-container" id="error-dictionary">
+    <div class="mb-6">
+      <div class="mb-2 inline-block">
+        <Badge variant="accent">代码速查字典</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        常见网络与代理报错代码字典速查表
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        遇到浏览器或软件弹出状态码代码？对照下方表格，一秒搞懂错误类型与排障手法
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-2xl border border-primary/20 shadow-sm bg-bg-primary dark:bg-bg-secondary-dark">
+      <table class="w-full text-left text-xs border-collapse min-w-[760px]">
+        <thead>
+          <tr class="bg-neutral-50 dark:bg-neutral-800/80 border-b border-primary/10 text-neutral-600 dark:text-neutral-300">
+            <th class="p-3.5 font-bold">错误代码 (Status Code)</th>
+            <th class="p-3.5 font-bold">错误属性</th>
+            <th class="p-3.5 font-bold">底层技术原因剖析</th>
+            <th class="p-3.5 font-bold">即刻修复操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-primary/5 text-neutral-700 dark:text-neutral-200">
+          {errorCodeList.map((item, index) => (
+            <tr class={index % 2 === 0 ? "bg-bg-primary dark:bg-bg-secondary-dark" : "bg-neutral-50/50 dark:bg-neutral-800/30"}>
+              <td class="p-3.5 font-mono font-bold text-primary">
+                {item.code}
+              </td>
+              <td class="p-3.5 font-semibold text-neutral-800 dark:text-neutral-100">
+                {item.type}
+              </td>
+              <td class="p-3.5 text-neutral-600 dark:text-neutral-300 leading-relaxed max-w-xs">
+                {item.cause}
+              </td>
+              <td class="p-3.5 text-emerald-600 dark:text-emerald-400 font-medium leading-relaxed">
+                {item.fix}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 🛡️ 模块五：异构备用梯子战略 -->
+  <section class="py-10 site-container" id="backup-strategy">
+    <div class="p-6 md:p-10 rounded-2xl bg-gradient-to-br from-primary/5 via-bg-secondary to-bg-secondary dark:from-primary/10 dark:via-bg-secondary-dark dark:to-bg-secondary-dark border-2 border-primary/30 shadow-sm">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-3 max-w-3xl">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded bg-primary text-white text-xs font-bold flex items-center gap-1">
+              <Award class="w-3.5 h-3.5" /> 网络容灾黄金法则
+            </span>
+            <span class="text-xs text-neutral-400">消除单点故障风险</span>
+          </div>
+          <h3 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            现代网络容灾核心理念：永远保持一条不限时异构备用专线
+          </h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+            无论你使用的是多么顶级的旗舰机场，海底光缆物理故障、敏感时期临时网络波动以及域名短时污染都是客观存在的。一旦主用机场遭遇突发事件，往往会导致你连官网都无法打开，陷入完全失联的孤岛死锁。
+          </p>
+          <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+            配置一条像<strong>星岛梦</strong> 那样永不过期的按量付费备用专线，或者主力选用拥有企业级物理专线与 7x24 小时智能运维保障的<strong>光速云</strong>，即可在主干道受损时秒级切换分流，永不失联。
+          </p>
+        </div>
+
+        <div class="flex sm:flex-col items-center gap-3 flex-shrink-0">
+          <a
+            href="/reviews/guangsu"
+            class="w-full px-6 py-3 rounded-xl bg-primary text-white text-xs font-bold text-center hover:opacity-90 shadow-sm transition-all"
+          >
+            了解光速云 2.5Gbps 专线
+          </a>
+          <a
+            href="/reviews/xingdaomeng"
+            class="w-full px-6 py-3 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-xs font-semibold text-center hover:border-primary border border-primary/20 transition-all"
+          >
+            获取星岛梦永不过期备用包
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ❓ 模块六：常见排障长尾答疑 (FAQ) -->
+  <section class="py-10 site-container" id="faq">
+    <div class="mb-8">
+      <div class="mb-2 inline-block">
+        <Badge variant="primary">高频答疑</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        网络排障与故障自查常见问答
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        汇聚用户在系统代理残留、系统时间同步、订阅报错与端口冲突中最常遇到的核心疑虑
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {faqItems.map((item, idx) => (
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 space-y-2">
+          <h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100 flex items-start gap-2">
+            <span class="text-primary font-mono font-bold flex-shrink-0">Q{idx + 1}.</span>
+            <span>{item.question}</span>
+          </h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-6">
+            {item.answer}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 🧭 模块七：全站网状知识库与专题直达 -->
+  <section class="py-12 site-container border-t border-primary/10">
+    <div class="p-6 md:p-8 rounded-2xl bg-gradient-to-r from-bg-secondary to-primary/5 dark:from-bg-secondary-dark dark:to-neutral-900 border border-primary/20 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="space-y-1">
+        <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+          故障已完全排除？继续探索客户端与专线配置
+        </h3>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400">
+          全站网状知识库助你从客户端下载、套餐对账到协议原理全流程无缝通关
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <a
+          href="/clients"
+          class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 text-xs font-semibold hover:border-primary border border-primary/20 transition-all"
+        >
+          📱 客户端下载专区
+        </a>
+        <a
+          href="/pricing"
+          class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 text-xs font-semibold hover:border-primary border border-primary/20 transition-all"
+        >
+          💰 价格套餐精算
+        </a>
+        <a
+          href="/protocols"
+          class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 text-xs font-semibold hover:border-primary border border-primary/20 transition-all"
+        >
+          ⚡ 线路拓扑与协议
+        </a>
+        <a
+          href="/recommend"
+          class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:opacity-90 shadow-sm transition-all"
+        >
+          ⭐ 2026 推荐主榜 →
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // 交互式决策树切换逻辑
+  const btnTimeout = document.getElementById('btn-symptom-timeout');
+  const btnDeadlock = document.getElementById('btn-symptom-deadlock');
+  const btnSub = document.getElementById('btn-symptom-sub');
+  const btnAi = document.getElementById('btn-symptom-ai');
+
+  const diagBadge = document.getElementById('diag-badge');
+  const diagTitle = document.getElementById('diag-title');
+  const diagSteps = document.getElementById('diag-steps');
+  const diagLink = document.getElementById('diag-link') as HTMLAnchorElement;
+
+  const allBtns = [btnTimeout, btnDeadlock, btnSub, btnAi];
+
+  function setActiveBtn(activeBtn: HTMLElement | null) {
+    allBtns.forEach(btn => {
+      if (btn) {
+        btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+        btn.classList.add('bg-bg-primary', 'text-neutral-700', 'border-primary/10');
+      }
+    });
+    if (activeBtn) {
+      activeBtn.classList.remove('bg-bg-primary', 'text-neutral-700', 'border-primary/10');
+      activeBtn.classList.add('bg-primary', 'text-white', 'border-primary');
+    }
+  }
+
+  btnTimeout?.addEventListener('click', () => {
+    setActiveBtn(btnTimeout);
+    if (diagBadge) diagBadge.textContent = "症状诊断：节点全部超时";
+    if (diagTitle) diagTitle.textContent = "核心根因：时间未同步、配额熔断或本地端口死锁";
+    if (diagSteps) {
+      diagSteps.innerHTML = `
+        <p><strong>第一排查动作：</strong>在操作系统时间设置中确认是否开启了‘自动设置时间’，点击‘立即同步’。时间误差超过 60 秒会直接导致 TLS 握手拒绝。</p>
+        <p><strong>第二排查动作：</strong>登录机场后台检查账单配额，确认当月流量是否用尽导致后端服务自动切断连接。</p>
+        <p><strong>第三排查动作：</strong>切换手机热点测试，若手机热点能测通而家里宽带测不通，代表当地三大运营商骨干网出现临时入口阻断，可联系机场工单或切换至第二备用梯子。</p>
+      `;
+    }
+    if (diagLink) diagLink.href = "#connection";
+  });
+
+  btnDeadlock?.addEventListener('click', () => {
+    setActiveBtn(btnDeadlock);
+    if (diagBadge) diagBadge.textContent = "症状诊断：国内国外网页都打不开";
+    if (diagTitle) diagTitle.textContent = "核心根因：系统代理死锁或软件强退后未清除注册表残留";
+    if (diagSteps) {
+      diagSteps.innerHTML = `
+        <p><strong>第一排查动作：</strong>打开系统设置 -> 网络和 Internet -> 代理，手动将‘使用代理服务器’开关直接关闭。</p>
+        <p><strong>第二排查动作：</strong>重新打开 Clash Verge Rev 或 v2rayN，将模式选为‘规则模式’，再重新开启系统代理开关。</p>
+        <p><strong>第三排查动作：</strong>检查是否有第三方浏览器插件（如 SwitchyOmega）正在强制劫持所有流量，将其暂时设为‘系统代理’模式。</p>
+      `;
+    }
+    if (diagLink) diagLink.href = "#connection";
+  });
+
+  btnSub?.addEventListener('click', () => {
+    setActiveBtn(btnSub);
+    if (diagBadge) diagBadge.textContent = "症状诊断：订阅更新失败 / 404";
+    if (diagTitle) diagTitle.textContent = "核心根因：订阅托管域名被墙或账户已欠费失效";
+    if (diagSteps) {
+      diagSteps.innerHTML = `
+        <p><strong>第一排查动作：</strong>在客户端内勾选‘更新订阅时走代理’，或者先开启手机流量热点后再点击更新订阅按钮。</p>
+        <p><strong>第二排查动作：</strong>登录机场用户后台，查看公告是否更换了最新免翻墙订阅域名，并重新复制新的订阅链接导入。</p>
+        <p><strong>第三排查动作：</strong>若更新后列表为空，请将客户端升级至支持新式协议（如 VLESS Reality / Hysteria 2）的最新版本。</p>
+      `;
+    }
+    if (diagLink) diagLink.href = "#subscription";
+  });
+
+  btnAi?.addEventListener('click', () => {
+    setActiveBtn(btnAi);
+    if (diagBadge) diagBadge.textContent = "症状诊断：ChatGPT / Claude 报错 1020 / Access Denied";
+    if (diagTitle) diagTitle.textContent = "核心根因：误选香港节点或机房广播 IP 触发安全风控拦截";
+    if (diagSteps) {
+      diagSteps.innerHTML = `
+        <p><strong>第一排查动作：</strong>严禁使用香港出口节点，切换至日本、美国或新加坡节点。</p>
+        <p><strong>第二排查动作：</strong>开启客户端 TUN 虚拟网卡模式，防止浏览器的真实 DNS 与 WebRTC 旁路泄漏真实属地。</p>
+        <p><strong>第三排查动作：</strong>开启浏览器隐私无痕窗口，清除包含被风控标记的历史 Cookie 缓存后重新尝试登录。</p>
+      `;
+    }
+    if (diagLink) diagLink.href = "#access-denied";
+  });
+</script>

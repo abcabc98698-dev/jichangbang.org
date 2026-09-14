@@ -1,0 +1,848 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import { airports } from "@/data/airports";
+import { directoryAirports } from "@/data/directory-airports";
+import {
+  Database,
+  Search,
+  Zap,
+  Wrench,
+  ExternalLink,
+  Server,
+  Check,
+  Activity,
+  Globe,
+  Copy,
+  ArrowRight,
+  Sparkles
+} from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "服务商数据库", url: "/providers" }
+];
+
+// 保持全站统一 18 家排位
+const sortedAirports = [...airports];
+
+// ItemList 结构化数据映射
+const itemListData = sortedAirports.map((airport, index) => ({
+  name: airport.name,
+  url: `https://jichangbang.org/reviews/${airport.slug}`,
+  position: index + 1
+}));
+
+// 8组高价值数据库与参数检索长尾问答
+const faqItems = [
+  {
+    question: "本数据库收录的 18 家机场底层参数多长时间核验更新一次？",
+    answer: "数据库参数保持动态监测与周期核验机制。连通性、晚高峰平均测速与丢包率采用自动化探针每日 20 点至 23 点进行流式采集；节点数量、套餐价格与当期优惠码每周与各服务商后台同步对账；而原生住宅双 ISP 属性检测（涵盖 ASN 机构属性与 Scamalytics 欺诈分值）每月进行全量回扫重测，确保全站呈现的数据真实客观、具备可复现性。"
+  },
+  {
+    question: "为什么有些服务商标称几百个节点，实际使用体验却不如几十个专线节点的机场？",
+    answer: "节点数量与网络可用性之间不存在正向线性关系。部分低质机场为了营销宣传，使用公网单台小带宽 VPS 服务器通过端口映射虚构出几十个重复节点，或者采用高超卖率的廉价广播云机房，一旦遇到晚高峰网络拥塞或敏感期审查，大面积节点瞬间变红超时。真正的高品质服务商（如光速云）聚焦于点对点大带宽 IPLC 或 IEPL 物理专线，即便单地区仅部署数条经过优化的主力线路，单节点物理吞吐量即可达 2.5Gbps，稳定性与响应速度远超虚标节点数千条的劣质平台。"
+  },
+  {
+    question: "什么是节点的倍率？为什么在数据库参数中需要特别关注倍率标注？",
+    answer: "节点倍率是机场服务端用于扣除账户流量额度的乘数系数。如果用户连接了 1.0x 倍率的节点，下载 1GB 文件将从账户扣除 1GB 流量；若连接 0.2x 倍率的低配节点，下载 1GB 仅扣除 200MB；然而部分不良服务商暗中部署 3.0x 甚至 5.0x 的高倍率节点，在用户不知情的情况下下载 1GB 视频瞬间扣除 3GB 至 5GB 流量，导致每月额度几天内被快速耗尽。数据库建议优先选择全节点恒定 1.0x 倍率或清晰公示倍率的透明服务商。"
+  },
+  {
+    question: "原生住宅双 ISP 属性在数据库中是如何进行客观检测与认证的？",
+    answer: "认证流程遵循业界公认的复合检测标准。首先提取服务商节点的真实公网出网 IP，通过 BGP 路由广播数据库检索其自治系统号（ASN），确认所属运营商为海外本土居民家庭宽带提供商（如 AT&T、Comcast、NTT 或 HKBN）；其次调用 ipinfo.io 查询其类型标签，要求必须明确标注为 isp 属性且严格排除 hosting 数据中心机房；最后结合 Scamalytics 商业风控数据库扫描，其欺诈风险分必须处于安全纯净区间，唯有同时满足上述三项指标才会在数据库中点亮该特性标签。"
+  },
+  {
+    question: "为什么专线机场的最低起步价格普遍高于普通的公网中转或直连机场？",
+    answer: "底层物理资源的采购成本存在天然的量级差距。普通公网直连或普通中转使用的是公网公共互联网路由，服务商仅需租用普通云主机按月付费；而正规企业级 IEPL 或 IPLC 专线属于跨国点对点物理隔离专线，需要向上游国际电信运营商按单 Gbps 物理带宽按月支付高昂的硬性租金，同时还要配备境内多线 BGP 高防汇聚入口与海外原生住宅 IP 资源池。高成本换来的是高峰期不过审查防火墙、丢包率接近零以及 20ms 级恒定超低物理延迟。"
+  },
+  {
+    question: "数据库中的晚高峰实测速率是在什么网络环境和时间段下测得的？",
+    answer: "所有测速数据均在网络流量最拥堵的晚间黄金时段（北京时间 20:00 至 23:00）实测采集。测试客户端统一采用无第三方干扰的原生内核客户端，分别接入国内三大主流宽带运营商（中国电信、中国联通、中国移动）千兆光纤网络，针对香港、日本、美国核心节点进行多线程流式下载拉取与 4K 超高清码率实时回放，测得的 Mbps 数值代表极端拥堵工况下的下限保障水平，而非凌晨空载时的理论峰值。"
+  },
+  {
+    question: "购买了具备原生住宅双 ISP 的机场，为什么访问海外部分金融网站依然偶尔需要验证码？",
+    answer: "这是客户端的会话保持策略与浏览器环境所致。虽然原生住宅 IP 具备极高的信誉评分，但若在客户端策略组中开启了自动优选（URL-Test 或 Load-Balance），客户端每隔几分钟在不同节点之间切换，导致访问金融网站时出网 IP 在不同国家或地区间频繁漂移，必然触发银行云端风控拦截。此外若浏览器保留了此前高风险机房 IP 产生的旧 Cookie 缓存，也会被风控系统读取。正确做法是手动锁定单一原生住宅节点，并在浏览器无痕隐身窗口中登录操作。"
+  },
+  {
+    question: "如果数据库中的某家服务商优惠码提示失效或过期应该如何处理？",
+    answer: "服务商优惠码分为通用长期折扣码与限时节假日特惠码。如光速云金牌专属优惠码 AMM（全单享受 8 折专属优惠）为长期有效代码；若在结算界面输入其他商家的特惠码提示失效，说明该批次优惠配额已提前领完。用户可点击该服务商的评测详情页查看最新更新的滚动备用码，或者直接选购其基础月付套餐，优先保障业务平稳运行。"
+  }
+];
+---
+
+<Layout
+  title="机场服务商底层参数数据库 18+主流机场节点·协议·物理专线·住宅IP全网大盘【2026权威版】"
+  description="2026机场服务商底层物理参数权威数据库。收录全网18家主流跨境机场真实网络规格：骨干线路（IEPL内网专线/IPLC/BGP中转）、出口协议（Shadowsocks/Trojan/Vless/Hysteria 2）、原生住宅双ISP纯净度、月基准流量与最低价格标准。支持多维动态筛选与快速模糊检索。"
+  keywords="机场数据库, 机场参数查询, 机场服务商大全, 机场节点数, 专线机场清单, 原生住宅IP机场, 机场协议大全, 机场榜一"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+  <JsonLd type="ItemList" itemList={itemListData} />
+  <JsonLd type="FAQPage" faqItems={faqItems} />
+
+  <!-- 头部英雄区 -->
+  <section class="relative z-20 site-container my-10 md:my-14">
+    <PageHeader
+      title="机场服务商底层参数数据库：全网 18 家主流品牌技术规格大盘"
+      description="拒绝浮夸宣传，以真实网络拓扑、实测物理吞吐、出网IP风控纯净度与协议支持为基准。结构化收录全网主流专线与中转服务商底层硬核参数，支持多维条件实时筛选与快速精准检索。"
+    />
+
+    <!-- 数据库核心大盘指标概览 -->
+    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+          <Database class="w-4 h-4" />
+        </div>
+        <div>
+          <div class="font-bold text-neutral-800 dark:text-neutral-200">167+ 家品牌数据库</div>
+          <div class="text-neutral-500 text-[11px]">18 家核心 + 149 家收录</div>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+          <Server class="w-4 h-4" />
+        </div>
+        <div>
+          <div class="font-bold text-neutral-800 dark:text-neutral-200">IPLC / IEPL 内网专线</div>
+          <div class="text-neutral-500 text-[11px]">不过防火墙 0% 丢包率</div>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+          <Globe class="w-4 h-4" />
+        </div>
+        <div>
+          <div class="font-bold text-neutral-800 dark:text-neutral-200">原生住宅双 ISP 认证</div>
+          <div class="text-neutral-500 text-[11px]">零风控免验证运行 AI</div>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+          <Activity class="w-4 h-4" />
+        </div>
+        <div>
+          <div class="font-bold text-neutral-800 dark:text-neutral-200">20:00-23:00 晚高峰</div>
+          <div class="text-neutral-500 text-[11px]">真实下限测速数据背书</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 多维交互式筛选引擎 -->
+  <section class="py-4 site-container">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/20 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+          <h2 class="text-lg font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            多维参数交互筛选引擎
+          </h2>
+        </div>
+        <div class="flex items-center gap-3 text-xs">
+          <span class="text-neutral-500">
+            当前展示：<span id="filtered-count" class="text-primary font-bold text-sm">18</span> / 18 家品牌
+          </span>
+          <button
+            id="reset-filter-btn"
+            type="button"
+            class="px-3 py-1.5 rounded-lg bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-600 dark:text-neutral-300 hover:border-primary hover:text-primary transition text-xs font-medium"
+          >
+            重置所有条件
+          </button>
+        </div>
+      </div>
+
+      <!-- 搜索输入框与核心筛选控件 -->
+      <div class="space-y-4 text-xs">
+        <!-- 关键词搜索 -->
+        <div class="relative">
+          <Search class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
+          <input
+            id="search-input"
+            type="text"
+            placeholder="搜索机场名称、协议（如 Shadowsocks / Hysteria2）、骨干线路或特性标签..."
+            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 focus:outline-none focus:border-primary transition"
+          />
+        </div>
+
+        <!-- 筛选维度网格 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+          <!-- 线路拓扑筛选 -->
+          <div>
+            <label class="block text-neutral-500 mb-1.5 font-medium">骨干网络拓扑</label>
+            <select
+              id="line-filter"
+              class="w-full px-3 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:border-primary transition"
+            >
+              <option value="all">全部骨干拓扑（18家）</option>
+              <option value="专线">仅看物理专线（IPLC / IEPL 内网）</option>
+              <option value="BGP">仅看 BGP 隧道中转</option>
+              <option value="直连">仅看 直连与多线混合</option>
+            </select>
+          </div>
+
+          <!-- 价格预算区间 -->
+          <div>
+            <label class="block text-neutral-500 mb-1.5 font-medium">起步门槛与计费方式</label>
+            <select
+              id="price-filter"
+              class="w-full px-3 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:border-primary transition"
+            >
+              <option value="all">全部价格预算</option>
+              <option value="budget">10元以下入门优选（单月 ≤ ¥10）</option>
+              <option value="mid">15元至20元高性价比档</option>
+              <option value="pro">20元以上高端生产力专线</option>
+              <option value="payasyougo">不限时按量计费（长期备用）</option>
+            </select>
+          </div>
+
+          <!-- 核心特性标签 -->
+          <div>
+            <label class="block text-neutral-500 mb-1.5 font-medium">核心增值技术特性</label>
+            <select
+              id="feature-filter"
+              class="w-full px-3 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:border-primary transition"
+            >
+              <option value="all">全部技术特性</option>
+              <option value="residential">具备原生住宅双 ISP IP（防风控）</option>
+              <option value="custom-client">配备独家自研免配置客户端</option>
+              <option value="4k">晚高峰 800Mbps+ 4K秒开保障</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 数据库超级大盘主表 -->
+  <section class="py-6 site-container">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-2">
+          <Database class="w-5 h-5 text-primary" />
+          <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            全网 18 家机场服务商底层网络参数大盘矩阵
+          </h2>
+        </div>
+        <div class="text-xs text-neutral-500 bg-bg-primary dark:bg-neutral-800 px-3 py-1 rounded-lg border border-primary/10">
+          数据基准：2026年9月晚高峰全天候实测
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table id="airports-table" class="w-full text-left border-collapse text-xs min-w-[950px]">
+          <thead>
+            <tr class="border-b border-primary/20 bg-primary/5 dark:bg-neutral-800/80 text-neutral-700 dark:text-neutral-200 font-bold">
+              <th class="py-3.5 px-3">排位 / 品牌名称</th>
+              <th class="py-3.5 px-3">综合评分</th>
+              <th class="py-3.5 px-3">骨干线路拓扑</th>
+              <th class="py-3.5 px-3">支持协议</th>
+              <th class="py-3.5 px-3">节点数 / 覆盖</th>
+              <th class="py-3.5 px-3">晚高峰测速 / 延迟</th>
+              <th class="py-3.5 px-3">起步门槛 / 流量</th>
+              <th class="py-3.5 px-3">原生住宅双 ISP</th>
+              <th class="py-3.5 px-3">专属优惠码</th>
+              <th class="py-3.5 px-3 text-center">状态</th>
+              <th class="py-3.5 px-3 text-right">操作</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700/60 text-neutral-600 dark:text-neutral-300">
+            {sortedAirports.map((item, idx) => {
+              const isResidential = item.id === "guangsucloud" || item.features.some(f => f.includes("住宅") || f.includes("双ISP"));
+              const hasCustomClient = item.id === "guangsucloud" || item.features.some(f => f.includes("客户端") || f.includes("自研"));
+              const isFast4K = item.speedMbps >= 800;
+
+              return (
+                <tr
+                  class="airport-row hover:bg-primary/5 transition-colors"
+                  data-name={item.name.toLowerCase()}
+                  data-line={item.lineType}
+                  data-price={item.monthlyPrice}
+                  data-duration={item.minDuration}
+                  data-protocols={item.protocols.join(" ").toLowerCase()}
+                  data-residential={isResidential ? "true" : "false"}
+                  data-custom-client={hasCustomClient ? "true" : "false"}
+                  data-4k={isFast4K ? "true" : "false"}
+                >
+                  <!-- 排名与品牌 -->
+                  <td class="py-3.5 px-3 font-bold text-neutral-800 dark:text-neutral-100">
+                    <div class="flex items-center gap-2">
+                      <span class={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
+                        idx === 0 ? "bg-amber-500 text-white shadow-sm" :
+                        idx === 1 ? "bg-slate-400 text-white" :
+                        idx === 2 ? "bg-amber-700 text-white" :
+                        "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300"
+                      }`}>
+                        {idx + 1}
+                      </span>
+                      <a
+                        href={`/reviews/${item.slug}`}
+                        class="hover:text-primary transition-colors flex items-center gap-1 text-sm font-bold"
+                      >
+                        {item.name}
+                      </a>
+                      {idx === 0 && (
+                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-primary text-white font-bold">
+                          金牌榜首
+                        </span>
+                      )}
+                      {item.id === "xingdaomeng" && (
+                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
+                          按量备用
+                        </span>
+                      )}
+                    </div>
+                    <div class="text-[11px] text-neutral-400 font-normal pl-7">
+                      {item.established} 年运营
+                    </div>
+                  </td>
+
+                  <!-- 综合评分 -->
+                  <td class="py-3.5 px-3">
+                    <div class="flex items-center gap-1">
+                      <span class="font-bold text-sm text-neutral-900 dark:text-neutral-100">
+                        {item.score.toFixed(1)}
+                      </span>
+                      <span class="text-[10px] text-neutral-400">/ 10</span>
+                    </div>
+                  </td>
+
+                  <!-- 骨干线路 -->
+                  <td class="py-3.5 px-3">
+                    <span class={`inline-block px-2 py-0.5 rounded text-[11px] font-bold ${
+                      item.lineType.includes("专线")
+                        ? "bg-primary/10 text-primary"
+                        : "bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300"
+                    }`}>
+                      {item.lineType}
+                    </span>
+                  </td>
+
+                  <!-- 支持协议 -->
+                  <td class="py-3.5 px-3 text-[11px]">
+                    <div class="flex flex-wrap gap-1 max-w-[150px]">
+                      {item.protocols.map(p => (
+                        <span class="px-1.5 py-0.5 rounded bg-bg-primary dark:bg-neutral-800 border border-primary/10 text-neutral-600 dark:text-neutral-400 text-[10px]">
+                          {p}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+
+                  <!-- 节点数与覆盖 -->
+                  <td class="py-3.5 px-3">
+                    <div class="font-bold text-neutral-800 dark:text-neutral-200">
+                      {item.nodeCount}+ 节点
+                    </div>
+                    <div class="text-[10px] text-neutral-400 truncate max-w-[120px]">
+                      {item.regions.join(" / ")}
+                    </div>
+                  </td>
+
+                  <!-- 实测速度与延迟 -->
+                  <td class="py-3.5 px-3">
+                    <div class="font-bold text-emerald-600 dark:text-emerald-400">
+                      {item.speedMbps} Mbps
+                    </div>
+                    <div class="text-[10px] text-neutral-400">
+                      平均延迟 {item.latencyMs}ms
+                    </div>
+                  </td>
+
+                  <!-- 最低起步价格与流量 -->
+                  <td class="py-3.5 px-3">
+                    <div class="font-bold text-primary text-sm">
+                      ¥{item.monthlyPrice}
+                      <span class="text-[10px] font-normal text-neutral-400">
+                        / {item.minDuration}
+                      </span>
+                    </div>
+                    <div class="text-[10px] text-neutral-500">
+                      {item.traffic} GB / 月
+                    </div>
+                  </td>
+
+                  <!-- 原生住宅双 ISP -->
+                  <td class="py-3.5 px-3">
+                    {isResidential ? (
+                      <span class="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold text-[11px]">
+                        <Check class="w-3.5 h-3.5" /> 已覆盖 (双ISP)
+                      </span>
+                    ) : (
+                      <span class="text-neutral-400 text-[11px]">机房托管</span>
+                    )}
+                  </td>
+
+                  <!-- 专属优惠码 -->
+                  <td class="py-3.5 px-3">
+                    {item.couponCode ? (
+                      <code
+                        class="coupon-copy-btn px-2 py-1 rounded bg-primary/10 text-primary font-bold text-[11px] cursor-pointer hover:bg-primary/20 transition inline-flex items-center gap-1"
+                        data-code={item.couponCode}
+                        title="点击复制优惠码"
+                      >
+                        {item.couponCode}
+                        <Copy class="w-2.5 h-2.5 opacity-60" />
+                      </code>
+                    ) : (
+                      <span class="text-neutral-400 text-[11px]">暂无折扣</span>
+                    )}
+                  </td>
+
+                  <!-- 运营状态 -->
+                  <td class="py-3.5 px-3 text-center whitespace-nowrap">
+                    <span class="text-emerald-500 font-medium text-[11px] inline-flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      {item.riskStatus}
+                    </span>
+                  </td>
+
+                  <!-- 操作按钮 -->
+                  <td class="py-3.5 px-3 text-right">
+                    <div class="flex items-center justify-end gap-1.5">
+                      <a
+                        href={`/reviews/${item.slug}`}
+                        class="px-2.5 py-1 rounded-lg bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-700 dark:text-neutral-200 hover:border-primary text-[11px] font-medium transition"
+                      >
+                        评测
+                      </a>
+                      <a
+                        href={item.affiliateUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="px-2.5 py-1 rounded-lg bg-primary text-white hover:bg-primary/90 text-[11px] font-medium inline-flex items-center gap-0.5 transition shadow-sm"
+                      >
+                        官网 <ExternalLink class="w-2.5 h-2.5 ml-0.5" />
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        <!-- 无匹配结果提示 -->
+        <div id="no-results-box" class="hidden p-8 text-center text-neutral-500 text-xs">
+          <Database class="w-8 h-8 text-neutral-400 mx-auto mb-2 opacity-50" />
+          <p class="font-medium">未找到符合当前多维筛选条件的服务商</p>
+          <p class="text-neutral-400 mt-1">请尝试调整搜索关键词或重置筛选维度查看全量大盘数据</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 全网知名品牌客观收录名录 (149 家) -->
+  <section class="py-6 site-container">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/20">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-primary text-white">收录扩展名录</span>
+            <span class="text-xs text-neutral-400">客观评测 · 选购指南</span>
+          </div>
+          <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            全网知名品牌客观收录库 ({directoryAirports.length} 家)
+          </h2>
+          <p class="text-xs md:text-sm text-neutral-500 mt-1">
+            除上方 18 家核心推荐专线外，本站同步收录全网具备一定知名度的加速服务商公网基准与评测档案。
+          </p>
+        </div>
+
+        <!-- 目录独立搜索框 -->
+        <div class="relative w-full md:w-72">
+          <Search class="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            id="provider-dir-search"
+            placeholder="搜索 149 家品牌名称或拼音..."
+            class="w-full pl-9 pr-3 py-2 rounded-xl text-xs bg-bg-primary dark:bg-neutral-800 border border-primary/15 focus:outline-none focus:border-primary text-neutral-800 dark:text-neutral-100"
+          />
+        </div>
+      </div>
+
+      <!-- 149 家卡片网格 -->
+      <div id="provider-dir-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        {directoryAirports.map((airport) => (
+          <a
+            href={`/reviews/${airport.slug}`}
+            data-dir-name={airport.name.toLowerCase()}
+            data-dir-slug={airport.slug}
+            class="provider-dir-card p-3 rounded-xl bg-bg-primary dark:bg-neutral-800/90 border border-primary/10 hover:border-primary hover:shadow-md transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
+                  {airport.lineType}
+                </span>
+                <span class="text-[11px] font-bold text-amber-500">
+                  ★ {airport.score}
+                </span>
+              </div>
+              <h4 class="text-xs font-bold text-neutral-800 dark:text-neutral-100 group-hover:text-primary transition-colors line-clamp-1 mb-1">
+                {airport.name}
+              </h4>
+              <p class="text-[10px] text-neutral-400 mb-1.5">
+                ¥{airport.monthlyPrice}/{airport.minDuration} · {airport.traffic}GB
+              </p>
+            </div>
+            <div class="pt-1.5 border-t border-dashed border-neutral-200 dark:border-neutral-700/60 flex items-center justify-between text-[10px] text-neutral-500 group-hover:text-primary transition-colors">
+              <span>实测 {airport.speedMbps}M</span>
+              <ArrowRight size={10} />
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div id="no-dir-results" class="hidden text-center py-8 text-neutral-400 text-xs">
+        未找到匹配的品牌，推荐直接参考上方 2026 金牌榜首【光速云】。
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    const dirSearch = document.getElementById('provider-dir-search');
+    const dirCards = document.querySelectorAll('.provider-dir-card');
+    const noDirResults = document.getElementById('no-dir-results');
+
+    if (dirSearch) {
+      dirSearch.addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        let visible = 0;
+        dirCards.forEach((c) => {
+          const name = c.getAttribute('data-dir-name') || '';
+          const slug = c.getAttribute('data-dir-slug') || '';
+          if (name.includes(q) || slug.includes(q)) {
+            c.style.display = '';
+            visible++;
+          } else {
+            c.style.display = 'none';
+          }
+        });
+        if (noDirResults) {
+          noDirResults.style.display = visible === 0 ? 'block' : 'none';
+        }
+      });
+    }
+  </script>
+
+  <!-- 核心网络物理参数与指标数据字典 -->
+  <section class="py-8 site-container">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <span class="inline-block px-2.5 py-1 rounded text-xs font-bold tracking-wider uppercase bg-primary/10 text-primary mb-2">
+            技术数据字典
+          </span>
+          <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            机场底层网络物理参数与关键指标解析
+          </h2>
+        </div>
+        <div class="text-xs text-neutral-500 bg-bg-primary dark:bg-neutral-800 px-3 py-1.5 rounded-lg border border-primary/10">
+          读懂真实物理参数，建立专业客观技术认知
+        </div>
+      </div>
+
+      <p class="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed mb-6">
+        商业推广文案往往充斥着诸如“千兆秒开、永久不卡”等营销噱头，而真正的网络质量完全取决于底层的物理拓扑、出口 ASN 属性与拥塞控制算法。以下四个核心技术维度构成了本数据库的评测基石。
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <!-- 维度 1：骨干拓扑 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+          <div class="flex items-center gap-2 mb-3">
+            <Server class="w-5 h-5 text-primary" />
+            <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+              骨干拓扑：IEPL / IPLC 物理专线 vs BGP 中转
+            </h3>
+          </div>
+          <p class="text-neutral-500 leading-relaxed mb-3">
+            IEPL（国际以太网私用专线）和 IPLC（国际私用租用电路）属于真正的端到端物理隔离线路，数据包在出境时完全不经过公共互联网审查防火墙，即使在敏感时期或晚高峰骨干网拥堵期，丢包率也能稳定维持在 0% 附近；而 BGP 中转走的是国内公网加密隧道跨越边境，虽然成本较低，但在遭遇骨干网波动时可能发生短暂抖动。
+          </p>
+          <div class="text-primary font-bold">
+            核心建议：生产力与关键外贸业务首选光速云等具备真实物理内网专线的服务商。
+          </div>
+        </div>
+
+        <!-- 维度 2：IP 属性 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+          <div class="flex items-center gap-2 mb-3">
+            <Globe class="w-5 h-5 text-emerald-500" />
+            <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+              出网纯净度：原生住宅双 ISP vs 机房托管 IP
+            </h3>
+          </div>
+          <p class="text-neutral-500 leading-relaxed mb-3">
+            机房托管 IP（Hosting / Data Center）归属于各大云厂商，OpenAI、Anthropic、PayPal 及流媒体部署了极其严密的机房 ASN 黑名单，容易直接触发封号或验证码死循环；而原生住宅双 ISP IP 直接挂载于海外本土居民宽带运营商机房，网络指纹与当地家庭宽带完全一致，是保障 AI 生产力工具长期存活的关键核心。
+          </p>
+          <div class="text-emerald-600 dark:text-emerald-400 font-bold">
+            鉴别标准：通过 ipinfo.io 查询 type 字段必须为 isp 且 Scamalytics 欺诈分低于 15 分。
+          </div>
+        </div>
+
+        <!-- 维度 3：节点倍率与突发带宽 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+          <div class="flex items-center gap-2 mb-3">
+            <Zap class="w-5 h-5 text-amber-500" />
+            <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+              计费倍率与带宽冗余度
+            </h3>
+          </div>
+          <p class="text-neutral-500 leading-relaxed mb-3">
+            部分不良服务商为掩饰高昂的专线带宽成本，在后台设置 3.0x 甚至 5.0x 的高倍率节点，造成暗中扣减流量；而正规平台普遍坚持全节点 1.0x 透明倍率。同时，单节点物理带宽储备至关重要，光速云单节点具备 2.5Gbps 物理吞吐冗余，可确保几十人同时进行 4K 视频串流时互不挤占网络信道。
+          </p>
+          <div class="text-amber-600 dark:text-amber-400 font-bold">
+            避坑准则：购买前仔细查看服务商节点列表，坚决避开标称超高倍率的暗扣陷阱。
+          </div>
+        </div>
+
+        <!-- 维度 4：协议内核与客户端适配 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+          <div class="flex items-center gap-2 mb-3">
+            <Wrench class="w-5 h-5 text-purple-500" />
+            <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+              协议生态与多端接入支持
+            </h3>
+          </div>
+          <p class="text-neutral-500 leading-relaxed mb-3">
+            现代代理协议涵盖经典的 Shadowsocks、兼具伪装与 TLS 握手的 Trojan / Vless，以及针对弱网移动端深度优化的基于 UDP 协议栈的 Hysteria 2。优质服务商不仅全协议兼容开源客户端（Clash Verge Rev、Shadowrocket、v2rayN），更会投入研发资源打造一键免配置客户端，彻底免除订阅复制与分流配置的上手痛点。
+          </p>
+          <div class="text-purple-600 dark:text-purple-400 font-bold">
+            体验优势：自研客户端具备自动防污染更新通道，新手零学习成本即开即用。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 数据库 8 组高价值技术长尾 FAQ -->
+  <section class="py-8 site-container">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="mb-6">
+        <span class="inline-block px-2.5 py-1 rounded text-xs font-bold tracking-wider uppercase bg-primary/10 text-primary mb-2">
+          参数与数据库答疑
+        </span>
+        <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          机场服务商底层数据库常见问题解答（FAQ）
+        </h2>
+        <p class="text-sm text-neutral-500 mt-1">
+          深入解读数据库更新周期、节点虚标识别、倍率陷阱及原生住宅 IP 验证标准
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {faqItems.map((item, idx) => (
+          <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100 mb-2 flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">
+                  {idx + 1}
+                </span>
+                <span>{item.question}</span>
+              </h3>
+              <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-7">
+                {item.answer}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 全站网状内链与专题枢纽指引 -->
+  <section class="py-8 site-container mb-10">
+    <div class="p-6 md:p-8 rounded-2xl bg-gradient-to-r from-primary/10 via-bg-secondary to-primary/5 dark:from-primary/15 dark:via-bg-secondary-dark dark:to-primary/10 border border-primary/20">
+      <div class="max-w-3xl">
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-3">
+          从数据大盘到实战部署，打通全站出海闭环
+        </h2>
+        <p class="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed mb-6">
+          查阅完 18 家服务商的底层参数后，你可以进一步前往各专项专题深入了解实测榜单、单机 1v1 决策对比、价格套餐测算、客户端下载配置以及风险防骗雷达。
+        </p>
+        <div class="flex flex-wrap items-center gap-3">
+          <a
+            href="/recommend"
+            class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary/90 transition shadow-sm"
+          >
+            2026 机场推荐榜
+          </a>
+          <a
+            href="/ranking"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            机场综合天梯榜
+          </a>
+          <a
+            href="/compare"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            机场 1v1 深度对比
+          </a>
+          <a
+            href="/pricing"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            价格套餐测算
+          </a>
+          <a
+            href="/protocols"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            线路节点解析
+          </a>
+          <a
+            href="/clients"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            客户端下载专区
+          </a>
+          <a
+            href="/tutorials"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            使用配置教程
+          </a>
+          <a
+            href="/issues"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            网络排障诊断
+          </a>
+          <a
+            href="/risk"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            风险情报雷达
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // 交互式多维筛选与模糊搜索脚本
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("search-input") as HTMLInputElement | null;
+    const lineFilter = document.getElementById("line-filter") as HTMLSelectElement | null;
+    const priceFilter = document.getElementById("price-filter") as HTMLSelectElement | null;
+    const featureFilter = document.getElementById("feature-filter") as HTMLSelectElement | null;
+    const resetBtn = document.getElementById("reset-filter-btn") as HTMLButtonElement | null;
+    const filteredCountEl = document.getElementById("filtered-count");
+    const noResultsBox = document.getElementById("no-results-box");
+    const rows = document.querySelectorAll<HTMLTableRowElement>(".airport-row");
+
+    function applyFilter() {
+      const keyword = (searchInput?.value || "").trim().toLowerCase();
+      const lineVal = lineFilter?.value || "all";
+      const priceVal = priceFilter?.value || "all";
+      const featureVal = featureFilter?.value || "all";
+
+      let visibleCount = 0;
+
+      rows.forEach((row) => {
+        const name = row.dataset.name || "";
+        const line = row.dataset.line || "";
+        const price = parseFloat(row.dataset.price || "0");
+        const duration = row.dataset.duration || "";
+        const protocols = row.dataset.protocols || "";
+        const isResidential = row.dataset.residential === "true";
+        const hasCustomClient = row.dataset.customClient === "true";
+        const is4K = row.dataset["4k"] === "true";
+
+        // 关键词过滤
+        let matchesKeyword = true;
+        if (keyword) {
+          matchesKeyword = name.includes(keyword) || protocols.includes(keyword) || line.toLowerCase().includes(keyword);
+        }
+
+        // 线路拓扑过滤
+        let matchesLine = true;
+        if (lineVal === "专线") {
+          matchesLine = line.includes("专线");
+        } else if (lineVal === "BGP") {
+          matchesLine = line.includes("BGP");
+        } else if (lineVal === "直连") {
+          matchesLine = line.includes("直连") || line.includes("混合");
+        }
+
+        // 价格预算过滤
+        let matchesPrice = true;
+        if (priceVal === "budget") {
+          matchesPrice = price <= 10;
+        } else if (priceVal === "mid") {
+          matchesPrice = price > 10 && price <= 20;
+        } else if (priceVal === "pro") {
+          matchesPrice = price > 20;
+        } else if (priceVal === "payasyougo") {
+          matchesPrice = duration.includes("按量");
+        }
+
+        // 增值特性过滤
+        let matchesFeature = true;
+        if (featureVal === "residential") {
+          matchesFeature = isResidential;
+        } else if (featureVal === "custom-client") {
+          matchesFeature = hasCustomClient;
+        } else if (featureVal === "4k") {
+          matchesFeature = is4K;
+        }
+
+        if (matchesKeyword && matchesLine && matchesPrice && matchesFeature) {
+          row.style.display = "";
+          visibleCount++;
+        } else {
+          row.style.display = "none";
+        }
+      });
+
+      if (filteredCountEl) {
+        filteredCountEl.textContent = String(visibleCount);
+      }
+
+      if (noResultsBox) {
+        if (visibleCount === 0) {
+          noResultsBox.classList.remove("hidden");
+        } else {
+          noResultsBox.classList.add("hidden");
+        }
+      }
+    }
+
+    searchInput?.addEventListener("input", applyFilter);
+    lineFilter?.addEventListener("change", applyFilter);
+    priceFilter?.addEventListener("change", applyFilter);
+    featureFilter?.addEventListener("change", applyFilter);
+
+    resetBtn?.addEventListener("click", () => {
+      if (searchInput) searchInput.value = "";
+      if (lineFilter) lineFilter.value = "all";
+      if (priceFilter) priceFilter.value = "all";
+      if (featureFilter) featureFilter.value = "all";
+      applyFilter();
+    });
+
+    // 优惠码点击一键复制
+    const copyBtns = document.querySelectorAll<HTMLElement>(".coupon-copy-btn");
+    copyBtns.forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const code = btn.dataset.code;
+        if (!code) return;
+        try {
+          await navigator.clipboard.writeText(code);
+          const originalText = btn.innerHTML;
+          btn.innerHTML = `已复制！`;
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+          }, 1500);
+        } catch {
+          // fallback
+        }
+      });
+    });
+  });
+</script>

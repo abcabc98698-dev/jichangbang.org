@@ -1,0 +1,745 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import Badge from "@/components/ui/Badge.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import {
+  Download,
+  ExternalLink,
+  ShieldCheck,
+  Award,
+  Zap,
+  Sparkles,
+  Laptop,
+  Smartphone,
+  Terminal
+} from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "客户端", url: "/clients" }
+];
+
+// 8组高价值客户端使用与配置长尾FAQ
+const faqItems = [
+  {
+    question: "iOS 平台怎么下载 Shadowrocket 小火箭？国区 App Store 搜索不到怎么办？",
+    answer: "Shadowrocket（小火箭）因地区合规政策未在大陆区 App Store 上架。用户只需准备一个海外地区（例如美区、港区或日区）的 Apple ID，在 App Store 登录该海外账号后搜索 Shadowrocket 即可下载购买，官方售价约 2.99 美元。切记只需在 App Store 应用商店内登录该账号，严禁在 iPhone 系统设置的 iCloud 中登录他人共享账号，以彻底规避设备被恶意远程锁定的风险。"
+  },
+  {
+    question: "Windows 平台上 Clash Verge Rev 与 v2rayN 应该如何选择？",
+    answer: "若追求现代美观的界面交互、智能分流策略组切换以及外服游戏或终端命令行的 TUN 虚拟网卡全局接管，首选 Clash Verge Rev；若追求极低的系统资源占用，或者需要兼容 Xray、VLESS Reality 与 Hysteria 2 等多种特殊前沿传输协议，老牌经典软件 v2rayN 则是极其稳健的全能工具。"
+  },
+  {
+    question: "客户端开启 TUN 模式有什么用？为什么打游戏或使用命令行建议开启？",
+    answer: "常规的系统代理模式仅能接管支持 HTTP 与 Socks5 代理设置的浏览器及普通应用程序。而 Git 命令行代码拉取、Docker 镜像构建、部分海外联机游戏以及无代理设置项的桌面软件，其网络请求会绕过系统代理直接发起连接导致超时失败。TUN 模式通过在操作系统内核层面创建一张虚拟网卡，将底层所有 TCP 与 UDP 数据包统一拦截并转发至代理核心，实现无死角全局接管。"
+  },
+  {
+    question: "为什么有时在客户端导入机场订阅链接会提示网络超时或解析失败？",
+    answer: "该现象通常由本地网络阻断订阅域名或订阅托管服务器短时拥堵引起。用户可先尝试切换本地网络环境，例如开启手机热点后再尝试更新；或者登录机场用户后台，查看是否提供了免翻墙订阅备用链接。此外，部分老旧客户端可能无法兼容新式 Base64 编码或特殊加密协议，升级客户端至最新发行版本通常能够解决此类解析问题。"
+  },
+  {
+    question: "使用网上的免费在线订阅转换工具安全吗？是否存在泄露风险？",
+    answer: "存在极其严重的信息安全隐患。订阅转换的底层机制是将用户的专属订阅 URL 提交至第三方服务器，由该服务器拉取节点配置后再重新生成目标客户端格式。不法搭建者可以在后台日志中批量收集用户的订阅 Token，直接盗用其付费流量，甚至在节点列表中植入恶意钓鱼节点劫持明文流量。强烈建议优先使用机场原生支持的客户端订阅格式，或在本地搭建专属转换工具。"
+  },
+  {
+    question: "macOS 平台上运行 Clash Verge Rev 提示需要安装服务模式或系统扩展，该如何处理？",
+    answer: "这是 macOS 开启 TUN 虚拟网卡接管系统底层网络时的正常安全权限请求。在软件设置的内核设置项中点击安装服务模式（Service Mode），并在 macOS 系统弹出的安全确认对话框中输入当前管理员密码确认授权即可。授权成功后即可正常开启 TUN 模式，享受全系统流量无感知分流。"
+  },
+  {
+    question: "为什么客户端显示节点连通测速正常，但浏览器仍然无法打开外网网页？",
+    answer: "最常见的原因是系统代理开关未正确触发，或者电脑本地系统时间与网络时间存在较大偏差。代理加密协议（尤其是 VMess 与 TLS 握手）对本地时间精度要求极高，若时钟误差超过 90 秒将导致所有握手请求被服务端拒绝。可先在系统设置中开启自动同步互联网时间，再检查客户端系统代理或 TUN 模式是否处于开启状态。"
+  },
+  {
+    question: "官方定制自研客户端与开源通用客户端相比有哪些核心差异？",
+    answer: "服务商专属自研客户端由机场团队针对自身节点架构专门定制，用户安装后只需输入账号密码或扫码登录，所有线路与分流规则均已在云端预设完毕，节点自动更新，零学习配置门槛，且完全避免了外部订阅转换的泄密隐患。开源通用客户端则适合需要同时聚合管理多家不同机场订阅、追求极致深度自定义规则的极客群体。"
+  }
+];
+
+// 五大操作系统主流客户端矩阵
+const osPlatforms = [
+  {
+    id: "windows",
+    name: "Windows 平台",
+    desc: "全面适配 Windows 10 与 Windows 11 系统，支持 x64 与 ARM64 架构",
+    apps: [
+      {
+        name: "Clash Verge Rev",
+        tag: "最推荐 · Meta 内核旗舰",
+        badgeVariant: "primary",
+        desc: "当前 Windows 平台最受推崇的现代化开源客户端。采用 Mihomo (Clash.Meta) 核心，内置高颜值 UI，原生支持 TUN 模式全局虚拟网卡与多订阅聚合分流。",
+        github: "https://github.com/clash-verge-rev/clash-verge-rev/releases",
+        guide: "/tutorials",
+        features: ["Mihomo 现代内核", "一键 TUN 虚拟网卡", "规则策略组拖拽", "轻量低内存占用"]
+      },
+      {
+        name: "Mihomo Party",
+        tag: "高颜值新秀 · 极简交互",
+        badgeVariant: "accent",
+        desc: "基于 Mihomo 内核打造的视觉新标杆。拥有优雅的暗黑毛玻璃风格与极简路由切换面板，支持多节点批量测速与快速故障切换，小白极客皆宜。",
+        github: "https://github.com/mihomo-party-org/mihomo-party/releases",
+        guide: "/tutorials",
+        features: ["暗黑毛玻璃美学", "极简策略组路由", "实时网络连接分析", "支持自研订阅聚合"]
+      },
+      {
+        name: "v2rayN",
+        tag: "老牌全能 · 多协议兼容",
+        badgeVariant: "neutral",
+        desc: "Windows 平台长盛不衰的经典代理利器。深度集成 Xray 与 Sing-box 双内核，全面支持 VLESS Reality、Trojan、Hysteria 2、TUIC 等全线前沿协议。",
+        github: "https://github.com/2dust/v2rayN/releases",
+        guide: "/tutorials",
+        features: ["全协议栈原生支持", "低配设备极速运行", "强大的路由分流设置", "多核心自由切换"]
+      }
+    ]
+  },
+  {
+    id: "macos",
+    name: "macOS 平台",
+    desc: "原生支持 Apple Silicon M1/M2/M3/M4 芯片与 Intel 架构机型",
+    apps: [
+      {
+        name: "Clash Verge Rev for Mac",
+        tag: "Mac 最推荐 · 原生适配",
+        badgeVariant: "primary",
+        desc: "专为 macOS 优化编译，提供 dmg 安装镜像与系统托盘菜单快捷控制。支持一键授权服务模式开启 TUN 全局网络接管，无需反复配置浏览器插件。",
+        github: "https://github.com/clash-verge-rev/clash-verge-rev/releases",
+        guide: "/tutorials",
+        features: ["Apple Silicon 原生指令集", "系统顶部菜单栏直控", "TUN 模式一键授权", "低功耗省电设计"]
+      },
+      {
+        name: "Surge for Mac",
+        tag: "商业级标杆 · 开发者利器",
+        badgeVariant: "neutral",
+        desc: "macOS 平台顶级的高级网络调试与规则分流工具。提供极度严苛的网络抓包、MITM 解密与多出口策略编排能力，适合对网络路由有极致要求的专业工程师。",
+        github: "https://nssurge.com/",
+        guide: "/tutorials",
+        features: ["专业级网络抓包分析", "高精度进程级分流", "企业网关增强模式", "高级脚本与插件体系"]
+      },
+      {
+        name: "Mihomo Party for Mac",
+        tag: "优雅设计 · 开箱即用",
+        badgeVariant: "accent",
+        desc: "完美融合 macOS 现代设计语言，提供清晰的节点测速折线图与连接仪表盘，支持通过快捷键呼出控制面板，优雅管理多订阅资产。",
+        github: "https://github.com/mihomo-party-org/mihomo-party/releases",
+        guide: "/tutorials",
+        features: ["符合苹果设计规范", "多订阅自动定时同步", "节点拓扑清晰呈现", "系统代理无缝衔接"]
+      }
+    ]
+  },
+  {
+    id: "ios",
+    name: "iOS (iPhone / iPad)",
+    desc: "需登录海外 Apple ID 在 App Store 下载，适配 iOS 15 及以上系统",
+    apps: [
+      {
+        name: "Shadowrocket (小火箭)",
+        tag: "iOS 装机必备 · 全球标杆",
+        badgeVariant: "primary",
+        desc: "iOS 平台最经典的代理软件。售价约 2.99 美元，全面支持 Shadowsocks、VLESS、Trojan、Hysteria 2 协议，具备扫码一键导入与后台长效保活特性。",
+        github: "https://apps.apple.com/us/app/shadowrocket/id932747118",
+        guide: "/tutorials",
+        features: ["相机扫码秒速导入", "分流规则自定义", "Widget 桌面小组件", "极低发热与电池消耗"]
+      },
+      {
+        name: "Stash (iOS 版 Clash)",
+        tag: "规则之王 · Clash 内核",
+        badgeVariant: "accent",
+        desc: "专为 iOS 深度打造的 Clash 体系客户端。全面继承 Clash 规则体系与策略组联动逻辑，支持在手机端可视化管理复杂的海外分流规则。",
+        github: "https://apps.apple.com/us/app/stash-rule-based-proxy/id1596063349",
+        guide: "/tutorials",
+        features: ["支持 Clash 原生配置文件", "精美仪表盘与网络看板", "On-Demand 自动按需连接", "多设备 iCloud 同步"]
+      },
+      {
+        name: "Quantumult X (圈 X)",
+        tag: "极客重度 · 脚本生态",
+        badgeVariant: "neutral",
+        desc: "iOS 平台高阶玩家推崇的专业代理软件。具备强劲的 JavaScript 脚本执行引擎、MITM 重写能力与分流策略组编排，适合深度折腾玩家。",
+        github: "https://apps.apple.com/us/app/quantumult-x/id1453926393",
+        guide: "/tutorials",
+        features: ["强劲 JS 脚本执行", "HTTP 请求重写与调试", "极客定制策略组", "底层网络状态精细监控"]
+      }
+    ]
+  },
+  {
+    id: "android",
+    name: "Android (安卓平台)",
+    desc: "支持各大安卓品牌手机、平板与 Android TV 电视盒子",
+    apps: [
+      {
+        name: "Clash Meta for Android (Flclash)",
+        tag: "安卓最推荐 · 高刷适配",
+        badgeVariant: "primary",
+        desc: "基于现代跨平台架构打造的安卓端代理新星。界面响应流畅丝滑，完美适配 120Hz 高刷新率，支持后台保活、多订阅聚合与分应用代理名单。",
+        github: "https://github.com/MetaCubeX/ClashMetaForAndroid/releases",
+        guide: "/tutorials",
+        features: ["适配 120Hz 高刷屏幕", "分应用代理黑白名单", "后台长效保活不杀后台", "支持分流策略组切换"]
+      },
+      {
+        name: "v2rayNG",
+        tag: "轻巧纯粹 · 省电耐用",
+        badgeVariant: "neutral",
+        desc: "安卓平台历史悠久的开源老牌工具。界面简洁质朴，内存占用极低，支持扫码导入订阅与单节点手动配置，非常适合入门用户与中老款备用机型。",
+        github: "https://github.com/2dust/v2rayNG/releases",
+        guide: "/tutorials",
+        features: ["极低系统内存占用", "支持分应用自定义分流", "原生支持扫码与剪贴板", "无多余后台驻留功耗"]
+      },
+      {
+        name: "NekoBox for Android",
+        tag: "全协议栈 · Sing-box 核心",
+        badgeVariant: "accent",
+        desc: "基于 Sing-box 通用代理平台内核编译。支持最新前沿协议与 QUIC 传输，具备强大的网络调试功能与低延迟优化表现。",
+        github: "https://github.com/MatsuriDayo/NekoBoxForAndroid/releases",
+        guide: "/tutorials",
+        features: ["Sing-box 现代内核", "支持前沿新式协议", "精细化路由控制规则", "支持多核配置切换"]
+      }
+    ]
+  },
+  {
+    id: "linux",
+    name: "Linux 平台",
+    desc: "覆盖 Ubuntu、Debian、Arch Linux、CentOS 及各类服务器发行版",
+    apps: [
+      {
+        name: "Clash Verge Rev (Linux GUI)",
+        tag: "桌面发行版 · 现代图形端",
+        badgeVariant: "primary",
+        desc: "提供 AppImage 与 deb 格式安装包，为各类 Linux 桌面环境（GNOME、KDE、XFCE）带来一致的图形化策略组管理与系统代理接管体验。",
+        github: "https://github.com/clash-verge-rev/clash-verge-rev/releases",
+        guide: "/tutorials",
+        features: ["开箱即用 AppImage 单文件", "桌面托盘快速切换节点", "原生支持 Linux TUN 虚拟网卡", "开发环境首选桌面端"]
+      },
+      {
+        name: "Mihomo / Sing-box (CLI 守护进程)",
+        tag: "服务器与极客 · systemd 后台",
+        badgeVariant: "neutral",
+        desc: "适用于无图形界面的云服务器与开发工作站。通过 systemd 配置开机自启守护进程，依托 TUN 虚拟网卡实现整机无感代理与自动化运维脚本支持。",
+        github: "https://github.com/MetaCubeX/mihomo/releases",
+        guide: "/tutorials",
+        features: ["零桌面依赖纯后台守护", "systemd 自动守护保活", "极低系统 CPU 功耗", "支持 RESTful API 远程控制"]
+      }
+    ]
+  }
+];
+
+// 核心客户端横向对比矩阵
+const clientMatrix = [
+  { name: "Clash Verge Rev", platform: "Win / Mac / Linux", type: "开源免费", kernel: "Mihomo (Meta)", tun: "一键支持", rule: "强大可视", newbie: "⭐⭐⭐⭐⭐" },
+  { name: "Mihomo Party", platform: "Win / Mac", type: "开源免费", kernel: "Mihomo (Meta)", tun: "原生支持", rule: "极简可视", newbie: "⭐⭐⭐⭐⭐" },
+  { name: "v2rayN", platform: "Windows", type: "开源免费", kernel: "Xray / Sing-box", tun: "支持", rule: "高阶配置", newbie: "⭐⭐⭐⭐" },
+  { name: "Shadowrocket", platform: "iOS", type: "商业买断 ($2.99)", kernel: "自研多协议", tun: "系统级接管", rule: "预设优秀", newbie: "⭐⭐⭐⭐⭐" },
+  { name: "Stash", platform: "iOS / macOS", type: "商业买断", kernel: "Clash 内核", tun: "系统级接管", rule: "策略组完整", newbie: "⭐⭐⭐⭐" },
+  { name: "Flclash (CMA)", platform: "Android", type: "开源免费", kernel: "Mihomo (Meta)", tun: "原生支持", rule: "图形可视", newbie: "⭐⭐⭐⭐⭐" },
+  { name: "v2rayNG", platform: "Android", type: "开源免费", kernel: "Xray", tun: "VpnService", rule: "分应用名单", newbie: "⭐⭐⭐⭐" },
+  { name: "Surge", platform: "Mac / iOS", type: "高阶商业授权", kernel: "自研引擎", tun: "增强网关", rule: "极客顶峰", newbie: "⭐⭐" }
+];
+---
+
+<Layout
+  title="客户端下载中心 — Clash Verge·Shadowrocket·v2rayN全平台开源软件【2026合集】"
+  description="2026 官方正版代理软件全景下载与配置指南：汇聚 Windows、macOS、iOS、Android 与 Linux 平台官方正版发布通道。深度横评 Clash Verge Rev、Shadowrocket 小火箭、v2rayN、Mihomo Party 与服务商专属自研端，详解 TUN 虚拟网卡与防木马安全策略。"
+  keywords="Clash Verge下载, Shadowrocket下载, 小火箭安装, v2rayN下载, Clash客户端, 机场客户端, 翻墙软件, TUN模式, 机场榜一"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+  <JsonLd type="FAQPage" faqItems={faqItems} />
+
+  <!-- 页面头部 -->
+  <section class="relative z-20 site-container my-10 md:my-14">
+    <PageHeader
+      title="全平台客户端软件下载与订阅配置中心"
+      description="横跨 Windows、macOS、iOS、Android 与 Linux 五大操作系统。汇聚官方开源正版与高可靠专属定制端，依托双轨选型战略与 TUN 模式底层拆解，助你远离钓鱼木马与隐私泄露风险。"
+    />
+
+    <!-- 快速导航胶囊 -->
+    <div class="flex flex-wrap gap-2 pt-6">
+      <a href="#dual-track" class="px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold hover:bg-primary/20 transition-colors">
+        🧭 双轨选型战略
+      </a>
+      <a href="#matrix-table" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        📊 8款客户端横评大盘
+      </a>
+      <a href="#os-windows" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        💻 Windows 下载专区
+      </a>
+      <a href="#os-macos" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        🍎 macOS 下载专区
+      </a>
+      <a href="#os-ios" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        📱 iOS 小火箭专区
+      </a>
+      <a href="#os-android" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        🤖 安卓客户端专区
+      </a>
+      <a href="#tun-mechanics" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        ⚡ TUN 模式与路由原理
+      </a>
+      <a href="#security-rules" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        ⚠️ 客户端防套路避雷
+      </a>
+      <a href="#faq" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        ❓ 客户端高频答疑
+      </a>
+    </div>
+  </section>
+
+  <!-- 🧭 模块一：双轨客户端选型战略决策树 -->
+  <section class="py-6 site-container" id="dual-track">
+    <div class="p-6 md:p-10 rounded-2xl bg-gradient-to-br from-bg-secondary via-bg-secondary to-primary/5 dark:from-bg-secondary-dark dark:to-neutral-900 border border-primary/20 shadow-sm">
+      <div class="mb-6">
+        <div class="mb-2 inline-block">
+          <Badge variant="accent">科学选型建议</Badge>
+        </div>
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          双轨选型战略：专属自研客户端 vs 开源通用工具
+        </h2>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+          根据你的技术熟练度与使用场景，选择最适合你的软件接入方式，避免盲目折腾
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- 轨道一：官方自研端 -->
+        <div class="p-6 rounded-xl bg-bg-primary dark:bg-neutral-800 border-2 border-primary/30 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full bg-primary text-white text-xs font-bold">
+              轨道一 · 新手与省心首选
+            </span>
+            <span class="text-xs text-emerald-600 dark:text-emerald-400 font-bold">零门槛开箱即用</span>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+              服务商专属自研定制客户端
+            </h3>
+            <p class="text-xs text-neutral-600 dark:text-neutral-300 mt-1 leading-relaxed">
+              由机场官方团队独立深度定制。用户安装后输入账号密码或扫码一键登录，节点实时同步，无需繁琐复制订阅 URL，线路测速与规则分流已在云端优化配置完毕。
+            </p>
+          </div>
+
+          <div class="space-y-2 pt-2 border-t border-primary/10 text-xs text-neutral-600 dark:text-neutral-300">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>绝对安全无泄露：</strong>不经过第三方在线订阅转换，Token 资产绝对安全</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>一键自动更新：</strong>节点域名发生变更或维护时客户端静默自动切换</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>代表性金牌服务商：</strong><a href="/reviews/guangsu" class="text-primary font-bold hover:underline">光速云</a>、<a href="/reviews/breeze" class="text-primary font-bold hover:underline">微风网络</a>、<a href="/reviews/feimao" class="text-primary font-bold hover:underline">飞猫云</a></span>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <a
+              href="/reviews/guangsu"
+              class="block w-full py-2.5 rounded-xl bg-primary text-white text-xs font-bold text-center hover:opacity-90 transition-opacity"
+            >
+              查看光速云金牌自研端详情与体验 →
+            </a>
+          </div>
+        </div>
+
+        <!-- 轨道二：开源通用客户端 -->
+        <div class="p-6 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 text-xs font-bold">
+              轨道二 · 极客与多机场首选
+            </span>
+            <span class="text-xs text-neutral-400">高度自由可玩性</span>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+              全球社区开源通用客户端
+            </h3>
+            <p class="text-xs text-neutral-600 dark:text-neutral-300 mt-1 leading-relaxed">
+              基于开放协议标准由全球开发者共同维护。支持在同一个软件中同时导入多家不同机场的订阅源，按需编排策略组，自定义去广告规则与 TUN 虚拟网卡路由。
+            </p>
+          </div>
+
+          <div class="space-y-2 pt-2 border-t border-primary/10 text-xs text-neutral-600 dark:text-neutral-300">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>多订阅资产聚合：</strong>主力专线与按量备用梯子无缝同屏共存管理</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>全协议深度兼容：</strong>灵活切换 Meta、Xray、Sing-box 底层内核</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span><strong>代表性开源利器：</strong>Clash Verge Rev、Mihomo Party、Shadowrocket、v2rayN</span>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <a
+              href="#os-windows"
+              class="block w-full py-2.5 rounded-xl bg-bg-secondary dark:bg-neutral-700 text-neutral-800 dark:text-neutral-200 text-xs font-semibold text-center hover:border-primary border border-transparent transition-all"
+            >
+              浏览下方全平台开源软件下载库 ↓
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📊 模块二：主流客户端核心功能对比大盘表 -->
+  <section class="py-10 site-container" id="matrix-table">
+    <div class="mb-6">
+      <div class="mb-2 inline-block">
+        <Badge variant="accent">参数横评</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        主流代理客户端全维度核心功能对比大盘
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        横向穿透内核底层、TUN 模式支持、分流规则复杂度与新手易用度指标
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-2xl border border-primary/20 shadow-sm bg-bg-primary dark:bg-bg-secondary-dark">
+      <table class="w-full text-left text-xs border-collapse min-w-[780px]">
+        <thead>
+          <tr class="bg-neutral-50 dark:bg-neutral-800/80 border-b border-primary/10 text-neutral-600 dark:text-neutral-300">
+            <th class="p-3.5 font-bold">软件名称</th>
+            <th class="p-3.5 font-bold">适配操作系统</th>
+            <th class="p-3.5 font-bold">开源与授权</th>
+            <th class="p-3.5 font-bold">驱动内核</th>
+            <th class="p-3.5 font-bold">TUN 虚拟网卡</th>
+            <th class="p-3.5 font-bold">分流规则便利度</th>
+            <th class="p-3.5 font-bold">新手推荐度</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-primary/5 text-neutral-700 dark:text-neutral-200">
+          {clientMatrix.map((item, index) => (
+            <tr class={index === 0 ? "bg-primary/5 dark:bg-primary/10 font-medium" : "hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30"}>
+              <td class="p-3.5 font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                <span>{item.name}</span>
+                {index === 0 && <span class="px-1.5 py-0.2 rounded bg-primary text-white text-[9px]">桌面首选</span>}
+                {item.name === "Shadowrocket" && <span class="px-1.5 py-0.2 rounded bg-amber-500 text-white text-[9px]">iOS标杆</span>}
+              </td>
+              <td class="p-3.5">{item.platform}</td>
+              <td class="p-3.5">
+                <span class={item.type.includes("开源") ? "text-emerald-600 dark:text-emerald-400 font-semibold" : "text-neutral-500"}>
+                  {item.type}
+                </span>
+              </td>
+              <td class="p-3.5 font-mono text-[11px]">{item.kernel}</td>
+              <td class="p-3.5">
+                <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium text-[11px]">
+                  {item.tun}
+                </span>
+              </td>
+              <td class="p-3.5">{item.rule}</td>
+              <td class="p-3.5 font-mono text-amber-500">{item.newbie}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 💻 模块三：五大主流操作系统全景软件库与官方通道 -->
+  <section class="py-10 site-container space-y-12">
+    <div class="mb-2">
+      <div class="mb-2 inline-block">
+        <Badge variant="primary">官方下载通道</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        五大主流操作系统全景软件库与正版下载
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        所有下载链接均指向各开源项目官方 GitHub Releases 仓库或 App Store 官方商城，杜绝第三方后门篡改包
+      </p>
+    </div>
+
+    {osPlatforms.map((platform) => (
+      <div id={`os-${platform.id}`} class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-primary/10">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="p-2 rounded-xl bg-primary/10 text-primary">
+                {platform.id === "windows" && <Laptop class="w-5 h-5" />}
+                {platform.id === "macos" && <Laptop class="w-5 h-5" />}
+                {platform.id === "ios" && <Smartphone class="w-5 h-5" />}
+                {platform.id === "android" && <Smartphone class="w-5 h-5" />}
+                {platform.id === "linux" && <Terminal class="w-5 h-5" />}
+              </span>
+              <h3 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+                {platform.name}
+              </h3>
+            </div>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 pl-9">
+              {platform.desc}
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {platform.apps.map((app) => (
+            <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10 flex flex-col justify-between hover:border-primary/30 transition-colors">
+              <div>
+                <div class="flex items-start justify-between gap-2 mb-2">
+                  <h4 class="font-bold text-base text-neutral-900 dark:text-neutral-100">
+                    {app.name}
+                  </h4>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary font-semibold flex-shrink-0">
+                    {app.tag}
+                  </span>
+                </div>
+                <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed mb-4">
+                  {app.desc}
+                </p>
+
+                <!-- 特性标签集 -->
+                <div class="flex flex-wrap gap-1.5 mb-4">
+                  {app.features.map(f => (
+                    <span class="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 text-[10px]">
+                      {f}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-dashed border-primary/10 flex items-center justify-between gap-2">
+                <a
+                  href={app.guide}
+                  class="text-xs text-neutral-500 hover:text-primary hover:underline"
+                >
+                  配置图文指南 →
+                </a>
+                <a
+                  href={app.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-xl bg-primary text-white hover:opacity-90 transition-opacity"
+                >
+                  <Download class="w-3.5 h-3.5" />
+                  官方下载直达
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <!-- ⚡ 模块四：四大代理模式与 TUN 模式深度技术解析 -->
+  <section class="py-10 site-container" id="tun-mechanics">
+    <div class="p-6 md:p-10 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/20 shadow-sm">
+      <div class="mb-6">
+        <div class="mb-2 inline-block">
+          <Badge variant="accent">核心原理深度剖析</Badge>
+        </div>
+        <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          四大代理运行模式与 TUN 虚拟网卡底层机理
+        </h2>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+          搞懂系统代理与虚拟网卡的本质差异，让代码拉取、命令行终端、游戏联机彻底告别超时困扰
+        </p>
+      </div>
+
+      <!-- 四大模式图解卡片 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10 space-y-1.5">
+          <span class="text-xs font-bold text-neutral-400">模式 01</span>
+          <h3 class="font-bold text-sm text-neutral-900 dark:text-neutral-100">规则分流 (Rule)</h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            核心日常默认模式。依据预设域名与 IP 数据库智能分流，国内主流网站直接走本地宽带秒开，海外目标请求走高速专线，兼顾速度与流量消耗。
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10 space-y-1.5">
+          <span class="text-xs font-bold text-neutral-400">模式 02</span>
+          <h3 class="font-bold text-sm text-neutral-900 dark:text-neutral-100">全局代理 (Global)</h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            所有由浏览器与应用程序发起的网络请求均无差别转发至所选海外节点。适合本地排查节点故障或个别特定访问，日常不建议开启以防浪费流量。
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10 space-y-1.5">
+          <span class="text-xs font-bold text-neutral-400">模式 03</span>
+          <h3 class="font-bold text-sm text-neutral-900 dark:text-neutral-100">直接连接 (Direct)</h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            所有流量完全绕过代理节点，全部走本地物理宽带出口。相当于暂时关闭代理服务，适合临时下载国内巨型文件或测算本地原生宽带速率。
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border-2 border-primary/30 space-y-1.5">
+          <span class="text-xs font-bold text-primary">模式 04 · 极客核心</span>
+          <h3 class="font-bold text-sm text-neutral-900 dark:text-neutral-100">TUN 虚拟网卡模式</h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            在操作系统协议栈中虚拟出一张独立网络接口，无死角接管系统底层三层 IP 数据包。无需对软件单独设置代理端口，所有应用全局透明走专线。
+          </p>
+        </div>
+      </div>
+
+      <!-- TUN 深度硬核解析 -->
+      <div class="p-6 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15 space-y-3">
+        <h4 class="font-bold text-sm text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+          <Zap class="w-4 h-4 text-primary" />
+          为什么程序员、开发者与外服网游玩家必须开启 TUN 模式？
+        </h4>
+        <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+          传统的代理工具在开启时仅在系统内配置了一个局域网监听端口（例如 127.0.0.1:7890），并通知系统设置中的 HTTP 代理生效。然而，像 Git 命令行、PowerShell/Bash 终端、Docker 容器内部拉取、Unity/Unreal 引擎素材下载，以及各类海外端游联机客户端，其网络层通信并不遵循系统的 HTTP 代理规范，依然会走本地直连导致频繁报错断流。
+        </p>
+        <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+          开启 TUN 模式后，客户端会在系统路由表中写入一条优先级最高的路由规则，把全部网络通信强制导入虚拟网卡。结合像<a href="/reviews/guangsu" class="text-primary font-bold hover:underline">光速云</a>这样的 22ms 低延迟全球 IPLC 专线，能够让 Git Clone 瞬间跑满百兆、海外服游戏丢包率直降为零。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⚠️ 模块五：客户端安全防护与五大避坑指南 -->
+  <section class="py-10 site-container" id="security-rules">
+    <div class="mb-6">
+      <div class="mb-2 inline-block">
+        <Badge variant="accent">安全避坑守则</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        客户端安全防护与五大避坑防钓鱼守则
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        远离山寨官网钓鱼木马、公共订阅转换嗅探以及共享 Apple ID 锁机勒索陷阱
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- 守则 1 -->
+      <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 space-y-2">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">1</span>
+          <h3 class="text-sm font-bold text-neutral-800 dark:text-neutral-100">
+            警惕搜索引擎竞价排名的山寨 Clash 官网
+          </h3>
+        </div>
+        <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-8">
+          国内搜索引擎中大量所谓“Clash 官网”、“小火箭中文下载站”均为黑灰产投放的竞价钓鱼广告。其安装包被植入了远控木马、键盘记录器或加密货币挖矿脚本。下载开源软件务必认准 GitHub 官方 Releases 仓库发布文件。
+        </p>
+      </div>
+
+      <!-- 守则 2 -->
+      <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 space-y-2">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">2</span>
+          <h3 class="text-sm font-bold text-neutral-800 dark:text-neutral-100">
+            绝不使用不明第三方的在线订阅转换服务
+          </h3>
+        </div>
+        <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-8">
+          公共在线订阅转换会将包含用户专属 Token 的订阅地址完整上传至第三方服务器。许多免费转换后端在日志中批量记录提取这些节点并私下转售，导致你的流量被莫名偷跑甚至触发机场的多地异地登录封号机制。
+        </p>
+      </div>
+
+      <!-- 守则 3 -->
+      <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 space-y-2">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">3</span>
+          <h3 class="text-sm font-bold text-neutral-800 dark:text-neutral-100">
+            iOS 严禁在 iPhone 设置的 iCloud 中登录他人共享账号
+          </h3>
+        </div>
+        <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-8">
+          获取小火箭需要美区 Apple ID。使用网上购买或免费共享的账号时，仅允许在 App Store 应用商店内登录下载。若在系统“设置 - iCloud”中登录，不法号贩子可立即通过查找手机功能远程锁定抹掉你的设备并敲诈赎金。
+        </p>
+      </div>
+
+      <!-- 守则 4 -->
+      <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 space-y-2">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">4</span>
+          <h3 class="text-sm font-bold text-neutral-800 dark:text-neutral-100">
+            定期跟进内核升级，防范 TLS 握手特征识别
+          </h3>
+        </div>
+        <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-8">
+          审查防火墙对旧版客户端的 TLS 握手特征与指纹库持续更新。长期使用三四年前的老旧客户端极易遭受主动探测与协议阻断。保持 Mihomo 或 Xray 内核处于近半年的稳定发行版本能够显著提升抗封锁生存率。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ❓ 模块六：常见客户端问题长尾答疑 (FAQ) -->
+  <section class="py-10 site-container" id="faq">
+    <div class="mb-8">
+      <div class="mb-2 inline-block">
+        <Badge variant="primary">高频答疑</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        客户端安装、使用与网络排障常见问答
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        解答你在全平台软件下载、TUN 授权、订阅导入与系统代理排查中最常遇到的高频疑问
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {faqItems.map((item, idx) => (
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 space-y-2">
+          <h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100 flex items-start gap-2">
+            <span class="text-primary font-mono font-bold flex-shrink-0">Q{idx + 1}.</span>
+            <span>{item.question}</span>
+          </h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-6">
+            {item.answer}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 🧭 模块七：全站网状知识库与专题直达 -->
+  <section class="py-12 site-container border-t border-primary/10">
+    <div class="p-6 md:p-8 rounded-2xl bg-gradient-to-r from-bg-secondary to-primary/5 dark:from-bg-secondary-dark dark:to-neutral-900 border border-primary/20 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="space-y-1">
+        <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+          软件下载完毕？快速搭配优质高速专线
+        </h3>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400">
+          全站网状知识库助你从套餐选型、线路原理到场景解锁全流程无缝通关
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <a
+          href="/pricing"
+          class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 text-xs font-semibold hover:border-primary border border-primary/20 transition-all"
+        >
+          💰 价格与套餐精算
+        </a>
+        <a
+          href="/ranking"
+          class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 text-xs font-semibold hover:border-primary border border-primary/20 transition-all"
+        >
+          🏆 综合实测排行榜
+        </a>
+        <a
+          href="/protocols"
+          class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 text-xs font-semibold hover:border-primary border border-primary/20 transition-all"
+        >
+          ⚡ 线路拓扑与协议技术
+        </a>
+        <a
+          href="/recommend"
+          class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:opacity-90 shadow-sm transition-all"
+        >
+          ⭐ 2026 推荐主榜 →
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

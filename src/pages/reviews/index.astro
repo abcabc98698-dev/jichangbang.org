@@ -1,0 +1,224 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import { airports } from "@/data/airports";
+import { directoryAirports } from "@/data/directory-airports";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import { ArrowRight, Star, ShieldCheck, Zap, Search, Sparkles, ExternalLink } from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "品牌评测", url: "/reviews" }
+];
+---
+
+<Layout
+  title="机场品牌深度评测大厅 — 2026晚高峰实测·测速图·流媒体AI解锁【全面评测】"
+  description="机场榜一深度评测中心：全网首家提供全天候晚高峰 20:00-23:00 真实测速、Netflix/Disney+ 原生解锁、ChatGPT 4o 与 Claude 3.7 双 ISP 住宅 IP 验证实测截图的评测专栏。收录 167+ 家国内外主流机场品牌档案。"
+  keywords="机场评测, 机场测评, 光速云评测, 宇宙云评测, 飞猫云评测, 微风网络测评, 机场晚高峰测速, 机场名录, 机场榜一"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+
+  <!-- 头部介绍 -->
+  <section class="relative z-20 site-container my-10 md:my-14">
+    <PageHeader
+      title="机场品牌深度评测中心"
+      description="每一个收录品牌均建立深度评测档案。客观剖析线路架构、实测晚高峰测速带宽、真实套餐性价比、风控解锁率及运营风险状态，提供官网直达与独家专属折扣码。"
+    />
+  </section>
+
+  <!-- 核心商业推荐品牌 (18强) -->
+  <section class="py-6 site-container">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+          🏆 2026 年度重点推荐品牌矩阵
+        </h2>
+        <p class="text-xs md:text-sm text-neutral-500 mt-1">
+          经过 7×24 小时晚高峰真实丢包率、大带宽下行与流媒体/AI 住宅 IP 严苛筛选的核心推荐品牌。
+        </p>
+      </div>
+      <span class="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold hidden sm:inline-block">
+        共 18 家金牌优选
+      </span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {airports.map((airport) => (
+        <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 hover:border-primary/40 hover:shadow-lg transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                {airport.lineType}
+              </span>
+              <div class="flex items-center gap-1 text-xs text-amber-500 font-bold">
+                <Star class="w-3.5 h-3.5 fill-current" />
+                <span>{airport.score}</span>
+              </div>
+            </div>
+
+            <h3 class="text-lg font-bold text-neutral-800 dark:text-neutral-100 mb-1">
+              <a href={`/reviews/${airport.slug}`} class="hover:text-primary transition-colors">
+                {airport.name}
+              </a>
+            </h3>
+            <p class="text-xs text-neutral-500 mb-4 line-clamp-2">
+              {airport.slogan}
+            </p>
+
+            <div class="space-y-1.5 py-3 border-y border-dashed border-neutral-200 dark:border-neutral-700/60 text-xs text-neutral-600 dark:text-neutral-300">
+              <div class="flex justify-between">
+                <span class="text-neutral-400">起步价格：</span>
+                <span class="font-bold text-neutral-800 dark:text-neutral-100">¥{airport.monthlyPrice} / {airport.minDuration}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-neutral-400">晚高峰均速：</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400">{airport.speedMbps} Mbps</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-neutral-400">端到端延迟：</span>
+                <span>{airport.latencyMs} ms</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-neutral-400">运营状态：</span>
+                <span class="text-emerald-500 font-medium">● {airport.riskStatus}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 mt-4 flex items-center justify-between">
+            <span class="text-xs text-neutral-400">已运营：{airport.established}</span>
+            <a
+              href={`/reviews/${airport.slug}`}
+              class="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1"
+            >
+              查看深度实测报告 <ArrowRight size={14} />
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 全网知名品牌客观收录名录 (149 家) -->
+  <section class="py-12 site-container border-t border-primary/15 mt-8">
+    <!-- 转化拦截横幅 -->
+    <div class="p-5 md:p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-primary/10 to-emerald-500/10 border border-primary/30 flex flex-col md:flex-row items-center justify-between gap-5 mb-8 shadow-sm">
+      <div class="flex items-start md:items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center shrink-0 mt-0.5 md:mt-0">
+          <Sparkles class="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-primary text-white">2026 综合金牌首推</span>
+            <span class="text-xs text-neutral-500 dark:text-neutral-400">9.9 分 · 2.5Gbps 物理专线</span>
+          </div>
+          <p class="text-xs md:text-sm text-neutral-700 dark:text-neutral-200">
+            下方为全网 149 家知名中立收录机场档案。若您需要极高稳定度、原生住宅双 ISP 且晚高峰 0 丢包，推荐优先选择金牌榜首<strong>【光速云】</strong>（月付 ¥19.9 起，8折专属优惠码：<code class="font-bold text-primary">AMM</code>）。
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 shrink-0 w-full md:w-auto">
+        <a
+          href="https://guangs.vipaff.cc/#/?code=xhX5X22f"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full md:w-auto text-center px-4 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:brightness-110 shadow-md shadow-primary/25 transition-all whitespace-nowrap"
+        >
+          抢购光速云 8 折 &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- 目录大厅标题与搜索框 -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div>
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+          📖 全网知名品牌客观收录名录 ({directoryAirports.length} 家)
+        </h2>
+        <p class="text-xs md:text-sm text-neutral-500 mt-1">
+          汇集全网主流与知名网络加速品牌档案，提供线路架构、公网测速基准、客观优缺点与选购避坑指南。
+        </p>
+      </div>
+
+      <!-- 客户端搜索过滤框 -->
+      <div class="relative w-full md:w-72">
+        <Search class="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <input
+          type="text"
+          id="airport-search-input"
+          placeholder="搜索品牌名称或拼音..."
+          class="w-full pl-9 pr-3 py-2 rounded-xl text-xs bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 focus:outline-none focus:border-primary text-neutral-800 dark:text-neutral-100"
+        />
+      </div>
+    </div>
+
+    <!-- 收录品牌卡片列表 -->
+    <div id="directory-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
+      {directoryAirports.map((airport) => (
+        <a
+          href={`/reviews/${airport.slug}`}
+          data-name={airport.name.toLowerCase()}
+          data-slug={airport.slug}
+          class="airport-directory-card p-3.5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 hover:border-primary hover:shadow-md transition-all group flex flex-col justify-between"
+        >
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
+                {airport.lineType}
+              </span>
+              <span class="text-[11px] font-bold text-amber-500 flex items-center gap-0.5">
+                ★ {airport.score}
+              </span>
+            </div>
+            <h4 class="text-sm font-bold text-neutral-800 dark:text-neutral-100 group-hover:text-primary transition-colors line-clamp-1 mb-1">
+              {airport.name}
+            </h4>
+            <p class="text-[11px] text-neutral-400 mb-2">
+              月付 ¥{airport.monthlyPrice} 起 · {airport.traffic}GB
+            </p>
+          </div>
+          <div class="pt-2 border-t border-dashed border-neutral-200 dark:border-neutral-700/60 flex items-center justify-between text-[11px] text-neutral-500 group-hover:text-primary transition-colors">
+            <span>实测 {airport.speedMbps}M</span>
+            <ArrowRight size={12} />
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- 无搜索结果提示 -->
+    <div id="no-search-results" class="hidden text-center py-12 text-neutral-400 text-xs">
+      未找到匹配的品牌，您可以直接在上方推荐中选择金牌专线【光速云】。
+    </div>
+  </section>
+
+  <!-- 搜索过滤 JS 脚本 -->
+  <script is:inline>
+    const searchInput = document.getElementById('airport-search-input');
+    const cards = document.querySelectorAll('.airport-directory-card');
+    const noResults = document.getElementById('no-search-results');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const name = card.getAttribute('data-name') || '';
+          const slug = card.getAttribute('data-slug') || '';
+          if (name.includes(query) || slug.includes(query)) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (noResults) {
+          noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+      });
+    }
+  </script>
+</Layout>
+

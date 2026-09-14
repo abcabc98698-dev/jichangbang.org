@@ -1,5 +1,6 @@
 ---
 import Meta from './Meta.astro';
+import JsonLd from "@/components/seo/JsonLd.astro";
 import TopBg from "@/components/ui/TopBg.astro";
 import Footer from "@/components/sections/Footer.astro";
 import Header from "@/components/sections/Header.astro";
@@ -24,7 +25,7 @@ import '../styles/article.css';
 import '../styles/article-enhancements.css';
 ---
 
-<html lang="">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <Meta
@@ -32,6 +33,7 @@ import '../styles/article-enhancements.css';
       description = {description}
       keywords = {keywords}
     />
+    <JsonLd type="Organization" />
     <TrackGa />
     <!-- Used to add dark mode right away, adding here prevents any flicker -->
     <script is:inline>

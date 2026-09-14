@@ -1,0 +1,521 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import Badge from "@/components/ui/Badge.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import { airports } from "@/data/airports";
+import {
+  ShieldCheck,
+  Award,
+  Zap,
+  Sparkles,
+  Clock,
+  Eye,
+  Radio
+} from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "风险情报", url: "/risk" }
+];
+
+// 保持用户统一排位
+const sortedAirports = [...airports];
+
+// 8组高价值机场风险、跑路监测与防骗长尾FAQ
+const faqItems = [
+  {
+    question: "机场为什么会频繁跑路？其底层的资金链崩塌机理是什么？",
+    answer: "绝大多数机场跑路的根本原因在于恶性价格战导致的现金流断裂。正规跨境物理专线与机房出口带宽成本高昂，单 Gbps 专线月租高达数万元。部分不良运营方为了快速圈钱，推出 9.9 元包年甚至 50 元终身套餐等不切实际的低价噱头。这种模式在本质上属于击鼓传花的庞氏结构，一旦新增用户付费放缓，收入无法覆盖昂贵的服务器月结账单，运营方就会在服务器到期前夕卷款失联。"
+  },
+  {
+    question: "发现机场官网打不开时，如何判断是网站被墙还是运营方已经跑路？",
+    answer: "判断的核心在于节点是否依然能够正常转发流量。大陆公共防火墙经常会对机场官网域名进行 DNS 污染或 SNI 阻断，导致国内网络直连无法打开官网，但这并不意味着服务器已经关停。用户可先连接当前客户端中尚且可用的节点，再尝试访问官网；或者打开其官方 Telegram 频道查看最新发布的发布页与备用域名。若节点全线变红超过 48 小时且社群全员禁言，方可确认为高危失联跑路。"
+  },
+  {
+    question: "为什么很多机场在跑路前夕会突然搞大幅度的打折促销？",
+    answer: "这是黑灰产圈钱跑路前的经典收割手段。当运营方因机房欠费即将被机房停机，或者团队因个人原因决定关停服务时，会利用用户贪图便宜的心理，在跑路前一周突然在社群与面板中群发五折大促销、买一年送两年或充值双倍等极具诱惑力的活动。在短时间内批量吸纳数万至数十万元预存资金后，运营方会立即删库、解散社群并彻底失联。"
+  },
+  {
+    question: "如果购买的机场不幸跑路关停，普通用户是否有渠道申请退款维权？",
+    answer: "在实际操作中维权极其艰难。绝大多数机场运营方为了规避监管，服务器位于境外，且结算普遍采用第三方非法聚合发卡平台或虚拟货币。一旦网站关闭，线上工单与社群通道全部断绝，用户几乎不可能联系到真实的运营主体。因此防范损失的唯一有效手段在于事前的风险控制，即优先选择按月付款，控制单次充值金额不超过一杯奶茶的花销。"
+  },
+  {
+    question: "新上线的不知名机场应该如何鉴别其是否为短期割韭菜的圈钱盘？",
+    answer: "可从四个硬性维度进行鉴别：第一，查看其官网域名的注册历史时间（通过 WHOIS 查询），若域名刚注册两三个月却号称五年老牌，必定是虚假宣传；第二，查看套餐是否只提供年付或长期付款，缺乏基础月付选项；第三，查看其节点列表是否充斥着超高倍率暗扣；第四，查看其官方社群是否开启了严格的发言限制或长期禁言。"
+  },
+  {
+    question: "官方 Telegram 群组开启全员禁言，是否意味着该机场已经失联？",
+    answer: "官方群开启全员禁言是极度危险的暴雷信号。在常规运营中，群组是用户反馈故障与交流的核心阵地。若非遭遇大规模恶意炸群或突发广告轰炸，正规服务商绝不会无故开启长期全员禁言。一旦发现群组开启禁言超过 24 小时，且后台工单系统无人回应，通常表明团队内部发生剧烈动荡或正准备关停跑路，用户应立即停止任何续费充值操作。"
+  },
+  {
+    question: "为什么运营超过 3 到 5 年的老牌机场跑路风险会呈指数级降低？",
+    answer: "能够持续运营超过三到五年的老牌服务商（如光速云、星岛梦等），其商业模式已历经多次敏感时期封锁与行业洗牌的严苛考验。此类老牌平台拥有庞大且忠诚的存量付费用户基盘，形成了稳定的正向现金流循环；同时团队具备成熟的技术抗封锁经验与机房冗余储备，其维护信誉与长期经营的收益远超跑路套现的短期收益。"
+  },
+  {
+    question: "为什么我们强烈建议建立一主一备的异构双机场容灾体系？",
+    answer: "网络世界中没有 100% 绝对不出现故障的单一系统。无论是国际海底光缆被渔船锚链切断、上游机房突发电力中断，还是敏感时期的大规模流量清洗，单一机场都存在短时不可用的客观风险。常备一条主力专线（如光速云企业专线）用于日常高频生产力，并额外储备一条不设到期时间的不限时按量套餐（如星岛梦），能够在主干受损时秒级切换，实现真正意义上的全天候在线。"
+  }
+];
+
+// 四级安全雷达评级体系
+const radarLevels = [
+  {
+    level: "绿灯 · 正常运营",
+    statusText: "Normal",
+    color: "emerald",
+    badgeClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+    desc: "全线节点连通率 ≥ 99.5%，客服工单 2 小时内响应，官方 Telegram 频道与群组交流活跃通畅，各项网络指标处于健康稳健状态。"
+  },
+  {
+    level: "蓝灯 · 例行检修",
+    statusText: "Maintenance",
+    color: "blue",
+    badgeClass: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+    desc: "上游机房进行物理服务器割接、海底光缆计划内维护或系统升级，局部单点节点出现短时丢包或重连，官方提前发布公告，属正常运维。"
+  },
+  {
+    level: "黄灯 · 重点观察",
+    statusText: "Caution",
+    color: "amber",
+    badgeClass: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+    desc: "大面积节点红色超时超过 24 小时未修复，客服工单响应出现严重延迟，或突然反常推出超低价永久套餐，现金流疑似面临紧张。"
+  },
+  {
+    level: "红灯 · 高危失联",
+    statusText: "High Risk",
+    color: "rose",
+    badgeClass: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20",
+    desc: "官方社群突然开启全员永久禁言、官网域名连续 48 小时无法解析访问、工单系统完全停摆，疑似运营方关停失联，严禁充值。"
+  }
+];
+
+// 五大核心跑路预兆信号
+const warningSigns = [
+  {
+    title: "官方社群突然开启全员永久禁言",
+    tag: "最致命预兆",
+    desc: "Telegram 官方交流群是用户反映节点状态的核心窗口。若管理人员在未遭遇大规模广告炸群的情况下突然开启全员禁言，甚至解散群组，说明运营方正在防范因故障引起的恐慌维权，通常是跑路关停的最直观前兆。"
+  },
+  {
+    title: "后台工单系统超过 72 小时无人应答",
+    tag: "运维停摆信号",
+    desc: "正规服务商普遍承诺数小时内响应工单。若提交的加急技术工单连续多日显示‘未处理’或仅有机器人自动回复，说明技术运维与客服团队已经撤离，平台已进入无人维护的自生自灭倒计时阶段。"
+  },
+  {
+    title: "突然反常推出骨折价终身或多年套餐",
+    tag: "圈钱套现收尾",
+    desc: "平时从不大促的平台突然在官网首页弹出‘5折终身会员’、‘买一年送两年’或‘充值100送100’等反常活动。这是资金链即将断裂时，运营团队在关门前最后进行一波预收圈钱的经典行径。"
+  },
+  {
+    title: "频繁变更收款账户名或转为个人二维码",
+    tag: "资金渠道暴雷",
+    desc: "合规运营方通常采用长期稳定的企业商户支付通道。若结账结算界面的收款方名称频繁更改为不同的个人商户，或者仅支持个人微信/支付宝扫码转账，说明其正规收款通道已被风控冻结，财务风险极高。"
+  },
+  {
+    title: "一线主力专线全红，仅留直连节点敷衍",
+    tag: "机房欠费断网",
+    desc: "昂贵的 IPLC/IEPL 企业专线因月租到期无力续费而被机房断开，列表中仅剩几条廉价的公网直连节点苟延残喘，延迟高达数百毫秒且丢包严重，表明运营方已放弃高质量线路投入。"
+  }
+];
+
+// 资深出海用户资金防坑六大守则
+const goldenRules = [
+  {
+    num: "1",
+    title: "新平台坚决奉行优先月付原则",
+    desc: "无论服务商给出多大的年付诱惑，初次体验新平台时必须选择一个月月付。用十几元的一顿外卖成本实测其晚高峰稳定性，即使突发变故损失也完全在可控范围内。"
+  },
+  {
+    num: "2",
+    title: "年付仅限持有运营三年以上老牌",
+    desc: "年付能锁定大幅折扣并享受月费减免，但前提是该服务商具备强劲抗风险能力。如光速云稳定运营超5年，拥有成熟运维团队与庞大存量用户，方具备年付持有的安全边际。"
+  },
+  {
+    num: "3",
+    title: "必须建立一主一备双异构容灾体系",
+    desc: "主力选用光速云等高品质企业专线保障日常生产力，备用配置一条星岛梦不限时按量套餐。当主力机房突发维护时，备用通道随时保障通信不断联，打破失联死锁。"
+  },
+  {
+    num: "4",
+    title: "定期在客户端本地导出备份节点配置",
+    desc: "在客户端中定期导出节点配置文件保存到本地磁盘。即使未来机场官网出现短时域名污染打不开，本地已解析出的物理节点配置依然可以继续正常连接数天甚至数周。"
+  },
+  {
+    num: "5",
+    title: "警惕虚假凌晨测速图与水军刷屏",
+    desc: "部分不良测速博主在凌晨四五点网络极度空闲时截取跑满千兆的图片冒充全天速率。必须参考真实晚高峰 20点至 23点拥堵时段的实测数据，拒绝虚假宣传欺骗。"
+  },
+  {
+    num: "6",
+    title: "严控账户充值沉淀资金",
+    desc: "不要在任何机场账户内预先充值大额现金余额。随用随买、按需续费，切忌把虚拟网络服务商当成储蓄银行，从源头上杜绝资金被套牢的潜在风险。"
+  }
+];
+---
+
+<Layout
+  title="机场风险情报与安全雷达 — 跑路监测·节点检修·避坑指南【2026实时预警】"
+  description="2026 机场安全雷达与风险情报中心：实时追踪全网机场网络连通异动、机房割接、域名防封替换与长达48小时失联高危预警。深度拆解跑路资金盘底层崩塌逻辑，提供六大资金防坑避雷守则与双异构主备容灾方案。"
+  keywords="机场跑路名单, 机场失联, 机场避坑, 机场黑名单, 机场跑路预警, 2026跑路机场, 机场域名变更, 9.9包年跑路, 机场榜一"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+  <JsonLd type="FAQPage" faqItems={faqItems} />
+
+  <!-- 页面头部 -->
+  <section class="relative z-20 site-container my-10 md:my-14">
+    <PageHeader
+      title="机场风险情报与全网安全雷达系统"
+      description="为你的出海资产与网络稳定性保驾护航。通过全网节点探针与社群舆情监测，实时公示主流机场运营健康状态，深度起底跑路资金盘套路，识别五大暴雷失联预警信号。"
+    />
+
+    <!-- 快速导航胶囊 -->
+    <div class="flex flex-wrap gap-2 pt-6">
+      <a href="#radar-levels" class="px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold hover:bg-primary/20 transition-colors">
+        📡 四级安全雷达
+      </a>
+      <a href="#safety-matrix" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        📊 18家安全状态大盘
+      </a>
+      <a href="#ponzi-economics" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        💡 跑路资金盘解密
+      </a>
+      <a href="#warning-signs" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        ⚠️ 五大跑路预兆
+      </a>
+      <a href="#golden-rules" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        🛡️ 资金防坑六大守则
+      </a>
+      <a href="#faq" class="px-3.5 py-1.5 rounded-full bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 text-xs text-neutral-600 dark:text-neutral-300 hover:border-primary/40 transition-colors">
+        ❓ 风险情报答疑
+      </a>
+    </div>
+  </section>
+
+  <!-- 📡 模块一：四级风险安全雷达评级体系 -->
+  <section class="py-6 site-container" id="radar-levels">
+    <div class="p-6 md:p-10 rounded-2xl bg-gradient-to-br from-bg-secondary via-bg-secondary to-primary/5 dark:from-bg-secondary-dark dark:to-neutral-900 border border-primary/20 shadow-sm">
+      <div class="mb-6">
+        <div class="mb-2 inline-block">
+          <Badge variant="primary">安全预警标准</Badge>
+        </div>
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          四级风险安全雷达评级体系
+        </h2>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+          依托自动化节点探针网络与服务商客服状态，量化评估出海网络资产的安全健康度
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {radarLevels.map((item) => (
+          <div class={`p-5 rounded-xl border flex flex-col justify-between ${item.badgeClass}`}>
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold font-mono uppercase">{item.statusText}</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-current"></span>
+              </div>
+              <h3 class="font-bold text-sm text-neutral-900 dark:text-neutral-100 mb-2">
+                {item.level}
+              </h3>
+              <p class="text-xs leading-relaxed opacity-90 text-neutral-700 dark:text-neutral-300">
+                {item.desc}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 📊 模块二：全站 18 家主流品牌安全合规与抗风险全景大盘 -->
+  <section class="py-10 site-container" id="safety-matrix">
+    <div class="mb-6">
+      <div class="mb-2 inline-block">
+        <Badge variant="accent">状态公示大盘</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        全站 18 家主流品牌当前安全状态与抗风险能力大盘
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        详细披露各服务商的持续运营年限、抗审查拓扑、最低支付门槛及综合抗风险评价
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-2xl border border-primary/20 shadow-sm bg-bg-primary dark:bg-bg-secondary-dark">
+      <table class="w-full text-left text-xs border-collapse min-w-[850px]">
+        <thead>
+          <tr class="bg-neutral-50 dark:bg-neutral-800/80 border-b border-primary/10 text-neutral-600 dark:text-neutral-300">
+            <th class="p-3.5 font-bold">排位与品牌</th>
+            <th class="p-3.5 font-bold">持续运营年限</th>
+            <th class="p-3.5 font-bold">安全雷达状态</th>
+            <th class="p-3.5 font-bold">线路拓扑架构</th>
+            <th class="p-3.5 font-bold">支付起步门槛</th>
+            <th class="p-3.5 font-bold">抗风险安全评价</th>
+            <th class="p-3.5 font-bold text-center">评测直达</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-primary/5 text-neutral-700 dark:text-neutral-200">
+          {sortedAirports.map((airport, index) => {
+            const isTopRank = index === 0;
+            return (
+              <tr class={isTopRank ? "bg-primary/5 dark:bg-primary/10 font-medium" : "hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30"}>
+                <td class="p-3.5 flex items-center gap-2">
+                  <span class={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                    index === 0 ? "bg-amber-500 text-white" :
+                    index === 1 ? "bg-slate-400 text-white" :
+                    index === 2 ? "bg-amber-700 text-white" : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300"
+                  }`}>
+                    {index + 1}
+                  </span>
+                  <div>
+                    <a href={`/reviews/${airport.slug}`} class="text-neutral-900 dark:text-neutral-100 hover:text-primary hover:underline font-bold">
+                      {airport.name}
+                    </a>
+                    {isTopRank && (
+                      <span class="ml-1.5 px-1.5 py-0.2 rounded bg-primary text-white text-[9px]">老牌标杆</span>
+                    )}
+                  </div>
+                </td>
+                <td class="p-3.5 font-medium text-neutral-800 dark:text-neutral-200">
+                  {airport.established}
+                  {airport.slug === 'guangsu' && <span class="text-emerald-600 dark:text-emerald-400 text-[10px] ml-1">(超5年)</span>}
+                </td>
+                <td class="p-3.5">
+                  <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[11px] inline-flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    {airport.riskStatus}
+                  </span>
+                </td>
+                <td class="p-3.5 text-neutral-700 dark:text-neutral-300">
+                  {airport.lineType}
+                </td>
+                <td class="p-3.5">
+                  <span class={`px-2 py-0.5 rounded text-[10px] ${
+                    airport.minDuration === '月付' ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold" :
+                    airport.minDuration === '不限时按量' ? "bg-purple-500/10 text-purple-600 dark:text-purple-400 font-semibold" :
+                    "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300"
+                  }`}>
+                    {airport.minDuration}
+                  </span>
+                </td>
+                <td class="p-3.5 text-neutral-600 dark:text-neutral-300 leading-relaxed max-w-xs text-[11px]">
+                  {airport.riskNote}
+                </td>
+                <td class="p-3.5 text-center">
+                  <a
+                    href={`/reviews/${airport.slug}`}
+                    class="px-2.5 py-1 rounded bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary hover:border-primary border border-primary/10 text-[11px]"
+                  >
+                    评测
+                  </a>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 💡 模块三：机场跑路机制与击穿式资金盘底层经济学解密 -->
+  <section class="py-10 site-container" id="ponzi-economics">
+    <div class="p-6 md:p-10 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/20 shadow-sm">
+      <div class="mb-6">
+        <div class="mb-2 inline-block">
+          <Badge variant="primary">行业黑幕起底</Badge>
+        </div>
+        <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          机场跑路机制与击穿式资金盘底层经济学解密
+        </h2>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+          为什么过低的价格从商业规律上注定破产？带你穿透跨境网络服务背后的刚性硬成本
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10 space-y-2">
+          <div class="flex items-center gap-2 text-neutral-800 dark:text-neutral-100 font-bold text-sm">
+            <Zap class="w-4 h-4 text-primary" />
+            刚性物理专线月租支出
+          </div>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            正规跨境 IPLC/IEPL 企业级专线带宽成本极为昂贵，单 Gbps 物理端口月租普遍在数万元。加上境内多线 BGP 汇聚入口、海外机房电力与落地 IP 租赁，一家中型机场每月的纯物理硬支出至少在 5万 至 20万元 以上。
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10 space-y-2">
+          <div class="flex items-center gap-2 text-neutral-800 dark:text-neutral-100 font-bold text-sm">
+            <Radio class="w-4 h-4 text-amber-500" />
+            击穿式低价资金盘逻辑
+          </div>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            打着“9.9元包年1000GB”旗号的平台，每名用户单月收入仅几毛钱，连支付通道 6% 到 15% 的手续费都无法覆盖。此类平台完全依靠源源不断的新人涌入支付年费来勉强维系上一批用户的带宽开销。
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10 space-y-2">
+          <div class="flex items-center gap-2 text-neutral-800 dark:text-neutral-100 font-bold text-sm">
+            <Clock class="w-4 h-4 text-rose-500" />
+            现金流崩塌与卷款失联
+          </div>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            一旦市场流量饱和或遭遇封锁导致新增付费用户断崖式下跌，运营方无法在月底补齐机房续约账单。此时不良团队往往在跑路前一周突然搞最后一波“终身五折大促销”，圈满数十万元后删库跑路。
+          </p>
+        </div>
+      </div>
+
+      <!-- 经济学警示横幅 -->
+      <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-start gap-3 text-xs text-rose-800 dark:text-rose-300">
+        <svg class="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <div class="leading-relaxed">
+          <strong>防骗核心常识：</strong>
+          没有任何企业能够长期违背成本法则提供免费或亏本的优质网络服务。遇到声称“永久不限时”、“9.9元包年”且仅支持年付的新开平台，100% 为击穿式资金盘，请坚决远离以保全资金安全。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⚠️ 模块四：机场暴雷跑路前的五大核心预兆信号 -->
+  <section class="py-10 site-container" id="warning-signs">
+    <div class="mb-6">
+      <div class="mb-2 inline-block">
+        <Badge variant="accent">危险预警信号</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        机场暴雷跑路前的五大核心危险预兆
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        当服务商出现以下迹象时，务必提高警惕，立即停止追加充值并做好本地节点备份
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {warningSigns.map((item, idx) => (
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 flex flex-col justify-between hover:border-primary/30 transition-colors">
+          <div class="space-y-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <span class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-mono font-bold flex-shrink-0">
+                0{idx + 1}
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold">
+                {item.tag}
+              </span>
+            </div>
+            <h3 class="font-bold text-sm text-neutral-900 dark:text-neutral-100">
+              {item.title}
+            </h3>
+            <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              {item.desc}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 🛡️ 模块五：资深出海用户资金安全与防坑六大守则 -->
+  <section class="py-10 site-container" id="golden-rules">
+    <div class="mb-6">
+      <div class="mb-2 inline-block">
+        <Badge variant="primary">安全守则</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        资深出海用户资金安全与防坑六大黄金守则
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        掌握成熟玩家的避险策略，在享受优惠的同时坚守本金与网络稳定底线
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {goldenRules.map((rule) => (
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">
+              {rule.num}
+            </span>
+            <h3 class="text-sm font-bold text-neutral-800 dark:text-neutral-100">
+              {rule.title}
+            </h3>
+          </div>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-8">
+            {rule.desc}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ❓ 模块六：常见风险情报长尾答疑 (FAQ) -->
+  <section class="py-10 site-container" id="faq">
+    <div class="mb-8">
+      <div class="mb-2 inline-block">
+        <Badge variant="primary">高频答疑</Badge>
+      </div>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        机场风险防范与安全情报常见问答
+      </h2>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        汇聚出海用户在跑路维权、域名防封替换、失联甄别与资金安全中最关心的核心疑问
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {faqItems.map((item, idx) => (
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 space-y-2">
+          <h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100 flex items-start gap-2">
+            <span class="text-primary font-mono font-bold flex-shrink-0">Q{idx + 1}.</span>
+            <span>{item.question}</span>
+          </h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-6">
+            {item.answer}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 🧭 模块七：全站网状知识库与专题直达 -->
+  <section class="py-12 site-container border-t border-primary/10">
+    <div class="p-6 md:p-8 rounded-2xl bg-gradient-to-r from-bg-secondary to-primary/5 dark:from-bg-secondary-dark dark:to-neutral-900 border border-primary/20 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="space-y-1">
+        <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+          了解了风险防范逻辑？探索稳健高可靠专线
+        </h3>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400">
+          全站网状知识库助你从价格精算、排障决策到客户端配置全流程无缝通关
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <a
+          href="/pricing"
+          class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 text-xs font-semibold hover:border-primary border border-primary/20 transition-all"
+        >
+          💰 价格套餐精算
+        </a>
+        <a
+          href="/issues"
+          class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 text-xs font-semibold hover:border-primary border border-primary/20 transition-all"
+        >
+          🔧 网络排障决策树
+        </a>
+        <a
+          href="/clients"
+          class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 text-xs font-semibold hover:border-primary border border-primary/20 transition-all"
+        >
+          📱 客户端下载专区
+        </a>
+        <a
+          href="/recommend"
+          class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:opacity-90 shadow-sm transition-all"
+        >
+          ⭐ 2026 推荐主榜 →
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

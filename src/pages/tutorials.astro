@@ -1,0 +1,992 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import Badge from "@/components/ui/Badge.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import { airports } from "@/data/airports";
+import {
+  ShieldCheck,
+  Award,
+  Zap,
+  Sparkles,
+  Wrench,
+  Laptop,
+  Smartphone,
+  Network,
+  Globe,
+  Terminal,
+  Lock,
+  Check,
+  ExternalLink,
+  ChevronRight
+} from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "使用教程", url: "/tutorials" }
+];
+
+// 保持全站统一排位
+const sortedAirports = [...airports];
+
+// 4步极速上手流程规范数据（供 HowTo 结构化数据消费）
+const tutorialSteps = [
+  {
+    name: "选购支持按月付费的高可用物理专线套餐",
+    text: "在机场推荐榜单中挑选支持小额月付的正规服务商，注册后购买基础月付套餐，优先挑选提供全天候物理专线以及原生住宅双 ISP 节点的品牌进行体验测试。",
+    url: "https://jichangbang.org/recommend"
+  },
+  {
+    name: "在服务商后台仪表盘复制专属节点订阅链接",
+    text: "登录机场后台用户中心，在仪表盘快捷操作区找到对应客户端类型的订阅链接，复制 Clash 或通用订阅地址到剪贴板，妥善保管个人专属密钥。",
+    url: "https://jichangbang.org/tutorials"
+  },
+  {
+    name: "打开客户端新建配置并拉取全部跨境节点",
+    text: "启动对应系统的代理客户端软件，新建配置文件并粘贴刚刚复制的订阅地址，保存后点击更新配置，客户端将自动同步拉取最新的线路节点列表。",
+    url: "https://jichangbang.org/clients"
+  },
+  {
+    name: "选取优选节点并启用规则模式系统代理或TUN网卡",
+    text: "在节点列表中选取目标国家低延迟线路，运行模式务必确认为规则模式，随后开启系统代理开关或 TUN 虚拟网卡，验证海外访问连通性。",
+    url: "https://jichangbang.org/tutorials"
+  }
+];
+
+// 8组高价值实操疑难长尾 FAQ
+const faqItems = [
+  {
+    question: "订阅链接导入客户端时提示网络错误或下载配置超时应该怎么排查？",
+    answer: "这种情况通常由四个原因导致。首先检查当前电脑或手机的基础网络是否畅通；其次确认服务商的订阅服务器域名是否被本地宽带 DNS 污染，可在客户端订阅设置中勾选允许不安全证书或更换公共 DNS 为 223.5.5.5；第三种可能是此前开启的旧代理软件残留了错误的系统代理配置导致网络闭环死锁，需要手动在系统网络设置中关闭代理开关后再行更新；第四种情况是该服务商官网正在遭遇突发攻击或临时维护，建议登录官网查看备用订阅转换节点。"
+  },
+  {
+    question: "为什么开启客户端后国内网站能正常打开但 Google 和 YouTube 依然打不开？",
+    answer: "国内网站正常打开说明本地基础宽带完全正常。海外服务无法访问通常是因为规则分流匹配或者代理内核未正确接管流量。首先在客户端的节点列表中观察所选节点是否有绿色延迟数值，若显示全部超时说明服务器连接中断；其次确认运行模式是否选为了 Direct 直连模式，必须切换为 Rule 规则模式或 Global 全局模式；再者检查浏览器是否安装了冲突的第三方 Proxy 插件（如 SwitchyOmega），若插件处于开启状态会覆盖本地客户端的系统代理。"
+  },
+  {
+    question: "手机开启便携热点给电脑使用时为什么电脑无法共享手机上的代理网络？",
+    answer: "手机系统的便携热点在操作系统底层默认只转发原始的局域网蜂窝数据包，不会将热点客户端流量重定向到手机内部运行的 VPN 虚拟网卡进程中。如果希望电脑通过手机热点走节点，可以在手机小火箭或 Android 客户端中开启允许局域网连接选项，记下手机分配的局域网 IP 与端口号，然后在电脑的网络设置中手动填写该 HTTP 代理信息；或者在电脑端独立安装并运行客户端软件直接导入订阅。"
+  },
+  {
+    question: "节点列表批量测速全部显示红色的超时或者负一数值是怎么回事？",
+    answer: "测速全部超时并不一定代表节点彻底瘫痪。最常见的原因是客户端内设置的测速测试网址无法在当前环境下完成握手（例如默认测速地址为 Google 204 服务，若当地宽带握手受阻就会全红），可以在设置中将测速 URL 修改为连通性更好的公共探测地址。另一个高频原因是本地系统代理端口与其他后台软件发生冲突，导致测速进程无法向外发送探测包。尝试重启客户端或更换测速地址通常可以恢复正常显示。"
+  },
+  {
+    question: "电脑关闭客户端退出后突然整个系统都上不了网了怎么快速修复？",
+    answer: "这是极其典型的问题，由于客户端非正常退出（如直接强行关机、任务管理器强制结束进程）导致。代理软件在运行时会在 Windows 系统注册表中写入本地代理回环地址 127.0.0.1 以及对应端口。如果软件异常崩溃退出，没能自动清理该注册表项，系统就会继续把全部网络请求发送到已经关闭的本地端口上。修复步骤非常简单，打开 Windows 系统设置进入网络和 Internet，找到代理设置，将手动设置代理开关彻底关闭即可瞬间恢复正常上网。"
+  },
+  {
+    question: "为什么节点能够正常打开网页但 Telegram 却一直在转圈连接中？",
+    answer: "Telegram 是一款对网络协议要求极高且默认自带独立代理设置的即时通讯软件。很多时候系统代理只接管了 HTTP 与 HTTPS 流量，而 Telegram 使用原生 MTProto 协议或直接走 SOCKS5 端口。解决办法有两种，一种是在 Telegram 设置的高级网络连接中，手动添加 SOCKS5 代理，服务器填 127.0.0.1，端口填写当前客户端对应的本地 Socks 端口（如 Clash 默认的 7890 端口）；另一种更彻底的方案是在客户端中直接开启 TUN 虚拟网卡模式，接管整机所有网络协议。"
+  },
+  {
+    question: "原生住宅双 ISP 节点在使用过程中和普通机房数据中心节点有什么体验差别？",
+    answer: "两者在底层 IP 属性库中的信任等级完全不同。机房数据中心节点所属的自治系统号（ASN）直接标注为数据中心或托管服务器，OpenAI、Claude、TikTok 以及各大国际流媒体平台部署了极其严苛的 IP 风控算法，识别到机房 IP 会直接弹出验证码甚至封禁访问。而原生住宅双 ISP 节点来自境外当地真实的居民宽带网络，在各类 IP 纯净度检测中显示为家庭宽带，不仅能够顺畅访问 AI 生产力工具，更大幅降低了账号被风控误封的概率。"
+  },
+  {
+    question: "怎么配置才能在访问特定本地局域网如公司内网 OA 或 NAS 时不被代理拦截？",
+    answer: "正规客户端的规则分流体系均支持自定义旁路网段。在客户端的设置或规则配置文件中，确认绕过局域网（Bypass LAN）选项已处于开启状态。默认配置下，私有 IP 网段（如 10.0.0.0/8、172.16.0.0/12、192.168.0.0/16）以及 localhost 会被自动归入 DIRECT 直连策略组，完全不经过代理内核。如果是通过域名访问内网 OA，可以在用户自定义规则列表中手动添加一条 DOMAIN-SUFFIX 规则，将企业内部域名指向 DIRECT，即可实现公司内网与境外专线的完全互不干扰。"
+  }
+];
+---
+
+<Layout
+  title="机场使用教程中心 全平台客户端导入·TUN虚拟网卡·分流规则与防封指南【2026实操手册】"
+  description="2026全网权威机场使用教程中心。手把手详解新手选购购买、复制订阅导入客户端（Clash Verge Rev、Shadowrocket小火箭、v2rayN、Flclash）、TUN虚拟网卡全局接管、策略组分流规则以及防止IP频繁跳动触发封号的风控规避手册。"
+  keywords="机场使用教程, 机场怎么用, 订阅怎么导入, Clash Verge教程, 小火箭配置教程, v2rayN设置, TUN模式配置, 规则分流教程, 订阅转换防泄密, 机场榜一"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+  <JsonLd
+    type="HowTo"
+    howToSteps={tutorialSteps}
+    article={{
+      title: "全平台机场客户端配置与订阅导入标准操作指南",
+      description: "手把手详解选购套餐、订阅提取、多端客户端导入、TUN虚拟网卡启用与分流避坑规则。",
+      publishDate: "2026-09-01"
+    }}
+  />
+  <JsonLd type="FAQPage" faqItems={faqItems} />
+
+  <!-- 头部英雄区 -->
+  <section class="relative z-20 site-container my-10 md:my-14">
+    <PageHeader
+      title="机场使用教程中心：全平台配置与网络分流实操手册"
+      description="客户端解决软件选型问题，教程中心专攻具体配置落地。从订阅提取到多端导入，从系统代理到TUN虚拟网卡深度接管，手把手带你跑通高可用出海网络并避开风控封号陷阱。"
+    />
+
+    <!-- 核心定位快捷指示条 -->
+    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+          <Zap class="w-4 h-4" />
+        </div>
+        <div>
+          <div class="font-bold text-neutral-800 dark:text-neutral-200">极速四步法</div>
+          <div class="text-neutral-500 text-[11px]">3分钟跑通出海网络</div>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+          <Laptop class="w-4 h-4" />
+        </div>
+        <div>
+          <div class="font-bold text-neutral-800 dark:text-neutral-200">四大主流客户端</div>
+          <div class="text-neutral-500 text-[11px]">Win / Mac / iOS / 安卓</div>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+          <Network class="w-4 h-4" />
+        </div>
+        <div>
+          <div class="font-bold text-neutral-800 dark:text-neutral-200">TUN虚拟网卡</div>
+          <div class="text-neutral-500 text-[11px]">终端与开发工具全接管</div>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+          <ShieldCheck class="w-4 h-4" />
+        </div>
+        <div>
+          <div class="font-bold text-neutral-800 dark:text-neutral-200">策略组防封指南</div>
+          <div class="text-neutral-500 text-[11px]">拒绝自动优选避免风控</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 专题导读与双轨入门体验 -->
+  <section class="py-6 site-container">
+    <div class="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-primary/5 via-bg-secondary to-bg-secondary dark:from-primary/10 dark:via-bg-secondary-dark dark:to-bg-secondary-dark border border-primary/20">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <span class="inline-block px-2.5 py-1 rounded text-xs font-bold tracking-wider uppercase bg-primary/10 text-primary mb-2">
+            选型必读
+          </span>
+          <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            双轨选择：自研免配置客户端与开源客户端差异对比
+          </h2>
+        </div>
+        <div class="text-xs text-neutral-500 bg-bg-primary dark:bg-neutral-800 px-3 py-1.5 rounded-lg border border-primary/10">
+          根据自身操作习惯选择最合适的接入路径
+        </div>
+      </div>
+
+      <p class="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed mb-6">
+        进入跨境网络世界通常有两条不同技术路径。对于不希望折腾复杂订阅格式转换、内核切换以及端口排障的普通办公与科研人员，选用优质服务商提供的自研一键客户端最为省心；而对于拥有多系统设备、需要深度定制规则策略以及终端代理的极客用户，开源通用客户端则能提供更高的自主可控性。
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- 路径一：自研定制免配置客户端 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800/90 border border-primary/20 shadow-sm relative overflow-hidden">
+          <div class="absolute top-0 right-0 px-3 py-1 bg-gradient-to-l from-primary to-primary/80 text-white text-[11px] font-bold rounded-bl-xl">
+            新手零门槛推荐
+          </div>
+          <div class="flex items-center gap-2 mb-3">
+            <Sparkles class="w-5 h-5 text-primary" />
+            <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+              品牌自研免配置客户端（以光速云为例）
+            </h3>
+          </div>
+          <p class="text-xs text-neutral-500 mb-4 leading-relaxed">
+            专为追求极致易用性的用户打造，彻底免去从后台复制订阅、导入软件、定期更新以及手动调整端口的琐碎繁杂环节。
+          </p>
+          <ul class="space-y-2 text-xs text-neutral-600 dark:text-neutral-300 mb-5">
+            <li class="flex items-start gap-2">
+              <Check class="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+              <span><strong>一键登录同步：</strong>使用注册账号密码即可直接登录，套餐状态与专线节点全量实时自动下发。</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <Check class="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+              <span><strong>内置防污染解析：</strong>订阅解析与线路更新内置专用防封隧道，完全不受本地运营商 DNS 污染影响。</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <Check class="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+              <span><strong>原生集成专属协议：</strong>深度优化跨境长连接与 TCP 拥塞控制算法，无需自行研究内核配置文件。</span>
+            </li>
+          </ul>
+          <div class="pt-4 border-t border-primary/10 flex items-center justify-between">
+            <span class="text-xs text-primary font-bold">适合人群：新手、外贸外企白领、科研学者</span>
+            <a
+              href="/reviews/guangsu"
+              class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline"
+            >
+              了解光速云自研客户端 <ChevronRight class="w-3 h-3" />
+            </a>
+          </div>
+        </div>
+
+        <!-- 路径二：开源通用客户端 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800/90 border border-neutral-200 dark:border-neutral-700 shadow-sm relative overflow-hidden">
+          <div class="flex items-center gap-2 mb-3">
+            <Wrench class="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+            <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+              开源通用客户端（Clash / 小火箭 / v2rayN）
+            </h3>
+          </div>
+          <p class="text-xs text-neutral-500 mb-4 leading-relaxed">
+            全球网络极客社区开源共同维护的核心工具，支持自由载入多家服务商订阅，支持高级规则分流、脚本改写与 TUN 虚拟网卡。
+          </p>
+          <ul class="space-y-2 text-xs text-neutral-600 dark:text-neutral-300 mb-5">
+            <li class="flex items-start gap-2">
+              <Check class="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+              <span><strong>多订阅多机场聚合：</strong>可同时添加多家机场订阅（如主力光速云配合备用星岛梦不限时），灵活自由切换。</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <Check class="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+              <span><strong>精准粒度分流控制：</strong>支持按域名、IP CIDR、进程名称或端口编写严格的分流路由规则。</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <Check class="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+              <span><strong>完全透明开源受检：</strong>客户端代码在 GitHub 公开，不依赖单一机场后台，安全性经受全球审查。</span>
+            </li>
+          </ul>
+          <div class="pt-4 border-t border-neutral-100 dark:border-neutral-700 flex items-center justify-between">
+            <span class="text-xs text-neutral-500 font-medium">适合人群：开发者、跨平台极客、多机场用户</span>
+            <a
+              href="/clients"
+              class="inline-flex items-center gap-1 text-xs font-bold text-neutral-700 dark:text-neutral-300 hover:text-primary"
+            >
+              前往客户端下载中心 <ChevronRight class="w-3 h-3" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 新手3分钟跑通极速四步法 -->
+  <section class="py-8 site-container">
+    <div class="mb-6">
+      <span class="inline-block px-2.5 py-1 rounded text-xs font-bold tracking-wider uppercase bg-primary/10 text-primary mb-2">
+        新手上手必读
+      </span>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        新手入门：极速 3 分钟跑通出海网络四步法
+      </h2>
+      <p class="text-sm text-neutral-500 mt-1">
+        遵循经过严格验证的标准标准化操作流程，规避 90% 以上新手高发网络阻断与配置错误
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+      <!-- 步骤 1 -->
+      <div class="p-5 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 relative flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="w-7 h-7 rounded-xl bg-primary text-white font-bold text-xs flex items-center justify-center shadow-sm">
+              01
+            </span>
+            <span class="text-[11px] text-primary font-bold">第一步</span>
+          </div>
+          <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+            选购合规月付套餐
+          </h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+            在机场推荐榜单中挑选提供高质量专线的品牌。初次使用务必选择基础月付套餐，切勿在没有经过长期网络检验前直接购买大额年付。
+          </p>
+        </div>
+        <div class="pt-3 border-t border-primary/10 text-[11px] text-neutral-500">
+          推荐首选：<a href="/reviews/guangsu" class="text-primary font-bold hover:underline">光速云专线（月付起步）</a>
+        </div>
+      </div>
+
+      <!-- 步骤 2 -->
+      <div class="p-5 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 relative flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="w-7 h-7 rounded-xl bg-primary text-white font-bold text-xs flex items-center justify-center shadow-sm">
+              02
+            </span>
+            <span class="text-[11px] text-primary font-bold">第二步</span>
+          </div>
+          <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+            复制专属订阅链接
+          </h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+            登录服务商用户后台仪表盘，找到快捷导入或订阅区域。点击复制 Clash 格式或通用订阅地址至剪贴板，严禁将订阅链接分享给他人。
+          </p>
+        </div>
+        <div class="pt-3 border-t border-primary/10 text-[11px] text-neutral-500">
+          备用保障：<a href="/reviews/xingdaomeng" class="text-primary font-bold hover:underline">备用星岛梦（不限时按量）</a>
+        </div>
+      </div>
+
+      <!-- 步骤 3 -->
+      <div class="p-5 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 relative flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="w-7 h-7 rounded-xl bg-primary text-white font-bold text-xs flex items-center justify-center shadow-sm">
+              03
+            </span>
+            <span class="text-[11px] text-primary font-bold">第三步</span>
+          </div>
+          <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+            客户端拉取节点列表
+          </h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+            打开已经下载好的客户端，新建配置并粘贴订阅地址，点击保存并下载。客户端会自动解析服务端配置并展示所有可用专线节点列表。
+          </p>
+        </div>
+        <div class="pt-3 border-t border-primary/10 text-[11px] text-neutral-500">
+          软件下载：<a href="/clients" class="text-primary font-bold hover:underline">查看全平台客户端中心</a>
+        </div>
+      </div>
+
+      <!-- 步骤 4 -->
+      <div class="p-5 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 relative flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="w-7 h-7 rounded-xl bg-primary text-white font-bold text-xs flex items-center justify-center shadow-sm">
+              04
+            </span>
+            <span class="text-[11px] text-primary font-bold">第四步</span>
+          </div>
+          <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+            启用规则模式系统代理
+          </h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+            在节点列表中手动选择香港或日本主力节点。运行模式确认选择为规则模式（Rule），勾选系统代理开关，即可顺利访问海外站点。
+          </p>
+        </div>
+        <div class="pt-3 border-t border-primary/10 text-[11px] text-neutral-500">
+          疑难解答：<a href="/issues" class="text-primary font-bold hover:underline">连接失败快速自检方案</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 四大主流客户端保姆级实操指南 -->
+  <section class="py-8 site-container">
+    <div class="mb-8">
+      <span class="inline-block px-2.5 py-1 rounded text-xs font-bold tracking-wider uppercase bg-primary/10 text-primary mb-2">
+        多端手把手实操
+      </span>
+      <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+        四大主流客户端保姆级图文配置指南
+      </h2>
+      <p class="text-sm text-neutral-500 mt-1">
+        覆盖 Windows、macOS、iOS 与 Android 主流设备，按照步骤操作即可轻松上手
+      </p>
+    </div>
+
+    <div class="space-y-8">
+      <!-- 客户端 1：Clash Verge Rev -->
+      <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+              <Laptop class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                  Clash Verge Rev 深度配置指南
+                </h3>
+                <div class="inline-block">
+                  <Badge variant="primary" size="sm">桌面端旗舰推荐</Badge>
+                </div>
+              </div>
+              <div class="text-xs text-neutral-500">适用平台：Windows 10/11、macOS（Intel与Apple Silicon）、Linux</div>
+            </div>
+          </div>
+          <a
+            href="/clients"
+            class="text-xs text-primary font-bold inline-flex items-center gap-1 hover:underline"
+          >
+            下载 Clash Verge Rev 安装包 <ExternalLink class="w-3 h-3" />
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 text-xs mb-6">
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-primary mb-1">Step 1：进入订阅菜单</div>
+            <p class="text-neutral-500 leading-relaxed">
+              打开软件主界面，在左侧导航栏点击【订阅】（Profiles）选项，进入配置文件管理面板。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-primary mb-1">Step 2：导入订阅链接</div>
+            <p class="text-neutral-500 leading-relaxed">
+              在顶部输入框中粘贴机场后台复制的 Clash 订阅地址，点击右侧【保存并导入】按钮开始拉取。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-primary mb-1">Step 3：激活配置文件</div>
+            <p class="text-neutral-500 leading-relaxed">
+              等待配置卡片下载成功并显示更新时间，右键点击该配置卡片，选择【使用】将其设为活跃状态。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-primary mb-1">Step 4：手动选取节点</div>
+            <p class="text-neutral-500 leading-relaxed">
+              切换到左侧【代理】（Proxies）页面，展开规则策略组，手动点选低延迟香港、日本或美国专线。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-primary mb-1">Step 5：开启系统代理</div>
+            <p class="text-neutral-500 leading-relaxed">
+              进入左侧【设置】（Settings）页面，将【系统代理】开关滑块打开，系统托盘图标变色即代表生效。
+            </p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-300">
+          <strong>进阶提权提示：</strong>如果需要让命令行终端、Docker 容器以及各类游戏客户端全部强制走代理，需要在【设置】中找到【服务模式】（Service Mode），点击安装并重启软件，随后即可直接开启【TUN 模式】实现网络层全局接管。
+        </div>
+      </div>
+
+      <!-- 客户端 2：Shadowrocket 小火箭 -->
+      <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+              <Smartphone class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                  Shadowrocket（小火箭）实操指南
+                </h3>
+                <div class="inline-block">
+                  <Badge variant="accent" size="sm">iOS 标配神器</Badge>
+                </div>
+              </div>
+              <div class="text-xs text-neutral-500">适用平台：iPhone、iPad（需要外区 Apple ID 从 App Store 获取）</div>
+            </div>
+          </div>
+          <a
+            href="/clients"
+            class="text-xs text-emerald-600 dark:text-emerald-400 font-bold inline-flex items-center gap-1 hover:underline"
+          >
+            查看 iOS 客户端对比 <ExternalLink class="w-3 h-3" />
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs mb-6">
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-emerald-600 dark:text-emerald-400 mb-1">Step 1：新建节点配置</div>
+            <p class="text-neutral-500 leading-relaxed">
+              打开小火箭首页，点击右上角【+】号图标进入添加节点页面。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-emerald-600 dark:text-emerald-400 mb-1">Step 2：类型选为 Subscribe</div>
+            <p class="text-neutral-500 leading-relaxed">
+              将【类型】（Type）点击切换为【Subscribe】，在【URL】栏中粘贴机场后台专属订阅地址。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-emerald-600 dark:text-emerald-400 mb-1">Step 3：设置路由为配置模式</div>
+            <p class="text-neutral-500 leading-relaxed">
+              保存后客户端自动刷新全部节点。在首页中间将【全局路由】务必确认勾选为【配置】（Config）。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-emerald-600 dark:text-emerald-400 mb-1">Step 4：启动并授权 VPN</div>
+            <p class="text-neutral-500 leading-relaxed">
+              挑选目标节点，点击首页最上方连接开关。首次启动时系统会弹出添加 VPN 配置窗口，输入密码完成授权。
+            </p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-800 dark:text-emerald-300">
+          <strong>省电与防封避坑：</strong>全局路由切勿误选为【代理】（Proxy），否则国内微信、淘宝、网银等所有本地流量都会强制绕行境外节点，不仅浪费流量，更会导致微信触发异地登录保护。保持【配置】模式可实现国内直连、海外智能加速。
+        </div>
+      </div>
+
+      <!-- 客户端 3：v2rayN -->
+      <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center">
+              <Terminal class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                  v2rayN（Windows 经典老牌客户端）配置指南
+                </h3>
+                <div class="inline-block">
+                  <Badge variant="neutral" size="sm">极低内存占用</Badge>
+                </div>
+              </div>
+              <div class="text-xs text-neutral-500">适用平台：Windows 7/8/10/11（基于 Xray / sing-box 双内核）</div>
+            </div>
+          </div>
+          <a
+            href="/clients"
+            class="text-xs text-blue-600 dark:text-blue-400 font-bold inline-flex items-center gap-1 hover:underline"
+          >
+            获取 v2rayN 核心包 <ExternalLink class="w-3 h-3" />
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs mb-6">
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-blue-600 dark:text-blue-400 mb-1">Step 1：订阅分组设置</div>
+            <p class="text-neutral-500 leading-relaxed">
+              打开主界面，点击顶部菜单栏的【订阅分组】，选择进入【订阅分组设置】。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-blue-600 dark:text-blue-400 mb-1">Step 2：添加并粘贴链接</div>
+            <p class="text-neutral-500 leading-relaxed">
+              点击【添加】，输入备注名称（如光速云），在【可选地址 (url)】一栏粘贴订阅链接并点击确定保存。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-blue-600 dark:text-blue-400 mb-1">Step 3：更新拉取全部节点</div>
+            <p class="text-neutral-500 leading-relaxed">
+              再次点击顶部菜单【订阅分组】，点击【更新全部订阅（不通过代理）】，主窗口将刷新显示所有可用节点。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-blue-600 dark:text-blue-400 mb-1">Step 4：切换系统代理与路由</div>
+            <p class="text-neutral-500 leading-relaxed">
+              选中目标节点按回车激活。在主界面底部，将【路由模式】设置为【绕过大陆】，将【系统代理】切换为【自动配置系统代理】。
+            </p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs text-blue-800 dark:text-blue-300">
+          <strong>状态栏色彩提示：</strong>v2rayN 在托盘区的图标颜色代表不同状态。深蓝色代表清除系统代理（直连不生效），红色代表自动配置系统代理正常运行。每次退出前建议右键选择退出，软件会自动恢复注册表设置。
+        </div>
+      </div>
+
+      <!-- 客户端 4：Flclash / Clash Meta for Android -->
+      <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center">
+              <Smartphone class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                  Flclash / Clash Meta for Android 配置指南
+                </h3>
+                <div class="inline-block">
+                  <Badge variant="primary" size="sm">安卓移动端首选</Badge>
+                </div>
+              </div>
+              <div class="text-xs text-neutral-500">适用平台：Android 9.0 以上系统（支持现代 Material You 界面与分应用代理）</div>
+            </div>
+          </div>
+          <a
+            href="/clients"
+            class="text-xs text-purple-600 dark:text-purple-400 font-bold inline-flex items-center gap-1 hover:underline"
+          >
+            下载安卓安装包 <ExternalLink class="w-3 h-3" />
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs mb-6">
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-purple-600 dark:text-purple-400 mb-1">Step 1：进入配置管理</div>
+            <p class="text-neutral-500 leading-relaxed">
+              打开软件主界面，点击底部或侧边栏中的【配置】（Profiles）选项卡。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-purple-600 dark:text-purple-400 mb-1">Step 2：URL 导入订阅</div>
+            <p class="text-neutral-500 leading-relaxed">
+              点击右下角浮动添加按钮，选择【从 URL 导入】，粘贴 Clash 订阅链接并自定义配置名称。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-purple-600 dark:text-purple-400 mb-1">Step 3：下载并点选激活</div>
+            <p class="text-neutral-500 leading-relaxed">
+              点击右上角保存图标完成配置文件拉取，在配置列表中点击选中该配置，使其右侧出现激活标识。
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+            <div class="font-bold text-purple-600 dark:text-purple-400 mb-1">Step 4：首页启动服务</div>
+            <p class="text-neutral-500 leading-relaxed">
+              返回主页点击中心连接大按钮，在弹出的系统网络连接请求中点击【确定】，状态变为已连接即可。
+            </p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-purple-500/10 border border-purple-500/20 text-xs text-purple-800 dark:text-purple-300">
+          <strong>安卓后台保活秘籍：</strong>国内厂商定制安卓系统（如小米澎湃、华为 HarmonyOS、vivo OriginOS 等）后台杀进程极其激进。务必长按软件图标进入应用信息，将【省电策略】修改为【无限制】，并锁定后台任务卡片，避免息屏断流。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TUN 虚拟网卡模式进阶深度拆解 -->
+  <section class="py-8 site-container">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <span class="inline-block px-2.5 py-1 rounded text-xs font-bold tracking-wider uppercase bg-primary/10 text-primary mb-2">
+            核心网络技术
+          </span>
+          <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            TUN 虚拟网卡模式深度解析与终端开发代理全解
+          </h2>
+        </div>
+        <div class="text-xs text-neutral-500 bg-bg-primary dark:bg-neutral-800 px-3 py-1.5 rounded-lg border border-primary/10">
+          攻克 Git clone、Docker 镜像与外服游戏无法走代理的终极解法
+        </div>
+      </div>
+
+      <p class="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed mb-6">
+        许多新手和程序员在使用系统代理时常常遭遇困惑：明明浏览器已经可以流畅打开 YouTube 和 ChatGPT，但在命令行终端运行 git clone、npm install、pip install 或拉取 Docker 镜像时依然频繁连接超时或速度极慢；许多外服多人在线游戏也完全无法加速。其底层根源在于传统系统代理（System Proxy）与网络层虚拟网卡（TUN Mode）在操作系统协议栈中所处层级截然不同。
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- 传统系统代理机理 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+          <div class="flex items-center gap-2 mb-3">
+            <Globe class="w-5 h-5 text-neutral-500" />
+            <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+              传统系统代理（应用层 HTTP / SOCKS5）
+            </h3>
+          </div>
+          <ul class="space-y-2 text-xs text-neutral-500 leading-relaxed">
+            <li>• 工作原理：仅在操作系统注册表写入环境变量，通知支持该规范的软件主动将流量发送到本地 127.0.0.1 端口。</li>
+            <li>• 接管范围：常规网页浏览器（Chrome、Edge、Safari、Firefox）及部分遵守系统代理约定的通用桌面应用。</li>
+            <li>• 致命软肋：大多数命令行终端工具、原生游戏客户端、Node.js / Python 脚本默认完全忽略系统代理变量，直接裸连造成超时。</li>
+          </ul>
+        </div>
+
+        <!-- TUN 虚拟网卡机理 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10 shadow-sm">
+          <div class="flex items-center gap-2 mb-3">
+            <Network class="w-5 h-5 text-primary" />
+            <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+              TUN 虚拟网卡模式（网络层 L3 强制全量捕获）
+            </h3>
+          </div>
+          <ul class="space-y-2 text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+            <li>• 工作原理：在系统内核安装一块虚拟网络适配器，通过底层修改操作系统全局路由表，将所有出站网络包定向送入虚拟网卡。</li>
+            <li>• 接管范围：无视应用软件是否支持代理配置，整机所有网络进程（终端命令、游戏 UDP、虚拟机、开发容器）强制全量接管。</li>
+            <li>• 绝对优势：无需在终端单独配置复杂的 http_proxy 环境变量，任何底层网络协议均能无缝走节点加速。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- TUN 开启标准三部曲 -->
+      <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+        <h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100 mb-3 flex items-center gap-2">
+          <Wrench class="w-4 h-4 text-primary" />
+          Clash Verge Rev 规范开启 TUN 模式三部曲
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-3.5 rounded-lg bg-bg-secondary dark:bg-bg-secondary-dark">
+            <span class="font-bold text-primary block mb-1">第一步：安装服务模式提权</span>
+            <p class="text-neutral-500">
+              进入【设置】页面找到【服务模式】（Service Mode），点击右侧安装按钮。该步骤会向 Windows 系统注册特权系统服务。
+            </p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-bg-secondary dark:bg-bg-secondary-dark">
+            <span class="font-bold text-primary block mb-1">第二步：切换内核为 Meta</span>
+            <p class="text-neutral-500">
+              在【设置】中确认核心内核选用的是 Clash.Meta（Mihomo）。Mihomo 对 TUN 协议栈优化极佳，兼容 Windows 全系架构。
+            </p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-bg-secondary dark:bg-bg-secondary-dark">
+            <span class="font-bold text-primary block mb-1">第三步：开启 TUN 模式总开关</span>
+            <p class="text-neutral-500">
+              服务模式图标变绿后，直接打开【TUN 模式】滑块。此时打开命令提示符运行 curl ipinfo.io，将直接返回境外节点 IP。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 策略组分流规则与防止封号实战避坑 -->
+  <section class="py-8 site-container">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-2 mb-4">
+        <Badge variant="accent">防封与稳定性核心</Badge>
+        <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          策略组分流规则与规避风控封号进阶指南
+        </h2>
+      </div>
+
+      <p class="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed mb-6">
+        许多用户在使用机场过程中常常遭遇 OpenAI 账号被封禁、PayPal 或海外银行被限制甚至异地冻结。很多时候这并非账号本身违规，而是在客户端中选用了错误的分流策略。了解策略组分流核心机理，是保护宝贵生产力资产的必修课。
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs mb-6">
+        <!-- 重点避坑：自动优选风险 -->
+        <div class="p-5 rounded-xl bg-red-500/5 border border-red-500/20">
+          <div class="flex items-center gap-2 mb-2 text-red-600 dark:text-red-400 font-bold text-sm">
+            <Lock class="w-4 h-4" />
+            严重警告：严禁选择自动优选（Auto）
+          </div>
+          <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-3">
+            策略组中的【自动优选】（URL-Test 或 Load-Balance）每隔数分钟就会向测速服务器发包，哪个节点延迟低就自动切过去。这会导致你的出口 IP 短时间内在香港、日本、美国甚至新加坡之间疯狂跳跃。
+          </p>
+          <div class="text-[11px] text-red-700 dark:text-red-300 font-medium">
+            后果：直接触发 OpenAI、Claude 与海外银行严格的异地多端风控模型，判定为账号被盗从而实施永久封号。
+          </div>
+        </div>
+
+        <!-- 规范操作：固定单一住宅双 ISP 节点 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10">
+          <div class="flex items-center gap-2 mb-2 text-primary font-bold text-sm">
+            <Award class="w-4 h-4" />
+            标准规范：固定单一住宅节点使用
+          </div>
+          <p class="text-neutral-600 dark:text-neutral-300 leading-relaxed mb-3">
+            针对 AI 开发、外贸业务与海淘支付，务必在策略组中手动固定选择同一个国家的优质节点，推荐优先使用光速云等服务商提供的日本或美国原生住宅双 ISP 节点，保持纯净且长周期稳定的会话出口。
+          </p>
+          <div class="text-[11px] text-primary font-bold">
+            黄金法则：固定单一地区节点，关闭一切测速跳跃负载组。
+          </div>
+        </div>
+
+        <!-- 规则分流机制：Rule 模式三大行为 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10">
+          <div class="flex items-center gap-2 mb-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+            <Wrench class="w-4 h-4" />
+            分流核心：DIRECT、PROXY 与 REJECT
+          </div>
+          <p class="text-neutral-600 dark:text-neutral-300 leading-relaxed mb-3">
+            <strong>DIRECT：</strong>国内百度、微信、各大银行直接走本地宽带，不消耗机场流量且零延迟；<br />
+            <strong>PROXY：</strong>海外 Google、GitHub 自动走优质专线；<br />
+            <strong>REJECT：</strong>常见广告分析追踪域名在本地直接拦截丢弃。
+          </p>
+          <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">
+            日常保持：99% 场景务必保持规则模式（Rule）。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 订阅安全防泄密与第三方转换避坑手册 -->
+  <section class="py-8 site-container">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-2 mb-4">
+        <Badge variant="neutral">资产安全手册</Badge>
+        <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          订阅 Token 资产安全与第三方在线转换避坑指南
+        </h2>
+      </div>
+
+      <p class="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed mb-6">
+        在机场使用过程中，订阅链接实际上就是你的通行支票。深入认识订阅链接的资产属性，防范隐私泄露和恶意流量劫持，是每一位出海用户必须建立的安全意识。
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+          <h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100 mb-2 flex items-center gap-2">
+            <Lock class="w-4 h-4 text-amber-500" />
+            认识订阅链接：包含账号全权操作密钥
+          </h3>
+          <p class="text-neutral-500 leading-relaxed mb-3">
+            观察你的订阅链接，末尾通常跟随一长串形如 token=xxxxxxxx 的哈希字符串。这个 token 是服务商服务器用于鉴别你身份的全局唯一凭据。任何人只要获取了你的订阅链接，就可以将其直接导入到任何客户端中肆无忌惮地消耗你的每月流量配额。
+          </p>
+          <div class="text-amber-600 dark:text-amber-400 font-medium">
+            防范措施：严禁在微信群、QQ群、公开论坛或聊天截图里展示完整的订阅 URL；若怀疑泄露，第一时间在后台点击重置订阅链接。
+          </div>
+        </div>
+
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+          <h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100 mb-2 flex items-center gap-2">
+            <ShieldCheck class="w-4 h-4 text-red-500" />
+            警惕不可信第三方在线订阅转换
+          </h3>
+          <p class="text-neutral-500 leading-relaxed mb-3">
+            很多新手喜欢使用网上搜索到的免费公共订阅转换网站。部分不良转换站点在后台服务器上偷偷记录所有上传的订阅 URL 与节点真实 IP，不仅窃取你的流量额度，甚至会在生成的配置中恶意注入分流后门或替换网页广告代码。
+          </p>
+          <div class="text-red-600 dark:text-red-400 font-medium">
+            安全准则：优先使用服务商后台原生提供的各客户端格式链接；如需转换协议，建议在本地运行 Subconverter 工具自建处理。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18家服务商快速导航与自研/通用客户端适配一览 -->
+  <section class="py-8 site-container">
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <span class="inline-block px-2.5 py-1 rounded text-xs font-bold tracking-wider uppercase bg-primary/10 text-primary mb-2">
+          品牌客户端适配索引
+        </span>
+        <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          全站 18 家机场客户端支持与配置友好度速查表
+        </h2>
+      </div>
+      <a
+        href="/recommend"
+        class="text-xs text-primary font-bold inline-flex items-center gap-1 hover:underline"
+      >
+        查看 2026 机场推荐全量总榜 <ChevronRight class="w-3.5 h-3.5" />
+      </a>
+    </div>
+
+    <div class="overflow-x-auto rounded-2xl border border-primary/10 bg-bg-secondary dark:bg-bg-secondary-dark">
+      <table class="w-full text-left text-xs border-collapse min-w-[700px]">
+        <thead>
+          <tr class="border-b border-primary/10 bg-primary/5 text-neutral-600 dark:text-neutral-300 font-bold">
+            <th class="py-3.5 px-4">排位 / 机场品牌</th>
+            <th class="py-3.5 px-4">专属免配置客户端</th>
+            <th class="py-3.5 px-4">通用开源客户端适配</th>
+            <th class="py-3.5 px-4">原生住宅双 ISP</th>
+            <th class="py-3.5 px-4">新手配置难度</th>
+            <th class="py-3.5 px-4 text-right">评测与实操</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-primary/5 text-neutral-700 dark:text-neutral-300">
+          {sortedAirports.map((airport, idx) => (
+            <tr class="hover:bg-primary/5 transition-colors">
+              <td class="py-3 px-4 font-medium flex items-center gap-2">
+                <span class={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                  idx === 0 ? "bg-amber-500 text-white" :
+                  idx === 1 ? "bg-slate-400 text-white" :
+                  idx === 2 ? "bg-amber-700 text-white" :
+                  "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300"
+                }`}>
+                  {idx + 1}
+                </span>
+                <span class="font-bold text-neutral-900 dark:text-neutral-100">{airport.name}</span>
+                {idx === 0 && (
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold">
+                    主推金牌
+                  </span>
+                )}
+                {airport.id === "xingdaomeng" && (
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
+                    按量备用
+                  </span>
+                )}
+              </td>
+              <td class="py-3 px-4">
+                {airport.id === "guangsucloud" ? (
+                  <span class="inline-flex items-center gap-1 font-bold text-primary">
+                    <Sparkles class="w-3.5 h-3.5" /> 专属一键客户端（免配置）
+                  </span>
+                ) : (
+                  <span class="text-neutral-400">使用通用开源客户端</span>
+                )}
+              </td>
+              <td class="py-3 px-4">
+                <span class="text-neutral-600 dark:text-neutral-400">全平台完美支持（Clash / 小火箭 / v2rayN）</span>
+              </td>
+              <td class="py-3 px-4">
+                {airport.id === "guangsucloud" || airport.features.some(f => f.includes("住宅") || f.includes("双ISP")) ? (
+                  <span class="text-emerald-600 dark:text-emerald-400 font-bold">已覆盖（防风控）</span>
+                ) : (
+                  <span class="text-neutral-400">常规机房数据中心</span>
+                )}
+              </td>
+              <td class="py-3 px-4">
+                {airport.id === "guangsucloud" ? (
+                  <span class="text-emerald-600 dark:text-emerald-400 font-bold">极简（零门槛）</span>
+                ) : (
+                  <span class="text-neutral-500">标准（3分钟导入）</span>
+                )}
+              </td>
+              <td class="py-3 px-4 text-right">
+                <a
+                  href={`/reviews/${airport.slug}`}
+                  class="text-primary font-bold hover:underline inline-flex items-center gap-0.5"
+                >
+                  详细配置评测 <ChevronRight class="w-3 h-3" />
+                </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 8 组高价值长尾问答 FAQ 区域 -->
+  <section class="py-8 site-container">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="mb-6">
+        <span class="inline-block px-2.5 py-1 rounded text-xs font-bold tracking-wider uppercase bg-primary/10 text-primary mb-2">
+          实操答疑
+        </span>
+        <h2 class="text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          机场使用与客户端配置常见疑问解答（FAQ）
+        </h2>
+        <p class="text-sm text-neutral-500 mt-1">
+          汇集全网新手与进阶用户在订阅导入、模式切换、TUN 网卡及分流规则中的高频疑问
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {faqItems.map((item, idx) => (
+          <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100 mb-2 flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">
+                  {idx + 1}
+                </span>
+                <span>{item.question}</span>
+              </h3>
+              <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pl-7">
+                {item.answer}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 全站网状内链与专题枢纽指引 -->
+  <section class="py-8 site-container mb-10">
+    <div class="p-6 md:p-8 rounded-2xl bg-gradient-to-r from-primary/10 via-bg-secondary to-primary/5 dark:from-primary/15 dark:via-bg-secondary-dark dark:to-primary/10 border border-primary/20">
+      <div class="max-w-3xl">
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-3">
+          打通全站知识网络，获取完整出海解决方案
+        </h2>
+        <p class="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed mb-6">
+          掌握了客户端配置与分流教程后，你可以进一步探索线路协议、客户端工具选择、套餐价格成本模型、常见疑难排障以及防范跑路风险的情报库，打造真正高可靠的出海体验。
+        </p>
+        <div class="flex flex-wrap items-center gap-3">
+          <a
+            href="/clients"
+            class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary/90 transition shadow-sm"
+          >
+            客户端专区
+          </a>
+          <a
+            href="/issues"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            网络排障诊断
+          </a>
+          <a
+            href="/protocols"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            线路节点解析
+          </a>
+          <a
+            href="/pricing"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            价格套餐测算
+          </a>
+          <a
+            href="/risk"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            风险跑路雷达
+          </a>
+          <a
+            href="/recommend"
+            class="px-4 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 text-xs font-bold hover:border-primary transition"
+          >
+            2026 机场推荐榜
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

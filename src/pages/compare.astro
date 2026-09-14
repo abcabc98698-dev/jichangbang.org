@@ -1,0 +1,1204 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import Badge from "@/components/ui/Badge.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import { airports } from "@/data/airports";
+import {
+  ArrowRight,
+  Award,
+  SlidersHorizontal
+} from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "机场对比", url: "/compare" }
+];
+
+// 核心自选对比器轻量数据准备
+const comparatorAirports = airports.map(a => ({
+  id: a.id,
+  name: a.name,
+  slug: a.slug,
+  score: a.score,
+  monthlyPrice: a.monthlyPrice,
+  annualPrice: a.annualPrice || 0,
+  minDuration: a.minDuration,
+  traffic: a.traffic,
+  lineType: a.lineType,
+  protocols: a.protocols.join(', '),
+  speedMbps: a.speedMbps,
+  latencyMs: a.latencyMs,
+  nodeCount: a.nodeCount,
+  aiUnlock: `${a.aiUnlock.chatgpt ? 'ChatGPT 4o ✓ ' : ''}${a.aiUnlock.claude ? 'Claude 3.7 ✓ ' : ''}${a.aiUnlock.gemini ? 'Gemini ✓' : ''}`,
+  streamingUnlock: `${a.streamingUnlock.netflix ? 'Netflix ✓ ' : ''}${a.streamingUnlock.disney ? 'Disney+ ✓ ' : ''}${a.streamingUnlock.youtube ? 'YouTube 4K ✓' : ''}`,
+  pros: a.pros.slice(0, 3),
+  cons: a.cons.slice(0, 2),
+  targetUsers: a.targetUsers.join('、'),
+  couponCode: a.couponCode || '无',
+  affiliateUrl: a.affiliateUrl
+}));
+
+// 8 组高价值决策常见问题
+const faqList = [
+  {
+    question: "10元以内的低价机场和30元以上的高端专线机场在日常使用中有何区别？",
+    answer: "低价机场通常采用公网中转或公网直连架构，服务器入口带宽较小且带宽超卖率高，在白天刷网页区别不大，但在晚上 20 点至 23 点用网高峰期，丢包率往往从 1% 激增至 20% 以上，看 4K 视频会出现频繁缓冲。30元以上的高端专线机场通常走物理隔离的企业内网 IEPL 或 IPLC 专线，不过审查防火墙，晚高峰延迟抖动小、丢包率接近零，并且配备原生住宅 IP，能够免验证使用 ChatGPT 和 Netflix。"
+  },
+  {
+    question: "玩外服游戏或 Steam 联机，应该选哪种线路架构的机场？",
+    answer: "玩竞技联机网游对带宽速度要求不高，关键指标是物理延迟和丢包率。建议优先选择纯内网 IPLC 专线。例如深圳到香港 IPLC 专线物理延迟仅约 10 至 20 毫秒，上海到日本专线物理延迟在 25 至 35 毫秒之间，且全天候无丢包。如果使用普通公网中转线路，晚高峰公网骨干网拥堵会导致游戏跳 ping 和丢包漂移。"
+  },
+  {
+    question: "使用 ChatGPT 和 Claude 经常被提示 Access Denied，是机场的问题吗？",
+    answer: "这是机场节点的出网 IP 类型与纯净度问题。OpenAI 和 Anthropic 对机房数据中心广播 IP 风控极严。如果机场使用廉价机房 IP，成百上千名用户共用同一个出口访问 AI 服务，就会触发云端安全拦截。解决办法是选用具备原生住宅 IP 或企业商用纯净 IP 解锁的机场，如光速云或宇宙云的专用 AI 节点。"
+  },
+  {
+    question: "新手第一次接触科学上网，选用哪款客户端最不容易出错？",
+    answer: "在 Windows 和 macOS 电脑端，目前主流首选是开源的 Clash Verge Rev 或 Mihomo Party，界面现代、内置 Mihomo 内核且支持一键开启 TUN 虚拟网卡模式。在苹果 iOS 手机端，装机标配是 Shadowrocket（小火箭），支持扫描二维码或一键复制订阅链接导入。在安卓手机端，推荐 Clash Meta for Android 或 v2rayNG。如果完全不想配置软件，可以选择提供自研客户端的机场（如光速云、飞猫云）。"
+  },
+  {
+    question: "为什么有些机场白天测速能跑几百兆，晚高峰看视频却卡顿？",
+    answer: "这属于典型的单点入口带宽超卖与非专线中转特征。Speedtest 测速属于短时间多线程突发拉取，可以在几秒内跑出高数值峰值；而在线流媒体播放（如 YouTube 4K、Netflix）需要持续稳定的高码率吞吐流。如果机场没有足够的专线冗余带宽，晚高峰期节点拥塞就会导致视频播放器反复降码率或重新缓冲。"
+  },
+  {
+    question: "机场套餐标明不限设备在线，可以和朋友一起合租吗？",
+    answer: "多数标明不限制在线设备的机场（如光速云）允许同一用户在手机、电脑、平板和路由器等多台个人设备上同时使用。但如果与多人合租共享同一个订阅链接，不同物理 IP 频繁并发拉取，可能触发机场防火墙的风控防盗刷策略，导致订阅链接被临时锁定。建议在合租前确认机场的服务条款规定。"
+  },
+  {
+    question: "机场更换官网域名后，客户端里的节点订阅会自动同步吗？",
+    answer: "不会自动感应。机场更换官网前台域名通常为了规避 DNS 污染，而后端节点订阅服务器域名大多独立运作。如果遇到节点无法刷新，可以在客户端中手动点击更新订阅；如果订阅链接已失效，需要登录机场最新的官方备用入口，重新复制最新生成的订阅链接并覆盖导入。"
+  },
+  {
+    question: "年付套餐优惠力度很大，购买机场应该选年付还是月付？",
+    answer: "新手初次接触新机场，建议始终以月付起步。月付可以完整验证机场在自身宽带网络环境（电信、联通或移动）下的晚高峰真实速度与稳定性，试错成本通常在十几元以内。在稳定使用两至三个月、确信线路质量过硬且运营口碑良好后，再结合优惠码购买年付套餐以获取更低的使用单价。"
+  }
+];
+---
+
+<Layout
+  title="机场对比决策中心 — 18大品牌PK·线路对比·软件横评【2026买前决策指南】 | 机场榜一"
+  description="机场榜一官方对比决策中心：提供光速云、飞猫云、微风网络、星岛梦、无忧链接、宇宙云等18大品牌横向评测。涵盖IEPL与IPLC专线差异、原生IP对比机房IP、Clash Verge与Shadowrocket客户端横评，助你买前精准决策。"
+  keywords="机场对比, 机场PK, 光速云对比宇宙云, 飞猫云对比微风网络, IEPL对比IPLC, Clash对比Shadowrocket, 原生IP对比机房IP, 机场怎么选, 专线机场对比"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+  <JsonLd type="FAQPage" faqItems={faqList} />
+
+  <!-- 页面头部 -->
+  <section class="relative z-20 site-container my-10 md:my-14">
+    <PageHeader
+      title="机场对比中心：多维参数横向评测与决策矩阵"
+      description="在纠结两款机场选哪家？通过客观参数横向对比、底层网络拓扑与真实测速数据，助你在购买前几分钟内看清优劣，做出最明智的下单决策。"
+    />
+
+    <!-- 快速导航锚点 -->
+    <div class="flex flex-wrap items-center justify-center gap-2 mt-6 max-w-4xl mx-auto">
+      <a href="#interactive-compare" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors">自选对比器</a>
+      <a href="#showdown-1" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary border border-primary/10">光速云 vs 宇宙云</a>
+      <a href="#showdown-2" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary border border-primary/10">飞猫云 vs 微风网络</a>
+      <a href="#showdown-3" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary border border-primary/10">星岛梦 vs 无忧链接</a>
+      <a href="#showdown-4" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary border border-primary/10">唯兔云 vs 速界</a>
+      <a href="#three-way" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary border border-primary/10">场景三方横评</a>
+      <a href="#master-matrix" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary border border-primary/10">18家大盘矩阵</a>
+      <a href="#tech-deep-dive" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary border border-primary/10">线路与IP技术</a>
+      <a href="#client-matrix" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary border border-primary/10">客户端横评</a>
+      <a href="#decision-guide" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary border border-primary/10">选型避坑指南</a>
+      <a href="#decision-faq" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-bg-secondary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-primary border border-primary/10">决策常见答疑</a>
+    </div>
+  </section>
+
+  <!-- 模块 1：交互式自选机场实时对比器 (纯原生轻量交互) -->
+  <section class="py-6 site-container" id="interactive-compare">
+    <div class="p-6 md:p-8 rounded-2xl bg-gradient-to-b from-primary/5 to-transparent dark:from-primary/10 border border-primary/20 shadow-sm">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center justify-center p-1.5 rounded-lg bg-primary text-white text-xs">
+              <SlidersHorizontal size={14} />
+            </span>
+            <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+              自选机场实时动态对比器
+            </h2>
+            <Badge variant="primary">18款自由任选</Badge>
+          </div>
+          <p class="text-xs text-neutral-500">
+            在下方两个选择器中分别挑选两家目标机场，系统将即时比对两者的价格、网络拓扑、实测性能与解锁能力。
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <label for="select-airport-a" class="text-xs font-semibold text-neutral-600 dark:text-neutral-300">机场 A</label>
+            <select id="select-airport-a" class="text-xs py-2 px-3 rounded-lg border border-primary/30 bg-bg-primary dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-primary">
+              {airports.map((a) => (
+                <option value={a.id} selected={a.id === 'guangsu'}>
+                  {a.name.split(' ')[0]} ({a.score}分)
+                </option>
+              ))}
+            </select>
+          </div>
+          <span class="text-xs font-bold text-primary">VS</span>
+          <div class="flex items-center gap-2">
+            <label for="select-airport-b" class="text-xs font-semibold text-neutral-600 dark:text-neutral-300">机场 B</label>
+            <select id="select-airport-b" class="text-xs py-2 px-3 rounded-lg border border-primary/30 bg-bg-primary dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-primary">
+              {airports.map((a) => (
+                <option value={a.id} selected={a.id === 'yuzhou'}>
+                  {a.name.split(' ')[0]} ({a.score}分)
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 对比动态展示卡片 (服务端初始输出默认数据，客户端脚本动态切换) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="comparator-output-container">
+        <!-- 机场 A 详情卡 -->
+        <div id="card-airport-a" class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/20">
+          <div class="flex items-start justify-between mb-4 border-b border-neutral-200 dark:border-neutral-700/60 pb-3">
+            <div>
+              <span class="text-[11px] font-semibold text-primary block mb-0.5">选手 A · 综合主推金牌</span>
+              <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100 name-field">光速云</h3>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-neutral-400 block">综合评分</span>
+              <span class="text-lg font-extrabold text-primary score-field">9.9</span>
+            </div>
+          </div>
+          <div class="space-y-2.5 text-xs text-neutral-700 dark:text-neutral-300">
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">入门价格与门槛</span>
+              <span class="font-semibold text-primary price-field">年付折合 ¥7.5-8 元/月 (极速版月付 ¥23)</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">骨干网络拓扑</span>
+              <span class="font-medium line-field">全球 IPLC / IEPL 企业内网专线 (最高2.5Gbps)</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">晚高峰测速与延迟</span>
+              <span class="font-semibold text-emerald-600 speed-field">980 Mbps · 22 ms 延迟 · 0 丢包</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">AI 与流媒体解锁</span>
+              <span class="font-medium ai-field">全节点原生住宅解锁，ChatGPT / Claude 免验证</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">客户端支持</span>
+              <span class="font-medium client-field">高颜值自研客户端 + 全平台开源客户端兼容</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">专属优惠码</span>
+              <span class="font-mono font-bold text-primary coupon-field">AMM (新人8折)</span>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 flex items-center justify-between">
+            <a href="/reviews/guangsu" class="text-xs font-semibold text-primary hover:underline link-review">查看光速云深度实测报告 →</a>
+            <a href="https://guangsu.cloud" target="_blank" rel="noopener noreferrer nofollow" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary text-white hover:opacity-90 link-official">直达官网</a>
+          </div>
+        </div>
+
+        <!-- 机场 B 详情卡 -->
+        <div id="card-airport-b" class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-amber-500/20">
+          <div class="flex items-start justify-between mb-4 border-b border-neutral-200 dark:border-neutral-700/60 pb-3">
+            <div>
+              <span class="text-[11px] font-semibold text-amber-500 block mb-0.5">选手 B · 15元月付专线标杆</span>
+              <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100 name-field">宇宙云</h3>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-neutral-400 block">综合评分</span>
+              <span class="text-lg font-extrabold text-amber-500 score-field">9.6</span>
+            </div>
+          </div>
+          <div class="space-y-2.5 text-xs text-neutral-700 dark:text-neutral-300">
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">入门价格与门槛</span>
+              <span class="font-semibold text-emerald-600 price-field">真实月付 ¥14.9 元 / 100GB (门槛低)</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">骨干网络拓扑</span>
+              <span class="font-medium line-field">IEPL 内网专线 + VLESS 协议</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">晚高峰测速与延迟</span>
+              <span class="font-semibold text-amber-600 speed-field">820 Mbps · 32 ms 延迟</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">AI 与流媒体解锁</span>
+              <span class="font-medium ai-field">支持常见 AI 与海外主流流媒体场景</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">客户端支持</span>
+              <span class="font-medium client-field">自研客户端 + 第三方通用客户端订阅导入</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800">
+              <span class="text-neutral-500">专属优惠码</span>
+              <span class="font-mono font-bold text-amber-600 coupon-field">YUZHOU553</span>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 flex items-center justify-between">
+            <a href="/reviews/yuzhou" class="text-xs font-semibold text-amber-600 hover:underline link-review">查看宇宙云深度实测报告 →</a>
+            <a href="https://yuzhou.cloud" target="_blank" rel="noopener noreferrer nofollow" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-white hover:opacity-90 link-official">直达官网</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块 2：四大焦点品牌双雄深度对决 -->
+  <section class="py-8 site-container space-y-12" id="all-showdowns">
+    
+    <!-- 对决 1：光速云 vs 宇宙云 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/20" id="showdown-1">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div class="flex items-center gap-2">
+          <Badge variant="primary">焦点双雄 PK 01</Badge>
+          <h2 class="text-lg md:text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            光速云 vs 宇宙云
+          </h2>
+        </div>
+        <span class="text-xs font-medium text-neutral-500">综合旗舰标杆 vs 15元月付标杆</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs mb-6">
+          <thead>
+            <tr class="border-b border-dashed border-primary/20 bg-primary/5 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+              <th class="py-3 px-4 w-1/4">核心评估维度</th>
+              <th class="py-3 px-4 w-3/8 text-primary font-bold">光速云 (综合评分 9.9 · 榜首推荐)</th>
+              <th class="py-3 px-4 w-3/8 text-amber-500 font-bold">宇宙云 (综合评分 9.6 · 月付首选)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700/60 text-neutral-700 dark:text-neutral-300">
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">起步价格与付费模式</td>
+              <td class="py-3 px-4 font-bold text-primary">年付折合约 ¥7.5-8 元/月 (59G流量) / 极速版月付 ¥23 (148G)</td>
+              <td class="py-3 px-4 font-bold text-emerald-600">纯月付 ¥14.9 元 / 100GB (零长期捆绑门槛)</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">骨干网络与出口架构</td>
+              <td class="py-3 px-4">全球企业级 IPLC / IEPL 专线，单节点物理带宽最高 2.5Gbps</td>
+              <td class="py-3 px-4">IEPL 内网专线 + VLESS 现代协议架构</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">晚高峰吞吐与延迟抖动</td>
+              <td class="py-3 px-4 text-emerald-500 font-bold">980 Mbps 实测速率 · 22ms 极低延迟 · 丢包率接近 0%</td>
+              <td class="py-3 px-4">820 Mbps 实测速率 · 32ms 稳定延迟 · 丢包率约 0.2%</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">AI 与海外流媒体纯净度</td>
+              <td class="py-3 px-4 text-emerald-500 font-bold">全节点原生住宅双 ISP IP，支持 ChatGPT 4o、Claude 3.7 免验证</td>
+              <td class="py-3 px-4">主流节点支持常见 AI 服务与 Netflix、YouTube 解锁</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">在线设备与客户端支持</td>
+              <td class="py-3 px-4 font-medium">高颜值自研多端客户端，开源软件无缝兼容，不限制设备同时在线</td>
+              <td class="py-3 px-4">提供自研客户端，同时支持通用订阅链接格式</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">专属折扣码</td>
+              <td class="py-3 px-4"><code class="text-primary font-bold">AMM</code> (新人 8 折)</td>
+              <td class="py-3 px-4"><code class="text-amber-600 font-bold">YUZHOU553</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 text-xs leading-relaxed text-neutral-600 dark:text-neutral-300">
+        <h4 class="font-bold text-neutral-800 dark:text-neutral-100 mb-2">深度横向点评与选型建议</h4>
+        <p class="mb-2">
+          光速云自 2020 年运营至今已超五年，其优势体现在骨干网络带宽储备。单节点最高 2.5Gbps 的物理吞吐与全节点原生住宅 IP，使它在重度 4K 视频、跨境大文件传输和 AI 高并发调用场景下几乎没有掉速烦恼。虽然入门版需要年付，但折合单月成本仅约 7.5 至 8 元。
+        </p>
+        <p>
+          宇宙云的核心竞争力在于真正的 15 元档极低月付门槛。如果用户单月预算严格控制在 15 元以内，不需要承担长期订阅风险，且每月流量在 100GB 范围内，宇宙云是目前非常稳妥的月付内网专线选择。追求综合稳定性与速度首选光速云，严格限制月付首选宇宙云。
+        </p>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-4 justify-end">
+        <a href="/reviews/guangsu" class="px-4 py-2 rounded-xl text-xs font-semibold bg-primary text-white hover:opacity-90">查看光速云评测与实测图</a>
+        <a href="/reviews/yuzhou" class="px-4 py-2 rounded-xl text-xs font-semibold bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 hover:border-primary">查看宇宙云评测</a>
+      </div>
+    </div>
+
+    <!-- 对决 2：飞猫云 vs 微风网络 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15" id="showdown-2">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div class="flex items-center gap-2">
+          <Badge variant="primary">高性价比对决 02</Badge>
+          <h2 class="text-lg md:text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            飞猫云 vs 微风网络
+          </h2>
+        </div>
+        <span class="text-xs font-medium text-neutral-500">7元档年付专线标杆 vs 7元档轻量IEPL专线</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs mb-6">
+          <thead>
+            <tr class="border-b border-dashed border-primary/20 bg-primary/5 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+              <th class="py-3 px-4 w-1/4">核心评估维度</th>
+              <th class="py-3 px-4 w-3/8 text-primary font-bold">飞猫云 (综合评分 9.85 · 性价比标杆)</th>
+              <th class="py-3 px-4 w-3/8 text-blue-500 font-bold">微风网络 (综合评分 9.8 · 轻度首选)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700/60 text-neutral-700 dark:text-neutral-300">
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">套餐价格与门槛</td>
+              <td class="py-3 px-4 font-bold text-primary">年付低至 ¥7.0 元/月 (含 100GB 大流量)</td>
+              <td class="py-3 px-4 font-bold text-blue-500">折合约 ¥7.0 元/月 (主打轻量小流量 IEPL 专线)</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">线路与节点布局</td>
+              <td class="py-3 px-4">45+ 全球优质专线节点，覆盖港台日美新主流节点</td>
+              <td class="py-3 px-4">IEPL 内网专线优化通道，主打核心常用地区节点</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">晚高峰测速表现</td>
+              <td class="py-3 px-4 text-emerald-500 font-bold">880 Mbps 实测速率 · 26ms 延迟</td>
+              <td class="py-3 px-4 font-bold text-blue-500">840 Mbps 实测速率 · 28ms 延迟</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">小白新手友好度</td>
+              <td class="py-3 px-4 text-emerald-500 font-bold">配备一键登录独立客户端，免去配置订阅烦恼</td>
+              <td class="py-3 px-4">支持标准订阅导入，网站提供图文分步教程</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">专属优惠码</td>
+              <td class="py-3 px-4"><code class="text-primary font-bold">flycat888</code></td>
+              <td class="py-3 px-4"><code class="text-blue-500 font-bold">flat888</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 text-xs leading-relaxed text-neutral-600 dark:text-neutral-300">
+        <h4 class="font-bold text-neutral-800 dark:text-neutral-100 mb-2">深度横向点评与选型建议</h4>
+        <p class="mb-2">
+          这两家机场都将专线门槛拉低到了每月 7 元左右的价格区间。飞猫云在年付套餐中给出的流量配额相对更充裕，适合日常有较多视频观看需求且需要简易客户端的新手朋友。
+        </p>
+        <p>
+          微风网络则专门瞄准轻度办公、外贸查单和学术查阅人群。其流量包更克制，但 IEPL 专线质量调校细腻，晚高峰连接响应灵敏。若追求大流量与一键客户端选飞猫云，若自身每月用量较小且专注稳定性选微风网络。
+        </p>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-4 justify-end">
+        <a href="/reviews/feimao" class="px-4 py-2 rounded-xl text-xs font-semibold bg-primary text-white hover:opacity-90">查看飞猫云评测</a>
+        <a href="/reviews/breeze" class="px-4 py-2 rounded-xl text-xs font-semibold bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 hover:border-primary">查看微风网络评测</a>
+      </div>
+    </div>
+
+    <!-- 对决 3：星岛梦 vs 无忧链接 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15" id="showdown-3">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div class="flex items-center gap-2">
+          <Badge variant="primary">特色模式对决 03</Badge>
+          <h2 class="text-lg md:text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            星岛梦 vs 无忧链接
+          </h2>
+        </div>
+        <span class="text-xs font-medium text-neutral-500">永不过期按量付费 vs 全平台免转换直连</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs mb-6">
+          <thead>
+            <tr class="border-b border-dashed border-primary/20 bg-primary/5 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+              <th class="py-3 px-4 w-1/4">核心评估维度</th>
+              <th class="py-3 px-4 w-3/8 text-purple-600 dark:text-purple-400 font-bold">星岛梦 (综合评分 9.75 · 不限时老牌)</th>
+              <th class="py-3 px-4 w-3/8 text-teal-600 dark:text-teal-400 font-bold">无忧链接 (综合评分 9.7 · 极简直连)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700/60 text-neutral-700 dark:text-neutral-300">
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">主打特色机制</td>
+              <td class="py-3 px-4 font-bold text-purple-600 dark:text-purple-400">2020老牌运营，流量永不过期，按需计费</td>
+              <td class="py-3 px-4 font-bold text-teal-600 dark:text-teal-400">全平台免转换直连，多协议原生支持，轻量月付</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">入门门槛与价格</td>
+              <td class="py-3 px-4">折合约 ¥8.0 元/月，一次购买长期有效不作废</td>
+              <td class="py-3 px-4">标准月付 ¥19 元，轻量活动套餐低至 ¥6.0 起</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">骨干线路架构</td>
+              <td class="py-3 px-4">国内企业内网专线互联，单节点晚高峰达 860 Mbps</td>
+              <td class="py-3 px-4">智能多云互联直连与优化中转，晚高峰达 850 Mbps</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">最适宜场景</td>
+              <td class="py-3 px-4">备用第二梯队、低频查询资料、出差应急备用</td>
+              <td class="py-3 px-4">厌烦复杂配置的新手、需要跨平台无缝同步设备的用户</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">专属优惠码</td>
+              <td class="py-3 px-4"><code class="text-purple-600 dark:text-purple-400 font-bold">nmw888</code></td>
+              <td class="py-3 px-4"><code class="text-teal-600 dark:text-teal-400 font-bold">wuyou666</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 text-xs leading-relaxed text-neutral-600 dark:text-neutral-300">
+        <h4 class="font-bold text-neutral-800 dark:text-neutral-100 mb-2">深度横向点评与选型建议</h4>
+        <p class="mb-2">
+          星岛梦是市面上少有的自 2020 年坚持运营至今的不限时专线机场。按周期清零的套餐如果当月用不完就会浪费，而星岛梦的按量计费套餐购买后流量长期有效，非常适合将其作为主力机场之外的常备保险线路。
+        </p>
+        <p>
+          无忧链接则将重点放在降低客户端接入难度上。其后端支持协议自适应，无需经过第三方订阅转换网站，避免了订阅信息泄露风险。需要不限时备用选星岛梦，需要快速免折腾上手选中无忧链接。
+        </p>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-4 justify-end">
+        <a href="/reviews/xingdaomeng" class="px-4 py-2 rounded-xl text-xs font-semibold bg-primary text-white hover:opacity-90">查看星岛梦评测</a>
+        <a href="/reviews/wuyou" class="px-4 py-2 rounded-xl text-xs font-semibold bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 hover:border-primary">查看无忧链接评测</a>
+      </div>
+    </div>
+
+    <!-- 对决 4：唯兔云 vs 速界 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15" id="showdown-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div class="flex items-center gap-2">
+          <Badge variant="primary">网络调度对决 04</Badge>
+          <h2 class="text-lg md:text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            唯兔云 vs 速界
+          </h2>
+        </div>
+        <span class="text-xs font-medium text-neutral-500">动态多节点调度标杆 vs 老牌三网优化中转</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs mb-6">
+          <thead>
+            <tr class="border-b border-dashed border-primary/20 bg-primary/5 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+              <th class="py-3 px-4 w-1/4">核心评估维度</th>
+              <th class="py-3 px-4 w-3/8 text-emerald-600 dark:text-emerald-400 font-bold">唯兔云 (综合评分 9.5 · 动态调度标杆)</th>
+              <th class="py-3 px-4 w-3/8 text-cyan-600 dark:text-cyan-400 font-bold">速界 (综合评分 9.4 · 三网优化老牌)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700/60 text-neutral-700 dark:text-neutral-300">
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">节点覆盖广度</td>
+              <td class="py-3 px-4 font-bold text-emerald-600 dark:text-emerald-400">60+ 全球多国节点，覆盖小众地区流媒体</td>
+              <td class="py-3 px-4">40+ 核心主流地区高可用节点矩阵</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">入口拓扑设计</td>
+              <td class="py-3 px-4">智能多入口动态调度，自动避让高峰拥塞节点</td>
+              <td class="py-3 px-4 font-bold text-cyan-600 dark:text-cyan-400">老牌三网优化中转通道，电信联通移动全兼容</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">晚高峰测速表现</td>
+              <td class="py-3 px-4">800 Mbps 实测速率 · 35ms 延迟</td>
+              <td class="py-3 px-4">780 Mbps 实测速率 · 36ms 延迟</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">月付入门价格</td>
+              <td class="py-3 px-4 font-bold text-emerald-600">¥12.0 元/月起</td>
+              <td class="py-3 px-4">¥14.0 元/月起</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-neutral-500">专属优惠码</td>
+              <td class="py-3 px-4"><code class="text-emerald-600 dark:text-emerald-400 font-bold">weitu666</code></td>
+              <td class="py-3 px-4"><code class="text-cyan-600 dark:text-cyan-400 font-bold">sujie888</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 text-xs leading-relaxed text-neutral-600 dark:text-neutral-300">
+        <h4 class="font-bold text-neutral-800 dark:text-neutral-100 mb-2">深度横向点评与选型建议</h4>
+        <p class="mb-2">
+          唯兔云的强项在于全球节点资源的深度覆盖。其 60 多个节点除了常见的新加坡、香港、日本外，还部署了欧洲、南美等地区节点，满足小众国家流媒体解锁和海外本地业务调研需求。
+        </p>
+        <p>
+          速界作为老牌三网中转代表，入口服务器对北方联通、南方电信以及移动宽带做了针对性分流配置，在晚高峰网络复杂波动期表现较均衡。需要多国冷门节点选唯兔云，需要大运营商稳健中转加速选速界。
+        </p>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-4 justify-end">
+        <a href="/reviews/weitu" class="px-4 py-2 rounded-xl text-xs font-semibold bg-primary text-white hover:opacity-90">查看唯兔云评测</a>
+        <a href="/reviews/sujie" class="px-4 py-2 rounded-xl text-xs font-semibold bg-bg-primary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 hover:border-primary">查看速界评测</a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- 模块 3：三大特定场景三方横向评测 -->
+  <section class="py-12 site-container" id="three-way">
+    <div class="border-t border-dashed border-primary/10 pt-10">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <div class="mb-2 inline-block"><Badge variant="primary">场景决策横评</Badge></div>
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          三大经典场景：三方品牌横向参数大比拼
+        </h2>
+        <p class="text-xs text-neutral-500 mt-2">
+          不再纠结单一参数，针对预算敏感、游戏生产力与新手易用三大高频诉求，横向交叉对比三家典型服务商。
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs">
+        <!-- 横评 1：10元内超低预算学生与轻度用户 -->
+        <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="p-1 rounded bg-emerald-500/10 text-emerald-600 font-bold text-xs">低预算</span>
+              <h3 class="font-bold text-sm text-neutral-800 dark:text-neutral-100">10元内低预算学生党首选三强</h3>
+            </div>
+            <p class="text-neutral-500 leading-relaxed mb-4">
+              在预算极为有限的情况下，兼顾可用性与单价，避免落入年付跑路陷阱。
+            </p>
+
+            <div class="space-y-3 mb-6">
+              <div class="p-3 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-bold text-neutral-800 dark:text-neutral-100">飞猫云</span>
+                  <span class="font-bold text-primary">折合约 ¥7 元/月</span>
+                </div>
+                <p class="text-[11px] text-neutral-500">年付包含 100GB 流量，自研一键客户端，晚高峰实测 880 Mbps。</p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-bold text-neutral-800 dark:text-neutral-100">微风网络</span>
+                  <span class="font-bold text-blue-500">折合约 ¥7 元/月</span>
+                </div>
+                <p class="text-[11px] text-neutral-500">轻量小流量 IEPL 专线，适合日常查资料与刷推，晚高峰稳定 840 Mbps。</p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-bold text-neutral-800 dark:text-neutral-100">无忧链接</span>
+                  <span class="font-bold text-teal-600">特惠低至 ¥6 元起</span>
+                </div>
+                <p class="text-[11px] text-neutral-500">全平台免转换直连，月付无门槛，适合单次或短期轻度验证。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-dashed border-neutral-200 dark:border-neutral-700 text-neutral-500 text-[11px]">
+            <strong>裁决总结：</strong>需要大流量与一键客户端选飞猫云；追求专线平稳与轻度浏览选微风网络；追求极低单月试水门槛选中无忧链接。
+          </div>
+        </div>
+
+        <!-- 横评 2：低延迟 IPLC/IEPL 生产力与游戏专线 -->
+        <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="p-1 rounded bg-primary/10 text-primary font-bold text-xs">硬核专线</span>
+              <h3 class="font-bold text-sm text-neutral-800 dark:text-neutral-100">极低延迟与生产力专线三强</h3>
+            </div>
+            <p class="text-neutral-500 leading-relaxed mb-4">
+              专为外贸办公、ChatGPT 高并发开发、Steam 联机与 4K 秒开打造的高端线路。
+            </p>
+
+            <div class="space-y-3 mb-6">
+              <div class="p-3 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-bold text-neutral-800 dark:text-neutral-100">光速云</span>
+                  <span class="font-bold text-primary">综合 9.9 分</span>
+                </div>
+                <p class="text-[11px] text-neutral-500">2.5Gbps IPLC/IEPL 内网专线，22ms 超低延迟，全节点原生住宅解锁。</p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-bold text-neutral-800 dark:text-neutral-100">宇宙云</span>
+                  <span class="font-bold text-amber-500">综合 9.6 分</span>
+                </div>
+                <p class="text-[11px] text-neutral-500">¥14.9 真实月付 IEPL 专线，820 Mbps 实测速率，VLESS 现代协议。</p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-bold text-neutral-800 dark:text-neutral-100">星岛梦</span>
+                  <span class="font-bold text-purple-600">综合 9.75 分</span>
+                </div>
+                <p class="text-[11px] text-neutral-500">不限时按量专线，860 Mbps 峰值，长期储备永不过期。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-dashed border-neutral-200 dark:border-neutral-700 text-neutral-500 text-[11px]">
+            <strong>裁决总结：</strong>顶级性能与 AI 生产力首选光速云；单月低门槛无拘束首选宇宙云；长效不限时备用首选星岛梦。
+          </div>
+        </div>
+
+        <!-- 横评 3：全平台免翻墙小白一键客户端 -->
+        <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="p-1 rounded bg-amber-500/10 text-amber-600 font-bold text-xs">新手易用</span>
+              <h3 class="font-bold text-sm text-neutral-800 dark:text-neutral-100">小白免配置一键客户端三强</h3>
+            </div>
+            <p class="text-neutral-500 leading-relaxed mb-4">
+              告别订阅转换、YAML 代码编辑与报错排查，下载客户端登录账号即可使用。
+            </p>
+
+            <div class="space-y-3 mb-6">
+              <div class="p-3 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-bold text-neutral-800 dark:text-neutral-100">光速云自研多端客户端</span>
+                  <span class="font-bold text-emerald-600">全端支持</span>
+                </div>
+                <p class="text-[11px] text-neutral-500">支持 Windows、macOS、Android，界面简洁，智能测速与自动选择节点。</p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-bold text-neutral-800 dark:text-neutral-100">飞猫云一键直连客户端</span>
+                  <span class="font-bold text-primary">新手标配</span>
+                </div>
+                <p class="text-[11px] text-neutral-500">注册即可下载安装包，国内 CDN 镜像下载加速，免去 GitHub 访问壁垒。</p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-bold text-neutral-800 dark:text-neutral-100">宇宙云轻量连接工具</span>
+                  <span class="font-bold text-amber-500">轻便集成</span>
+                </div>
+                <p class="text-[11px] text-neutral-500">内存占用极低，同时兼容 Clash 配置导出，进可折腾退可省心。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-dashed border-neutral-200 dark:border-neutral-700 text-neutral-500 text-[11px]">
+            <strong>裁决总结：</strong>需要大品牌全平台无缝衔接选光速云；追求下载快速与新手开箱即用选飞猫云；兼顾轻便与拓展性选宇宙云。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块 4：全站 18 家机场关键参数一览横向大矩阵 -->
+  <section class="py-12 site-container" id="master-matrix">
+    <div class="border-t border-dashed border-primary/10 pt-10">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-6">
+        <div>
+          <div class="mb-2 inline-block"><Badge variant="primary">全站数据大盘</Badge></div>
+          <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+            全站 18 大机场核心技术参数与性能决策大矩阵
+          </h2>
+          <p class="text-xs text-neutral-500 mt-1">
+            横向收录 18 家主流品牌晚高峰测速、物理骨干网络、AI 解锁及起步价格，支持点击品牌跳转独立实测评测。
+          </p>
+        </div>
+        <div class="mt-4 md:mt-0 text-xs text-neutral-400">
+          数据基准更新时间：2026年9月 · 晚高峰实测核验
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-primary/15 shadow-sm">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-primary/20 bg-primary/5 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200">
+              <th class="py-3 px-3">排位</th>
+              <th class="py-3 px-4">机场品牌与代号</th>
+              <th class="py-3 px-3 text-center">综合评分</th>
+              <th class="py-3 px-3">起步价格 / 周期</th>
+              <th class="py-3 px-3">骨干线路拓扑</th>
+              <th class="py-3 px-3">晚高峰测速</th>
+              <th class="py-3 px-3">延迟</th>
+              <th class="py-3 px-4">AI 与流媒体</th>
+              <th class="py-3 px-3">优惠码</th>
+              <th class="py-3 px-3 text-right">操作</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700/60 bg-bg-secondary dark:bg-bg-secondary-dark text-neutral-700 dark:text-neutral-300">
+            {airports.map((airport, index) => (
+              <tr class={index === 0 ? "bg-primary/5 dark:bg-primary/10 font-medium" : "hover:bg-neutral-50 dark:hover:bg-neutral-800/40"}>
+                <td class="py-3 px-3">
+                  {index === 0 && <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500 text-white">#1 主推</span>}
+                  {index === 1 && <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-neutral-400 text-white">#2</span>}
+                  {index === 2 && <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-700 text-white">#3</span>}
+                  {index > 2 && <span class="text-neutral-400 font-mono text-[11px]">#{index + 1}</span>}
+                </td>
+                <td class="py-3 px-4 font-semibold text-neutral-900 dark:text-neutral-100">
+                  <a href={`/reviews/${airport.slug}`} class="hover:text-primary transition-colors flex items-center gap-1.5">
+                    {airport.name}
+                    {airport.isRecommended && <Award size={13} class="text-primary inline shrink-0" />}
+                  </a>
+                </td>
+                <td class="py-3 px-3 text-center">
+                  <span class={`font-extrabold ${index === 0 ? 'text-primary' : 'text-neutral-800 dark:text-neutral-200'}`}>
+                    {airport.score}
+                  </span>
+                </td>
+                <td class="py-3 px-3">
+                  <span class="font-bold text-neutral-900 dark:text-neutral-100">¥{airport.monthlyPrice}</span>
+                  <span class="text-[10px] text-neutral-400 block">{airport.minDuration}</span>
+                </td>
+                <td class="py-3 px-3">
+                  <span class="text-[11px] font-medium text-neutral-600 dark:text-neutral-300">
+                    {airport.lineType}
+                  </span>
+                </td>
+                <td class="py-3 px-3">
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400">
+                    {airport.speedMbps} Mbps
+                  </span>
+                </td>
+                <td class="py-3 px-3 text-neutral-500">
+                  {airport.latencyMs} ms
+                </td>
+                <td class="py-3 px-4 text-[11px]">
+                  {airport.aiUnlock.chatgpt ? (
+                    <span class="text-emerald-500 mr-2">✓ AI原生</span>
+                  ) : (
+                    <span class="text-neutral-400 mr-2">○ 基础</span>
+                  )}
+                  {airport.streamingUnlock.netflix ? (
+                    <span class="text-emerald-500">✓ 奈飞4K</span>
+                  ) : (
+                    <span class="text-neutral-400">○ 普通</span>
+                  )}
+                </td>
+                <td class="py-3 px-3">
+                  {airport.couponCode ? (
+                    <code class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-mono text-[11px]">
+                      {airport.couponCode}
+                    </code>
+                  ) : (
+                    <span class="text-neutral-400">-</span>
+                  )}
+                </td>
+                <td class="py-3 px-3 text-right whitespace-nowrap">
+                  <a
+                    href={`/reviews/${airport.slug}`}
+                    class="text-xs text-primary font-medium hover:underline inline-flex items-center gap-0.5 mr-2"
+                  >
+                    评测
+                  </a>
+                  <a
+                    href={airport.affiliateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    class="text-[11px] px-2 py-1 rounded bg-bg-primary dark:bg-neutral-800 border border-primary/20 hover:border-primary text-neutral-700 dark:text-neutral-200"
+                  >
+                    官网
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块 5：底层线路拓扑与技术硬核深度对比 -->
+  <section class="py-12 site-container" id="tech-deep-dive">
+    <div class="border-t border-dashed border-primary/10 pt-10">
+      <div class="max-w-3xl mb-8">
+        <div class="mb-2 inline-block"><Badge variant="primary">技术原理透析</Badge></div>
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          底层网络拓扑与 IP 属性深度剖析：避开商家概念包装
+        </h2>
+        <p class="text-xs text-neutral-500 mt-2 leading-relaxed">
+          许多商家通过所谓超算加速、量子线路等生造词汇包装低廉服务器。掌握核心的网络链路拓扑与 IP 风险判定机制，才能穿透营销话术看清本质。
+        </p>
+      </div>
+
+      <!-- 线路拓扑大对比 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-bold text-base text-neutral-900 dark:text-neutral-100">IEPL 专线 (以太网私网互联)</h3>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-primary/10 text-primary font-bold">抗封锁王者</span>
+          </div>
+          <p class="text-xs text-neutral-500 leading-relaxed mb-4">
+            IEPL 是企业内部点对点以太网二层物理隔离专线。数据在国内入口服务器打包后，通过跨国海底光缆物理专线直接传输至香港、日本或美国机房，中间不经过国家防火墙审查节点。
+          </p>
+          <div class="space-y-2 text-xs border-t border-neutral-200 dark:border-neutral-700/60 pt-3">
+            <div class="text-emerald-600 dark:text-emerald-400 font-medium">● 晚高峰表现：零丢包，延迟极其恒定</div>
+            <div class="text-neutral-500">● 成本构成：每 1Gbps 带宽月成本高达上万元</div>
+            <div class="text-primary font-medium">● 典型代表：光速云、微风网络、宇宙云</div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-bold text-base text-neutral-900 dark:text-neutral-100">IPLC 专线 (国际租用电路)</h3>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/10 text-amber-600 font-bold">超低延迟利器</span>
+          </div>
+          <p class="text-xs text-neutral-500 leading-relaxed mb-4">
+            IPLC 是传统的国际私有物理租用电信电路。其特点在于路由跳数极少，由中国电信或联通直达境外机房。例如深圳到香港物理延迟仅 12 毫秒，对跨国竞技网游和语音通信体验提升明显。
+          </p>
+          <div class="space-y-2 text-xs border-t border-neutral-200 dark:border-neutral-700/60 pt-3">
+            <div class="text-amber-600 dark:text-amber-400 font-medium">● 晚高峰表现：物理延迟抖动在 1ms 以内</div>
+            <div class="text-neutral-500">● 成本构成：跨国物理专线带宽成本极高</div>
+            <div class="text-primary font-medium">● 典型代表：光速云游戏优化节点、星岛梦</div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-bold text-base text-neutral-900 dark:text-neutral-100">BGP 隧道中转 / 优化直连</h3>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 font-bold">高性价比首选</span>
+          </div>
+          <p class="text-xs text-neutral-500 leading-relaxed mb-4">
+            国内入口采用多线 BGP 服务器，用户将流量发给国内中转服务器后，由中转机通过加密隧道跨公网转发给境外落地机房。成本约为专线的 30% 至 50%，适合日常大流量看视频。
+          </p>
+          <div class="space-y-2 text-xs border-t border-neutral-200 dark:border-neutral-700/60 pt-3">
+            <div class="text-neutral-600 dark:text-neutral-400 font-medium">● 晚高峰表现：受公网拥堵影响有微弱波动</div>
+            <div class="text-neutral-500">● 成本构成：机房 VPS 服务器月租较为亲民</div>
+            <div class="text-primary font-medium">● 典型代表：飞猫云、速界、唯兔云</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 原生住宅 IP vs 机房广播 IP 专题解析 -->
+      <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+        <h3 class="text-base md:text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-3">
+          原生住宅 IP、机房数据中心 IP 与广播 IP 的风控区别
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-neutral-600 dark:text-neutral-300">
+          <div>
+            <span class="font-bold text-emerald-600 dark:text-emerald-400 block mb-1">原生住宅双 ISP IP (Residential IP)</span>
+            <p class="leading-relaxed">
+              归属于当地居民宽带运营商（如香港 HKT、台湾中华电信、美国 AT&T）。在 MaxMind 和 IPinfo 数据库中被标记为 ISP 类型，欺诈分通常低于 5 分。OpenAI 和银行金融系统将其视作真实本地家庭住址访问，极难被封号。
+            </p>
+          </div>
+          <div>
+            <span class="font-bold text-amber-600 dark:text-amber-400 block mb-1">机房数据中心 IP (Data Center / Hosting IP)</span>
+            <p class="leading-relaxed">
+              归属于云厂商（如 Amazon AWS、Google Cloud、Linode 等）。大量爬虫、机器人与批量注册号均从这类机房发出，因此被 OpenAI、Netflix 等公司加入严密风控观察列表，常导致死循环人机验证。
+            </p>
+          </div>
+          <div>
+            <span class="font-bold text-neutral-500 block mb-1">广播 IP (Broadcast / Non-Native IP)</span>
+            <p class="leading-relaxed">
+              物理机房位于美国或其他地区，通过 BGP 宣告伪装成香港或新加坡 IP。DNS 解析和地理归属常出现混乱，流媒体平台往往会直接锁区，或者只能观看自制剧而无法显示当地版权内容。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块 6：主流代理客户端横向评测矩阵 -->
+  <section class="py-12 site-container" id="client-matrix">
+    <div class="border-t border-dashed border-primary/10 pt-10">
+      <div class="max-w-3xl mb-8">
+        <div class="mb-2 inline-block"><Badge variant="primary">工具生态横评</Badge></div>
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          主流客户端软件生态横向评测：按设备挑选最顺手的工具
+        </h2>
+        <p class="text-xs text-neutral-500 mt-2 leading-relaxed">
+          好的机场需要搭配稳定的客户端。不同平台工具在内核机制、内存开销与分流规则上有明显取向差异。
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-xs">
+        <!-- 客户端 1：Clash Verge Rev -->
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-sm text-neutral-800 dark:text-neutral-100">Clash Verge Rev</h3>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary font-bold">电脑端主力首选</span>
+          </div>
+          <p class="text-neutral-500 mb-3 leading-relaxed">
+            基于 Tauri 框架重构的现代 Clash 客户端，内置 Mihomo (Meta) 内核，内存占用较老版减少 40% 以上。原生支持 TUN 虚拟网卡模式，接管系统全局流量。
+          </p>
+          <div class="border-t border-neutral-100 dark:border-neutral-800 pt-2 space-y-1 text-[11px]">
+            <div>● 支持平台：Windows / macOS / Linux</div>
+            <div>● 内核引擎：Mihomo 内核</div>
+            <div>● 适用人群：办公白领、开发者、进阶分流需求</div>
+          </div>
+        </div>
+
+        <!-- 客户端 2：Shadowrocket (小火箭) -->
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-sm text-neutral-800 dark:text-neutral-100">Shadowrocket (小火箭)</h3>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-bold">iOS 苹果装机标配</span>
+          </div>
+          <p class="text-neutral-500 mb-3 leading-relaxed">
+            苹果生态经久不衰的代理神器，在美区 App Store 售价约 2.99 美元。操作界面直观，一键扫码添加节点，按应用与域名智能分流省电省流。
+          </p>
+          <div class="border-t border-neutral-100 dark:border-neutral-800 pt-2 space-y-1 text-[11px]">
+            <div>● 支持平台：iOS (iPhone / iPad)</div>
+            <div>● 协议支持：Shadowsocks / VLESS / Trojan / Hysteria2</div>
+            <div>● 适用人群：所有苹果手机与平板移动端用户</div>
+          </div>
+        </div>
+
+        <!-- 客户端 3：v2rayN / v2rayNG -->
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-sm text-neutral-800 dark:text-neutral-100">v2rayN / v2rayNG</h3>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 font-bold">协议兼容老将</span>
+          </div>
+          <p class="text-neutral-500 mb-3 leading-relaxed">
+            极客发烧友与备用工具首选，更新频率快，对 Xray、Vless Reality 等最新加密协议提供第一时间跟进，配置参数极度透明。
+          </p>
+          <div class="border-t border-neutral-100 dark:border-neutral-800 pt-2 space-y-1 text-[11px]">
+            <div>● 支持平台：Windows (v2rayN) / Android (v2rayNG)</div>
+            <div>● 内核引擎：Xray / Sing-box 双核心支持</div>
+            <div>● 适用人群：协议爱好者、备用排障工具</div>
+          </div>
+        </div>
+
+        <!-- 客户端 4：Mihomo Party -->
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-sm text-neutral-800 dark:text-neutral-100">Mihomo Party</h3>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary font-bold">新潮高颜值UI</span>
+          </div>
+          <p class="text-neutral-500 mb-3 leading-relaxed">
+            被称为派对客户端的高颜值工具，将节点分流、测速图谱与路由走向以极简现代的设计呈现，交互体验极其舒适。
+          </p>
+          <div class="border-t border-neutral-100 dark:border-neutral-800 pt-2 space-y-1 text-[11px]">
+            <div>● 支持平台：Windows / macOS</div>
+            <div>● 内核引擎：Mihomo 专有集成</div>
+            <div>● 适用人群：颜控党、轻度桌面办公用户</div>
+          </div>
+        </div>
+
+        <!-- 客户端 5：Sing-box -->
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-sm text-neutral-800 dark:text-neutral-100">Sing-box 全平台核心</h3>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 font-bold">高性能通用底座</span>
+          </div>
+          <p class="text-neutral-500 mb-3 leading-relaxed">
+            新一代通用代理核心，内存占用比 Go 语言传统内核低 60%，在移动端几乎不增加发热与电量消耗，各平台图形界面正在迅速完善。
+          </p>
+          <div class="border-t border-neutral-100 dark:border-neutral-800 pt-2 space-y-1 text-[11px]">
+            <div>● 支持平台：全平台 (Windows / Mac / iOS / Android)</div>
+            <div>● 核心特点：超高并发、超低内存开销</div>
+            <div>● 适用人群：极客玩家与高性能追求者</div>
+          </div>
+        </div>
+
+        <!-- 客户端 6：自研免配置客户端 -->
+        <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-sm text-neutral-800 dark:text-neutral-100">品牌专属自研客户端</h3>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-bold">新手开箱即用</span>
+          </div>
+          <p class="text-neutral-500 mb-3 leading-relaxed">
+            由光速云、飞猫云等品牌自主开发的一键客户端，无需复制粘贴订阅地址，输入机场账户密码即可登录并智能分流。
+          </p>
+          <div class="border-t border-neutral-100 dark:border-neutral-800 pt-2 space-y-1 text-[11px]">
+            <div>● 支持平台：通常覆盖 Windows / macOS / Android</div>
+            <div>● 核心特点：零学习门槛、节点自动刷新</div>
+            <div>● 适用人群：完全不想折腾技术规则的小白用户</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <a href="/clients" class="inline-flex items-center gap-1.5 text-xs text-primary font-semibold hover:underline">
+          查看全部官方客户端下载地址与配置图文指引 <ArrowRight size={14} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块 7：万字级决策选型方法论与避坑防跑路指南 -->
+  <section class="py-12 site-container" id="decision-guide">
+    <div class="border-t border-dashed border-primary/10 pt-10">
+      <div class="max-w-3xl mb-8">
+        <div class="mb-2 inline-block"><Badge variant="primary">科学决策指南</Badge></div>
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          四步决策漏斗与五大行业避坑防跑路法则
+        </h2>
+        <p class="text-xs text-neutral-500 mt-2 leading-relaxed">
+          购买机场不需要碰运气。依照明确的预算、流量、场景与周期漏斗逐步筛选，并警惕常见的低价圈钱陷阱。
+        </p>
+      </div>
+
+      <!-- 四步决策漏斗 -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12 text-xs">
+        <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+          <span class="text-xs font-mono font-bold text-primary block mb-1">第一步</span>
+          <h4 class="font-bold text-neutral-800 dark:text-neutral-100 mb-2">明确月度预算阈值</h4>
+          <p class="text-neutral-500 leading-relaxed">
+            10元以内选轻量中转或年付特惠（飞猫云、微风网络）；15至25元选高性价比月付专线（宇宙云、速界）；30元以上选旗舰级综合专线（光速云）。
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+          <span class="text-xs font-mono font-bold text-primary block mb-1">第二步</span>
+          <h4 class="font-bold text-neutral-800 dark:text-neutral-100 mb-2">合理测算真实流量</h4>
+          <p class="text-neutral-500 leading-relaxed">
+            仅查资料和文字聊天，每月 30GB 足够；日常刷 YouTube 与追剧，每月需 100GB 至 200GB；4K 重度影音与设计下载，需 300GB 以上或选不限时套餐（星岛梦）。
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+          <span class="text-xs font-mono font-bold text-primary block mb-1">第三步</span>
+          <h4 class="font-bold text-neutral-800 dark:text-neutral-100 mb-2">匹配关键业务场景</h4>
+          <p class="text-neutral-500 leading-relaxed">
+            搞 AI 开发必须认准原生住宅 IP 解锁；外服网游必须认准点对点低延迟专线；单纯看剧重在带宽冗余度与 Netflix 地区片库解锁支持。
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+          <span class="text-xs font-mono font-bold text-primary block mb-1">第四步</span>
+          <h4 class="font-bold text-neutral-800 dark:text-neutral-100 mb-2">遵循试水付费周期</h4>
+          <p class="text-neutral-500 leading-relaxed">
+            初次接触任何新品牌，无论优惠力度多大，坚决以单月试水为主；稳定运行两至三个月确信晚高峰不拉胯之后，再考虑结合折扣码购入年付。
+          </p>
+        </div>
+      </div>
+
+      <!-- 五大行业常见陷阱与避坑法则 -->
+      <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+        <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100 mb-4">
+          行业常见的五大套路陷阱与识别对策
+        </h3>
+        <div class="space-y-4 text-xs text-neutral-600 dark:text-neutral-300">
+          <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+            <span class="font-bold text-rose-600 dark:text-rose-400 block mb-1">陷阱 1：9.9 包年 1000G 的超低价圈钱陷阱</span>
+            <p class="leading-relaxed">
+              任何提供物理带宽与服务器的商家都有不可压缩的硬性成本。9.9 包年往往是小作坊购买几台廉价公网 VPS 搭建的超卖集群，开业两至三个月收集一批资金后直接拔线跑路。牢记一分钱一分货，勿贪图违背商业常理的低价。
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+            <span class="font-bold text-amber-600 dark:text-amber-400 block mb-1">陷阱 2：标称 100G 流量，实际使用 2x / 5x 高倍率扣费</span>
+            <p class="leading-relaxed">
+              部分机场在套餐页面标称每月赠送海量流量，但在节点列表中只有冷门直连节点是 1x 倍率，常用的香港、日本专线节点全部标上 3x、5x 甚至 10x 倍率。实际看一部两小时的电影就消耗数十上百 G。选购时务必确认常用节点是否全为 1x 真实倍率。
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+            <span class="font-bold text-amber-600 dark:text-amber-400 block mb-1">陷阱 3：凌晨跑满千兆的虚假测速截图与晚高峰断流</span>
+            <p class="leading-relaxed">
+              测速截图如果在凌晨三四点测试，由于骨干网空闲，任何普通线路都能跑出好看的深绿速度条。真正的试金石是在晚上 20 点至 23 点晚高峰进行实际测速和视频播放。本站所有品牌测速图均采自晚高峰真实环境。
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+            <span class="font-bold text-neutral-700 dark:text-neutral-300 block mb-1">陷阱 4：机房广播 IP 冒充原生住宅 IP</span>
+            <p class="leading-relaxed">
+              部分商家将普通的欧洲广播 IP 宣称为原生解锁，用户购买后打开 ChatGPT 频繁被拒绝访问，登录外服游戏被系统判断为异地风险封禁。建议购买前查看本站评测中的原生住宅 IP 检测报告。
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+            <span class="font-bold text-neutral-700 dark:text-neutral-300 block mb-1">陷阱 5：Telegram 官方群突然全员禁言与工单无回应</span>
+            <p class="leading-relaxed">
+              这是机场面临跑路或运维崩盘的典型前兆信号。当节点大面积飘红，官方管理团队不仅不发维护公告，反而开启交流群全员禁言并关闭工单提交入口时，说明资金链断裂风险极高，切勿再进行任何续费操作。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块 8：决策常见问题解答库 (含 FAQPage 结构化数据) -->
+  <section class="py-12 site-container" id="decision-faq">
+    <div class="border-t border-dashed border-primary/10 pt-10">
+      <div class="max-w-3xl mb-8">
+        <div class="mb-2 inline-block"><Badge variant="primary">买前必看 FAQ</Badge></div>
+        <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
+          机场选型与对比常见问题客观答疑
+        </h2>
+        <p class="text-xs text-neutral-500 mt-2">
+          整理自上千名读者的真实选型困惑，为你提供中肯客观的技术与消费参考。
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        {faqList.map((faq, idx) => (
+          <div class="p-5 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 flex flex-col justify-between">
+            <div>
+              <div class="flex items-start gap-2 mb-2">
+                <span class="font-mono font-bold text-primary">Q{idx + 1}.</span>
+                <h3 class="font-bold text-neutral-800 dark:text-neutral-100 leading-snug">
+                  {faq.question}
+                </h3>
+              </div>
+              <p class="text-neutral-600 dark:text-neutral-300 leading-relaxed pl-6">
+                {faq.answer}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块 9：底部行动号召与全站关联导流 -->
+  <section class="py-14 site-container">
+    <div class="p-8 md:p-12 rounded-3xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 text-center">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/20 text-primary mb-4">
+        <Award size={14} /> 2026 全站主推金牌榜首
+      </span>
+      <h2 class="text-2xl md:text-3xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-3">
+        仍然拿不定主意？不妨从综合第一名开始体验
+      </h2>
+      <p class="text-xs md:text-sm text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto mb-6 leading-relaxed">
+        经过 2026 年度全天候晚高峰综合实测，<strong>光速云</strong> 凭借五年老牌口碑、全球 2.5Gbps IPLC/IEPL 企业专线、原生住宅双 ISP IP 解锁与专属高颜值自研客户端，综合评分稳居 9.9 榜首。
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="/reviews/guangsu"
+          class="px-6 py-2.5 rounded-xl text-xs font-bold bg-primary text-white hover:opacity-90 transition-opacity shadow-sm"
+        >
+          查看光速云完整晚高峰实测数据报告
+        </a>
+        <a
+          href="/recommend"
+          class="px-6 py-2.5 rounded-xl text-xs font-bold bg-bg-secondary dark:bg-neutral-800 border border-primary/20 text-neutral-800 dark:text-neutral-200 hover:border-primary transition-colors"
+        >
+          查阅全站 2026 综合推荐指南
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 轻量纯原生交互对比器执行脚本 -->
+  <script is:inline define:vars={{ comparatorAirports }}>
+    document.addEventListener("DOMContentLoaded", () => {
+      const selectA = document.getElementById("select-airport-a");
+      const selectB = document.getElementById("select-airport-b");
+      const cardA = document.getElementById("card-airport-a");
+      const cardB = document.getElementById("card-airport-b");
+
+      if (!selectA || !selectB || !cardA || !cardB || !comparatorAirports) return;
+
+      const airportsMap = {};
+      comparatorAirports.forEach(a => {
+        airportsMap[a.id] = a;
+      });
+
+      function updateCard(cardEl, airportData) {
+        if (!airportData) return;
+        const nameEl = cardEl.querySelector(".name-field");
+        const scoreEl = cardEl.querySelector(".score-field");
+        const priceEl = cardEl.querySelector(".price-field");
+        const lineEl = cardEl.querySelector(".line-field");
+        const speedEl = cardEl.querySelector(".speed-field");
+        const aiEl = cardEl.querySelector(".ai-field");
+        const couponEl = cardEl.querySelector(".coupon-field");
+        const reviewLinkEl = cardEl.querySelector(".link-review");
+        const officialLinkEl = cardEl.querySelector(".link-official");
+
+        if (nameEl) nameEl.textContent = airportData.name;
+        if (scoreEl) scoreEl.textContent = airportData.score;
+        if (priceEl) priceEl.textContent = `¥${airportData.monthlyPrice} /月起 (${airportData.minDuration} · ${airportData.traffic}GB)`;
+        if (lineEl) lineEl.textContent = `${airportData.lineType} · ${airportData.nodeCount}+ 节点`;
+        if (speedEl) speedEl.textContent = `${airportData.speedMbps} Mbps 实测 · ${airportData.latencyMs}ms`;
+        if (aiEl) aiEl.textContent = `${airportData.aiUnlock} · ${airportData.streamingUnlock}`;
+        if (couponEl) couponEl.textContent = airportData.couponCode || '无优惠码';
+        if (reviewLinkEl) {
+          reviewLinkEl.setAttribute("href", `/reviews/${airportData.slug}`);
+          reviewLinkEl.textContent = `查看${airportData.name.split(' ')[0]}深度评测 →`;
+        }
+        if (officialLinkEl) {
+          officialLinkEl.setAttribute("href", airportData.affiliateUrl);
+        }
+      }
+
+      selectA.addEventListener("change", (e) => {
+        const selected = airportsMap[e.target.value];
+        if (selected) updateCard(cardA, selected);
+      });
+
+      selectB.addEventListener("change", (e) => {
+        const selected = airportsMap[e.target.value];
+        if (selected) updateCard(cardB, selected);
+      });
+    });
+  </script>
+</Layout>

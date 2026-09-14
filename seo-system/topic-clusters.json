@@ -1,0 +1,128 @@
+{
+  "version": "1.0.0",
+  "clusters": [
+    {
+      "clusterId": "cluster-recommend",
+      "clusterName": "商业转化与分层推荐集群",
+      "pillarUrl": "https://jichangbang.org/recommend",
+      "searchIntent": "用户综合选购与决策转化",
+      "topicHubs": [
+        "https://jichangbang.org/pricing",
+        "https://jichangbang.org/compare",
+        "https://jichangbang.org/ai-streaming"
+      ],
+      "supportingPages": [
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/yuzhou",
+        "https://jichangbang.org/reviews/breeze",
+        "https://jichangbang.org/reviews/feimao"
+      ],
+      "linkingStrategy": {
+        "hubsToPillar": "所有子专题页通过底部 CTA 与面包屑回链 /recommend",
+        "pillarToHubs": "推荐页首屏及各主线板块自然内链至预算页、对比页与场景页"
+      }
+    },
+    {
+      "clusterId": "cluster-ranking",
+      "clusterName": "量化打分与性能天梯集群",
+      "pillarUrl": "https://jichangbang.org/ranking",
+      "searchIntent": "查看客观速度与综合能力天梯排位",
+      "topicHubs": [
+        "https://jichangbang.org/providers",
+        "https://jichangbang.org/protocols"
+      ],
+      "supportingPages": [
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/sujie",
+        "https://jichangbang.org/reviews/yifanyun"
+      ],
+      "linkingStrategy": {
+        "hubsToPillar": "数据库大盘与协议页通过榜单引流回链 /ranking",
+        "pillarToHubs": "排行表格每行直达服务商数据库与深度评测报告"
+      }
+    },
+    {
+      "clusterId": "cluster-brands",
+      "clusterName": "品牌实体与深度评测集群",
+      "pillarUrl": "https://jichangbang.org/reviews",
+      "searchIntent": "品牌词调研、晚高峰实测数据与专属折扣",
+      "topicHubs": [
+        "https://jichangbang.org/providers"
+      ],
+      "supportingPages": [
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/yuzhou",
+        "https://jichangbang.org/reviews/breeze",
+        "https://jichangbang.org/reviews/feimao",
+        "https://jichangbang.org/reviews/xingdaomeng",
+        "https://jichangbang.org/reviews/sujie",
+        "https://jichangbang.org/reviews/yifanyun",
+        "https://jichangbang.org/reviews/weitu",
+        "https://jichangbang.org/reviews/sogoyun",
+        "https://jichangbang.org/reviews/lingmao",
+        "https://jichangbang.org/reviews/guangnianti",
+        "https://jichangbang.org/reviews/kuaili",
+        "https://jichangbang.org/reviews/kexinyun",
+        "https://jichangbang.org/reviews/ermaoyun",
+        "https://jichangbang.org/reviews/quanqiuyun",
+        "https://jichangbang.org/reviews/jilianyun",
+        "https://jichangbang.org/reviews/u1s1",
+        "https://jichangbang.org/reviews/wuyou"
+      ],
+      "linkingStrategy": {
+        "entityToPillar": "所有 18 个品牌实体页面包屑与返回链接统一指向 /reviews",
+        "pillarToEntity": "评测大厅以网格卡片形式全量索引 18 个品牌详情"
+      }
+    },
+    {
+      "clusterId": "cluster-tools",
+      "clusterName": "客户端工具与全平台下载集群",
+      "pillarUrl": "https://jichangbang.org/clients",
+      "searchIntent": "获取安全官方代理软件与快速使用建议",
+      "topicHubs": [
+        "https://jichangbang.org/tutorials"
+      ],
+      "supportingPages": [
+        "https://jichangbang.org/issues"
+      ],
+      "linkingStrategy": {
+        "toolsToTutorial": "每个软件卡片提供直达该客户端配置教程的链接",
+        "tutorialToTools": "教程页开头提示必备软件下载直达 /clients"
+      }
+    },
+    {
+      "clusterId": "cluster-tutorials",
+      "clusterName": "新手配置与动手教程集群",
+      "pillarUrl": "https://jichangbang.org/tutorials",
+      "searchIntent": "手把手配置订阅与进阶分流优化",
+      "topicHubs": [
+        "https://jichangbang.org/clients",
+        "https://jichangbang.org/issues"
+      ],
+      "supportingPages": [],
+      "linkingStrategy": {
+        "tutorialsToIssues": "教程常见错误提示处内链至 /issues 排障指南",
+        "issuesToTutorials": "排障解决方案建议重新按教程规范配置回链 /tutorials"
+      }
+    },
+    {
+      "clusterId": "cluster-wiki",
+      "clusterName": "出海网络常青知识百科集群",
+      "pillarUrl": "https://jichangbang.org/wiki",
+      "searchIntent": "高权重专业出海科普与底层网络原理",
+      "topicHubs": [
+        "https://jichangbang.org/protocols"
+      ],
+      "supportingPages": [
+        "https://jichangbang.org/wiki/customize-your-saas-site",
+        "https://jichangbang.org/wiki/design-system-behind-ricofast",
+        "https://jichangbang.org/wiki/introducing-ricofast",
+        "https://jichangbang.org/wiki/launching-v1-0"
+      ],
+      "linkingStrategy": {
+        "articlesToWiki": "所有文章头部标签与面包屑回链 /wiki",
+        "wikiToArticles": "知识百科首页列表与特色推荐索引全部常青文章"
+      }
+    }
+  ]
+}

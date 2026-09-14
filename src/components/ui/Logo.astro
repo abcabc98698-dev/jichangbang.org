@@ -1,7 +1,47 @@
+---
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  showDomain?: boolean;
+  class?: string;
+}
+
+const { showDomain = true, class: className = "" } = Astro.props;
+---
+
 <a
   href="/"
-  class="h-10 text-base group relative z-30 flex items-center aspect-square"
+  class:list={[
+    "group relative z-30 flex items-center gap-2.5 transition-all duration-200 hover:opacity-90",
+    className
+  ]}
+  title={`${siteConfig.name} - ${siteConfig.slogan}`}
 >
-  <img src="/assets/logo.png" alt="Logo" class="w-10 h-10 rounded-full" />
-</a>
+  <!-- Logo Icon -->
+  <div class="relative flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden ring-1 ring-black/5 dark:ring-white/10 shadow-sm transition-transform duration-200 group-hover:scale-105">
+    <img
+      src="/assets/logo.png"
+      alt={siteConfig.name}
+      class="w-full h-full object-cover"
+      width="40"
+      height="40"
+    />
+  </div>
 
+  <!-- Brand Name -->
+  <div class="flex flex-col justify-center">
+    <div class="flex items-center gap-1.5">
+      <span class="font-brand font-bold text-base sm:text-lg text-neutral-900 dark:text-white tracking-tight leading-tight transition-colors group-hover:text-primary dark:group-hover:text-primary-light">
+        {siteConfig.name}
+      </span>
+      <span class="hidden xl:inline-block px-1.5 py-0.5 text-[10px] font-semibold text-primary dark:text-primary-light bg-primary/10 dark:bg-primary/20 rounded-md leading-none">
+        2026
+      </span>
+    </div>
+    {showDomain && (
+      <span class="text-[10px] sm:text-[11px] text-neutral-400 dark:text-neutral-500 font-mono tracking-wider leading-none mt-0.5">
+        jichangbang.org
+      </span>
+    )}
+  </div>
+</a>

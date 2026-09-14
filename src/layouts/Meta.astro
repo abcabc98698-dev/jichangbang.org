@@ -13,28 +13,35 @@ const {
   title,
   description,
   keywords = "",
-  url = siteConfig.url, //
+  url,
   ogImage = "/og.jpg",
   twitterHandle = siteConfig.social.twitterName || '',
 } = Astro.props;
+
+// Compute strict canonical URL based on primary apex domain https://jichangbang.org
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '';
+const canonicalUrl = url || (pathname === '' ? `${siteConfig.url}/` : `${siteConfig.url}${pathname}`);
 ---
 
 <!-- Meta Tags -->
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="icon" type="image/svg+xml" href="/favicon.png" />
+<link rel="icon" type="image/x-icon" href="/favicon.png" />
 <title>{title}</title>
 <meta name="description" content={description} />
 <meta name="keywords" content={keywords} />
 <meta name="author" content={siteConfig.author} />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="canonical" href={canonicalUrl} />
 
 <!-- Open Graph Tags -->
 <meta property="og:type" content="website" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:url" content={url} />
+<meta property="og:url" content={canonicalUrl} />
 <meta property="og:image" content={ogImage} />
-<meta property="og:site_name" content={title} />
+<meta property="og:site_name" content={siteConfig.title} />
+<meta property="og:locale" content="zh_CN" />
 
 <!-- Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image" />

@@ -234,3 +234,13 @@ rg -n "template positioning|backend feature|real auth" docs README.md README-zh.
 - Do not make the static auth/contact pages sound like real backend features.
 - Do not add real secrets or private credentials.
 - Do not replace the established Astro + Tailwind + MDX stack without an explicit request.
+
+## SEO Content & Anti-Cannibalization Master Rules (MANDATORY)
+
+This project strictly enforces **《反重力 SEO 内容生产与关键词防内耗总规范》** (`docs/SEO-ANTI-CANNIBALIZATION-SPEC.md`).
+- **NEVER directly create a page/article** upon requests like "add 10 articles" or "create an SEO article".
+- **Always perform SEO PRE-CHECK** against `SEO-Keyword-URL-Mapping.csv` first.
+- **One Search Intent = One Primary URL**: If the intent already exists, you MUST UPDATE the existing page, NOT create a new URL.
+- **Always follow `SEO-Anchor-URL-Mapping.csv`** for internal link targets.
+- **Verify with audit**: Run `pnpm run audit` (`node scripts/seo-url-audit.mjs`) and check `reports/seo-cannibalization-report.md`.
+

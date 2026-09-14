@@ -1,0 +1,42 @@
+[
+  {
+    "from": "/brands",
+    "to": "/providers",
+    "reason": "历史品牌列表页与结构化服务商数据库意图重叠，已安全 301 重定向",
+    "risk": "Low",
+    "recommended": true,
+    "status": "applied_in_config"
+  },
+  {
+    "from": "/routes",
+    "to": "/protocols",
+    "reason": "线路科普原 URL 命名易与系统路由冲突，已安全 301 重定向至 /protocols",
+    "risk": "Low",
+    "recommended": true,
+    "status": "applied_in_config"
+  },
+  {
+    "from": "/troubleshooting",
+    "to": "/issues",
+    "reason": "故障排查原 URL 过长且生僻，已安全 301 重定向至短 URL /issues",
+    "risk": "Low",
+    "recommended": true,
+    "status": "applied_in_config"
+  },
+  {
+    "from": "/intel",
+    "to": "/risk",
+    "reason": "原情报页面术语与用户搜索意图脱节，已安全 301 重定向至 /risk",
+    "risk": "Low",
+    "recommended": true,
+    "status": "applied_in_config"
+  },
+  {
+    "from": "/blog",
+    "to": "/wiki",
+    "reason": "平铺博客解构为常青知识库 Topic Cluster，已安全 301 重定向至 /wiki",
+    "risk": "Low",
+    "recommended": true,
+    "status": "applied_in_config"
+  }
+]

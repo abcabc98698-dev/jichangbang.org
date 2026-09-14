@@ -1,0 +1,261 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-09-13T20:48:00+08:00",
+  "orphanPagesCount": 0,
+  "nodes": [
+    {
+      "url": "https://jichangbang.org/",
+      "title": "首页",
+      "pageType": "Root",
+      "inboundFrom": [
+        "https://jichangbang.org/recommend",
+        "https://jichangbang.org/ranking",
+        "https://jichangbang.org/reviews",
+        "https://jichangbang.org/pricing",
+        "https://jichangbang.org/compare",
+        "https://jichangbang.org/clients",
+        "https://jichangbang.org/tutorials",
+        "https://jichangbang.org/issues",
+        "https://jichangbang.org/protocols",
+        "https://jichangbang.org/risk",
+        "https://jichangbang.org/wiki",
+        "https://jichangbang.org/about"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/recommend",
+        "https://jichangbang.org/ranking",
+        "https://jichangbang.org/pricing",
+        "https://jichangbang.org/compare",
+        "https://jichangbang.org/protocols",
+        "https://jichangbang.org/clients",
+        "https://jichangbang.org/risk",
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/yuzhou"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/recommend",
+      "title": "2026 机场推荐",
+      "pageType": "Pillar",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/pricing",
+        "https://jichangbang.org/compare",
+        "https://jichangbang.org/ranking"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/yuzhou",
+        "https://jichangbang.org/reviews/breeze",
+        "https://jichangbang.org/reviews/feimao",
+        "https://jichangbang.org/pricing",
+        "https://jichangbang.org/compare"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/ranking",
+      "title": "机场综合排行榜",
+      "pageType": "Pillar",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/recommend",
+        "https://jichangbang.org/providers"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/yuzhou",
+        "https://jichangbang.org/reviews/sujie",
+        "https://jichangbang.org/recommend",
+        "https://jichangbang.org/protocols"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/reviews",
+      "title": "品牌深度评测大厅",
+      "pageType": "Pillar",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/providers",
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/yuzhou"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/yuzhou",
+        "https://jichangbang.org/reviews/breeze",
+        "https://jichangbang.org/reviews/feimao",
+        "https://jichangbang.org/providers"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/providers",
+      "title": "服务商数据库",
+      "pageType": "Pillar",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/reviews",
+        "https://jichangbang.org/ranking"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/yuzhou",
+        "https://jichangbang.org/reviews",
+        "https://jichangbang.org/protocols"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/pricing",
+      "title": "价格套餐筛选与计算器",
+      "pageType": "Cluster",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/recommend",
+        "https://jichangbang.org/ranking"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/yuzhou",
+        "https://jichangbang.org/reviews/breeze",
+        "https://jichangbang.org/reviews/xingdaomeng",
+        "https://jichangbang.org/recommend"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/compare",
+      "title": "机场横向对比中心",
+      "pageType": "Comparison",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/recommend"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/yuzhou",
+        "https://jichangbang.org/recommend",
+        "https://jichangbang.org/protocols"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/protocols",
+      "title": "线路与协议知识库",
+      "pageType": "Cluster",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/compare",
+        "https://jichangbang.org/ranking",
+        "https://jichangbang.org/wiki"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/wiki",
+        "https://jichangbang.org/recommend",
+        "https://jichangbang.org/reviews/guangsu"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/clients",
+      "title": "代理客户端下载中心",
+      "pageType": "Cluster",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/tutorials"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/tutorials",
+        "https://jichangbang.org/issues",
+        "https://jichangbang.org/reviews/guangsu"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/tutorials",
+      "title": "新手与进阶使用教程",
+      "pageType": "Pillar",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/clients",
+        "https://jichangbang.org/issues"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/clients",
+        "https://jichangbang.org/issues",
+        "https://jichangbang.org/recommend"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/issues",
+      "title": "网络排障与自救指南",
+      "pageType": "Troubleshooting",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/tutorials",
+        "https://jichangbang.org/clients"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/tutorials",
+        "https://jichangbang.org/clients",
+        "https://jichangbang.org/risk"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/ai-streaming",
+      "title": "AI 与流媒体专线解锁",
+      "pageType": "Cluster",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/recommend"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/reviews/guangsu",
+        "https://jichangbang.org/reviews/sujie",
+        "https://jichangbang.org/recommend"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/risk",
+      "title": "机场风险情报与安全雷达",
+      "pageType": "Risk",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/issues",
+        "https://jichangbang.org/recommend"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/recommend",
+        "https://jichangbang.org/reviews/guangsu"
+      ],
+      "orphanRisk": "None"
+    },
+    {
+      "url": "https://jichangbang.org/wiki",
+      "title": "常青知识百科",
+      "pageType": "Pillar",
+      "inboundFrom": [
+        "https://jichangbang.org/",
+        "https://jichangbang.org/protocols",
+        "https://jichangbang.org/wiki/customize-your-saas-site",
+        "https://jichangbang.org/wiki/design-system-behind-ricofast",
+        "https://jichangbang.org/wiki/introducing-ricofast",
+        "https://jichangbang.org/wiki/launching-v1-0"
+      ],
+      "outboundTo": [
+        "https://jichangbang.org/protocols",
+        "https://jichangbang.org/wiki/customize-your-saas-site",
+        "https://jichangbang.org/wiki/design-system-behind-ricofast",
+        "https://jichangbang.org/wiki/introducing-ricofast",
+        "https://jichangbang.org/wiki/launching-v1-0"
+      ],
+      "orphanRisk": "None"
+    }
+  ]
+}

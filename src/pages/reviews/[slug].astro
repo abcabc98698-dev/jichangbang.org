@@ -1,0 +1,642 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Badge from "@/components/ui/Badge.astro";
+import Button from "@/components/ui/Button.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import { airports, type Airport } from "@/data/airports";
+import { directoryAirports } from "@/data/directory-airports";
+import { getCollection, render } from "astro:content";
+import {
+  CheckCircle2, XCircle, ExternalLink, AlertTriangle, ShieldCheck, Zap, Image as ImageIcon, Sparkles
+} from "@lucide/astro";
+
+export async function getStaticPaths() {
+  const allAirports = [...airports, ...directoryAirports];
+  const allReviews = await getCollection("airportReviews");
+  const reviewMap = new Map(allReviews.map(r => [r.id.replace(/\.(md|mdx)$/, ''), r]));
+
+  return allAirports.map((airport) => ({
+    params: { slug: airport.slug },
+    props: {
+      airport,
+      reviewEntry: reviewMap.get(airport.slug) || null,
+    },
+  }));
+}
+
+interface Props {
+  airport: Airport;
+  reviewEntry?: any;
+}
+
+const { airport, reviewEntry } = Astro.props;
+
+let RenderedContent: any = null;
+let headings: Array<{ depth: number; slug: string; text: string }> = [];
+if (reviewEntry) {
+  const rendered = await render(reviewEntry);
+  RenderedContent = rendered.Content;
+  headings = rendered.headings.filter((h: any) => h.depth <= 2);
+}
+
+// 获取同类替代品牌（若为非推广客观收录品牌，固定向用户推荐排名前 3 的旗舰推广品牌）
+const alternativeAirports = airport.isAffiliate === false
+  ? airports.slice(0, 3)
+  : airports.filter(a => a.id !== airport.id).slice(0, 3);
+
+// 品牌 FAQ 数据
+const brandFaqs = [
+  {
+    question: `${airport.name} 怎么样？好用稳定吗？`,
+    answer: `${airport.name} 成立于 ${airport.established}，当前在机场榜一综合评分 ${airport.score} 分。其核心网络为 ${airport.lineType}，晚高峰实测速度达到 ${airport.speedMbps} Mbps，平均延迟 ${airport.latencyMs} ms。对于大部分用户而言，连通率与抗封锁表现处于上游水平。`
+  },
+  {
+    question: `${airport.name} 支持 ChatGPT、Claude 和 Netflix 吗？`,
+    answer: `${airport.name} 对流媒体及 AI 工具解锁支持状态：ChatGPT (${airport.aiUnlock.chatgpt ? '支持' : '不支持'})、Claude (${airport.aiUnlock.claude ? '支持' : '不支持'})、Netflix (${airport.streamingUnlock.netflix ? '支持' : '不支持'})、TikTok (${airport.streamingUnlock.tiktok ? '支持' : '不支持'})。`
+  },
+  {
+    question: `${airport.name} 官网打不开或订阅失败怎么办？`,
+    answer: `由于公共网络防火墙干扰，机场官网域名可能会阶段性更换。请关注本站提供的实时跳转通道。如遇订阅无法更新，请检查是否启用了系统代理，或在客户端中尝试临时开启全局代理后再进行订阅更新。`
+  },
+  {
+    question: `${airport.name} 有跑路风险吗？当前运营状态如何？`,
+    answer: `据机场榜一实时雷达监测，${airport.name} 当前状态为【${airport.riskStatus}】。监测备注：${airport.riskNote}。建议用户遵守‘优先月付、切勿盲目长期囤积年付’的基本原则。`
+  }
+];
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "品牌评测", url: "/reviews" },
+  { name: airport.name, url: `/reviews/${airport.slug}` }
+];
+---
+
+<Layout
+  title={`${airport.name} 怎么样？2026最新评测·套餐价格·线路测速与优惠码`}
+  description={`${airport.name} 深度测评：${airport.slogan}。覆盖最低 ¥${airport.monthlyPrice} 套餐价格、${airport.lineType} 线路分析、晚高峰实测速度 ${airport.speedMbps}M、ChatGPT/Claude解锁能力及优缺点分析。`}
+  keywords={`${airport.name}, ${airport.name}怎么样, ${airport.name}评测, ${airport.name}官网, ${airport.name}优惠码, ${airport.name}跑路了吗, 机场榜一`}
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+  <JsonLd type="FAQPage" faqItems={brandFaqs} />
+
+  <!-- 品牌顶部 Hero -->
+  <section class="relative z-20 site-container my-8 md:my-14">
+    <div class="p-6 md:p-10 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <Badge variant="primary">{airport.lineType}</Badge>
+            {airport.badge && (
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-primary/20 text-primary font-bold">
+                ★ {airport.badge}
+              </span>
+            )}
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium">
+              ● {airport.riskStatus}
+            </span>
+            <span class="text-xs text-neutral-400">已稳定运营：{airport.established}</span>
+          </div>
+
+          <h1 class="text-2xl md:text-4xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-2">
+            {airport.name} 深度评测与选购指南
+          </h1>
+          <p class="text-sm md:text-base text-neutral-600 dark:text-neutral-300 max-w-2xl leading-relaxed">
+            {airport.slogan}
+          </p>
+          {airport.priceNote && (
+            <div class="mt-3 inline-block text-xs px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+              💡 <strong>价格提示：</strong> {airport.priceNote}
+            </div>
+          )}
+        </div>
+
+        <!-- 评分与官网直达卡片 -->
+        <div class="p-5 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-primary/15 text-center flex-shrink-0 min-w-[220px]">
+          <span class="text-xs text-neutral-400 block mb-1">机场榜一综合评分</span>
+          <div class="text-3xl font-black text-primary font-brand mb-1">
+            {airport.score} <span class="text-xs font-normal text-neutral-400">/ 10</span>
+          </div>
+          <p class="text-[11px] text-neutral-400 mb-3">基于 {airport.ratingCount}+ 真实用户评测</p>
+          {airport.isAffiliate === false ? (
+            <div class="space-y-2">
+              <a
+                href={airport.officialUrl}
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+                class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-800 dark:text-neutral-100 text-xs font-semibold transition-colors"
+              >
+                访问官网 (无专属折扣) <ExternalLink size={12} />
+              </a>
+              <a
+                href="https://guangs.vipaff.cc/#/?code=xhX5X22f"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-primary text-white text-xs font-bold hover:brightness-110 shadow-md shadow-primary/20 transition-all animate-pulse"
+              >
+                ★ 前往金牌专线【光速云】<Sparkles size={12} />
+              </a>
+            </div>
+          ) : (
+            <Button url={airport.affiliateUrl} target="_blank" type="fill" className="text-xs w-full justify-center">
+              进入官网选购 <ExternalLink size={12} />
+            </Button>
+          )}
+          {airport.isAffiliate === false ? (
+            <div class="mt-2.5 pt-2 border-t border-dashed border-primary/20 text-center">
+              <span class="text-[11px] text-neutral-400 block">金牌榜首 8 折专享码：</span>
+              <a href="/reviews/guangsu" class="text-xs px-2 py-0.5 rounded bg-primary/10 text-primary font-bold tracking-wider inline-block mt-1 hover:underline">
+                AMM (光速云专用)
+              </a>
+            </div>
+          ) : airport.couponCode && (
+            <div class="mt-2.5 pt-2 border-t border-dashed border-primary/20 text-center">
+              <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block">专属折上折优惠码：</span>
+              <code class="text-xs px-2 py-0.5 rounded bg-primary/10 text-primary font-bold tracking-wider inline-block mt-1">
+                {airport.couponCode}
+              </code>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* 非 Affiliate 引流页面：首屏高转化拦截推荐横幅 */}
+  {airport.isAffiliate === false && (
+    <section class="site-container my-4">
+      <div class="p-5 md:p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-primary/10 to-emerald-500/10 border border-primary/30 flex flex-col md:flex-row items-center justify-between gap-5 shadow-sm">
+        <div class="flex items-start md:items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center shrink-0 mt-0.5 md:mt-0">
+            <Sparkles class="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-primary text-white">2026 金牌专线更优替代推荐</span>
+              <span class="text-xs text-neutral-500 dark:text-neutral-400">更低延迟 · 0 丢包 · 原生住宅双 ISP</span>
+            </div>
+            <p class="text-xs md:text-sm text-neutral-700 dark:text-neutral-200 leading-relaxed">
+              您当前正在查阅中立收录品牌 <strong>{airport.name}</strong> 的评测档案。若您正在寻找晚高峰更稳定、流媒体与 ChatGPT/Claude 100% 原生解锁的旗舰服务，强烈建议参考 2026 年度综合评分 9.9 分的 <strong>【光速云】</strong>（全节点 2.5Gbps IEPL 专线，月付 ¥19.9 起，使用本站专属 8 折优惠码：<code class="font-bold text-primary bg-primary/10 px-1 py-0.5 rounded">AMM</code>）。
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0 w-full md:w-auto">
+          <a
+            href="https://guangs.vipaff.cc/#/?code=xhX5X22f"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full md:w-auto text-center px-4 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:brightness-110 shadow-md shadow-primary/25 transition-all whitespace-nowrap"
+          >
+            直接抢购光速云 8 折 &rarr;
+          </a>
+          <a
+            href="/reviews/guangsu"
+            class="w-full md:w-auto text-center px-3 py-2.5 rounded-xl bg-bg-primary dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 text-xs font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 border border-primary/20 transition-all whitespace-nowrap"
+          >
+            深度实测报告
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 核心规格参数速览表 -->
+  <section class="py-6 site-container">
+    <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-4">
+      📋 核心网络参数与规格矩阵
+    </h2>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <span class="text-xs text-neutral-400 block mb-1">入门套餐价格</span>
+        <span class="text-lg font-bold font-brand text-neutral-800 dark:text-neutral-100">¥{airport.monthlyPrice} / {airport.minDuration}</span>
+      </div>
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <span class="text-xs text-neutral-400 block mb-1">月度基准流量</span>
+        <span class="text-lg font-bold text-neutral-800 dark:text-neutral-100">{airport.traffic} GB</span>
+      </div>
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <span class="text-xs text-neutral-400 block mb-1">晚高峰平均测速</span>
+        <span class="text-lg font-bold text-emerald-600 dark:text-emerald-400">{airport.speedMbps} Mbps</span>
+      </div>
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <span class="text-xs text-neutral-400 block mb-1">端到端平均延迟</span>
+        <span class="text-lg font-bold text-neutral-800 dark:text-neutral-100">{airport.latencyMs} ms</span>
+      </div>
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <span class="text-xs text-neutral-400 block mb-1">骨干线路类型</span>
+        <span class="text-sm font-bold text-primary">{airport.lineType}</span>
+      </div>
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <span class="text-xs text-neutral-400 block mb-1">支持协议体系</span>
+        <span class="text-xs font-medium text-neutral-700 dark:text-neutral-300">{airport.protocols.join(', ')}</span>
+      </div>
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <span class="text-xs text-neutral-400 block mb-1">全球节点覆盖</span>
+        <span class="text-sm font-bold text-neutral-800 dark:text-neutral-100">{airport.nodeCount}+ 个节点</span>
+      </div>
+      <div class="p-4 rounded-xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+        <span class="text-xs text-neutral-400 block mb-1">主要地区支持</span>
+        <span class="text-xs font-medium text-neutral-700 dark:text-neutral-300">{airport.regions.join(' · ')}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 品牌详情与长文剖析 -->
+  <section class="py-8 site-container">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- 左侧主体内容 -->
+      <div class="lg:col-span-2 space-y-8">
+        {RenderedContent ? (
+          <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15 shadow-sm space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-primary/10">
+              <div class="flex items-center gap-2">
+                <span class="text-xs px-2.5 py-1 rounded-full bg-primary text-white font-bold tracking-wider">
+                  ★ 2026 万字深度测评专稿
+                </span>
+                <span class="text-xs text-neutral-500 dark:text-neutral-400 hidden sm:inline">
+                  实测采集 · 拓扑拆解 · 避坑守则
+                </span>
+              </div>
+              <span class="text-xs text-neutral-400">已核验更新</span>
+            </div>
+
+            {headings.length > 0 && (
+              <div class="p-4 md:p-5 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-primary/10">
+                <h3 class="text-xs font-bold text-neutral-800 dark:text-neutral-200 mb-2.5 flex items-center gap-1.5">
+                  📑 本篇深度评测核心章节索引
+                </h3>
+                <nav class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  {headings.map((h, i) => (
+                    <a
+                      href={`#${h.slug}`}
+                      class="text-neutral-600 dark:text-neutral-400 hover:text-primary transition-colors flex items-center gap-1.5 line-clamp-1"
+                    >
+                      <span class="text-primary/70 font-mono text-[11px]">{i + 1}.</span>
+                      <span>{h.text}</span>
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            )}
+
+            <article class="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-brand prose-headings:scroll-mt-24 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-table:text-xs prose-th:bg-primary/5 prose-th:p-2.5 prose-td:p-2.5">
+              <RenderedContent />
+            </article>
+          </div>
+        ) : (
+          <>
+            <!-- 品牌介绍 -->
+            <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+              <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-3">
+                一、品牌背景与线路架构解析
+              </h2>
+              <p class="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                {airport.description}
+              </p>
+              <div class="mt-4 p-4 rounded-xl bg-bg-primary dark:bg-neutral-800/50 border border-primary/5">
+                <h4 class="text-xs font-bold text-neutral-700 dark:text-neutral-200 mb-2">特色服务与亮点：</h4>
+                <div class="flex flex-wrap gap-2">
+                  {airport.features.map(f => (
+                    <span class="text-xs px-2.5 py-1 rounded-lg bg-primary/10 text-primary">{f}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* 详细套餐规格（如果有 packages） */}
+            {airport.packages && airport.packages.length > 0 && (
+              <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+                <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
+                  <Sparkles class="w-5 h-5 text-primary" /> {airport.name} 热门主推套餐资费
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {airport.packages.map((pkg, idx) => (
+                    <div class:list={[
+                      "p-4 rounded-xl border flex flex-col justify-between transition-all",
+                      idx === 1
+                        ? "bg-primary/5 dark:bg-primary/10 border-primary shadow-sm"
+                        : "bg-bg-primary dark:bg-neutral-800/80 border-primary/10"
+                    ]}>
+                      <div>
+                        <div class="flex items-center justify-between mb-2">
+                          <h4 class="font-bold text-sm text-neutral-900 dark:text-neutral-100">{pkg.name}</h4>
+                          {idx === 1 && <span class="text-[10px] px-2 py-0.5 rounded bg-primary text-white font-semibold">主推款</span>}
+                        </div>
+                        <div class="text-lg font-black text-primary font-brand mb-1">{pkg.price}</div>
+                        <div class="text-xs text-neutral-500 mb-3">流量：<strong class="text-neutral-700 dark:text-neutral-300">{pkg.traffic}</strong> · 线路：{pkg.line}</div>
+                        <ul class="text-[11px] space-y-1.5 text-neutral-600 dark:text-neutral-300 mb-4">
+                          {pkg.features.map(feat => (
+                            <li class="flex items-center gap-1.5">
+                              <span class="text-emerald-500 font-bold">✓</span> {feat}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <Button url={airport.affiliateUrl} target="_blank" type={idx === 1 ? "fill" : "outline"} className="text-xs w-full justify-center">
+                        立即订阅
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <!-- 场景解锁深度实测 -->
+            <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+              <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-3">
+                二、AI 与全球流媒体解锁深度实测
+              </h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+                  <span class="font-bold text-sm block mb-2 text-neutral-800 dark:text-neutral-100">🤖 AI 生产力工具</span>
+                  <ul class="space-y-1.5 text-neutral-600 dark:text-neutral-300">
+                    <li class="flex items-center justify-between">
+                      <span>ChatGPT (4o/Voice)：</span>
+                      <span class={airport.aiUnlock.chatgpt ? "text-emerald-500 font-bold" : "text-neutral-400"}>{airport.aiUnlock.chatgpt ? "✓ 支持原生解锁" : "✗ 需自备节点"}</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                      <span>Claude (3.5/3.7 Sonnet)：</span>
+                      <span class={airport.aiUnlock.claude ? "text-emerald-500 font-bold" : "text-neutral-400"}>{airport.aiUnlock.claude ? "✓ 住宅IP免风控" : "✗ 机房段易受限"}</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                      <span>Gemini / Google AI Studio：</span>
+                      <span class={airport.aiUnlock.gemini ? "text-emerald-500 font-bold" : "text-neutral-400"}>{airport.aiUnlock.gemini ? "✓ 正常访问" : "✗ 受限"}</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                      <span>Cursor / GitHub Copilot：</span>
+                      <span class={airport.aiUnlock.cursor ? "text-emerald-500 font-bold" : "text-neutral-400"}>{airport.aiUnlock.cursor ? "✓ 低延迟直通" : "✗ 偶有超时"}</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+                  <span class="font-bold text-sm block mb-2 text-neutral-800 dark:text-neutral-100">🎬 4K 影音与海外社媒</span>
+                  <ul class="space-y-1.5 text-neutral-600 dark:text-neutral-300">
+                    <li class="flex items-center justify-between">
+                      <span>Netflix (非自制剧)：</span>
+                      <span class={airport.streamingUnlock.netflix ? "text-emerald-500 font-bold" : "text-neutral-400"}>{airport.streamingUnlock.netflix ? "✓ 全区解锁" : "✗ 仅自制剧"}</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                      <span>Disney+ / HBO Max：</span>
+                      <span class={airport.streamingUnlock.disney ? "text-emerald-500 font-bold" : "text-neutral-400"}>{airport.streamingUnlock.disney ? "✓ 4K超清解锁" : "✗ 报错"}</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                      <span>YouTube 4K/8K HDR：</span>
+                      <span class={airport.streamingUnlock.youtube ? "text-emerald-500 font-bold" : "text-neutral-400"}>{airport.streamingUnlock.youtube ? "✓ 秒开超清" : "✗ 需缓冲"}</span>
+                    </li>
+                    <li class="flex items-center justify-between">
+                      <span>TikTok (原生无水印)：</span>
+                      <span class={airport.streamingUnlock.tiktok ? "text-emerald-500 font-bold" : "text-neutral-400"}>{airport.streamingUnlock.tiktok ? "✓ 原生支持" : "✗ 需拔卡"}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <p class="text-[11px] text-neutral-400 mt-3 italic">
+                * 声明：AI 与流媒体可用性受海外服务商最新防风控规则影响，本站定期轮询实测，请以实际节点测试为准。
+              </p>
+            </div>
+
+            {/* 晚高峰测速与解锁实测截图展厅 */}
+            {airport.screenshots && airport.screenshots.length > 0 && (
+              <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+                <div class="flex items-center justify-between mb-4">
+                  <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                    <ImageIcon class="w-5 h-5 text-primary" /> 三、晚高峰真实测速与流媒体解锁截图
+                  </h2>
+                  <span class="text-xs text-neutral-400">真实设备本地跑测</span>
+                </div>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
+                  以下截图为 2026 年最新实测采集，涵盖北方联通、南方电信以及移动多网晚高峰测速、千兆宽带跑满带宽及 Netflix/Disney+/ChatGPT 原生解锁矩阵：
+                </p>
+                <div class:list={[
+                  "gap-4",
+                  airport.screenshots?.length === 1
+                    ? "flex justify-center max-w-3xl mx-auto"
+                    : "grid grid-cols-1 sm:grid-cols-2"
+                ]}>
+                  {airport.screenshots.map((imgSrc, i) => (
+                    <div class:list={[
+                      "rounded-xl overflow-hidden border border-primary/15 bg-neutral-900 group",
+                      airport.screenshots?.length === 1 ? "w-full shadow-md" : ""
+                    ]}>
+                      <a href={imgSrc} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={imgSrc}
+                          alt={`${airport.name} 真实晚高峰测速与解锁实测图 ${i + 1}`}
+                          class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                        />
+                      </a>
+                      <div class="p-2 text-center text-[11px] text-neutral-400 bg-neutral-800">
+                        实测节点样本 #{i + 1}（点击可看大图）
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <!-- 优缺点与人群画像 -->
+            <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+              <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-4">
+                四、客观优缺点与适合人群
+              </h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <span class="text-xs font-bold text-emerald-500 flex items-center gap-1 mb-2">
+                    <CheckCircle2 class="w-4 h-4" /> 核心优势 (Pros)
+                  </span>
+                  <ul class="text-xs space-y-2 text-neutral-600 dark:text-neutral-300">
+                    {airport.pros.map(pro => (
+                      <li class="flex items-start gap-1.5">
+                        <span class="text-emerald-500 font-bold">•</span>
+                        <span>{pro}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <span class="text-xs font-bold text-rose-500 flex items-center gap-1 mb-2">
+                    <XCircle class="w-4 h-4" /> 不足与注意事项 (Cons)
+                  </span>
+                  <ul class="text-xs space-y-2 text-neutral-600 dark:text-neutral-300">
+                    {airport.cons.map(con => (
+                      <li class="flex items-start gap-1.5">
+                        <span class="text-rose-500 font-bold">•</span>
+                        <span>{con}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-dashed border-neutral-200 dark:border-neutral-700 text-xs">
+                <span class="font-bold text-neutral-800 dark:text-neutral-100 block mb-1">适合人群画像：</span>
+                <p class="text-neutral-500">{airport.targetUsers.join('、')}</p>
+              </div>
+            </div>
+
+            {/* 非 Affiliate 引流页面：横向对比表格（引导至光速云） */}
+            {airport.isAffiliate === false && (
+              <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/20">
+                <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-2 flex items-center gap-2">
+                  <Zap class="w-5 h-5 text-amber-500" /> {airport.name} 与 2026 金牌首推【光速云】核心指标对比
+                </h2>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-4 leading-relaxed">
+                  为便于您客观评估，我们将 {airport.name} 的公网实测基准与 2026 年度综合排名第 1 位的金牌专线【光速云】进行全维对标：
+                </p>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-xs text-left border-collapse">
+                    <thead>
+                      <tr class="border-b border-primary/10 text-neutral-400">
+                        <th class="py-2.5 px-3">评测对标维度</th>
+                        <th class="py-2.5 px-3 text-neutral-700 dark:text-neutral-300 font-semibold">{airport.name}（当前评测）</th>
+                        <th class="py-2.5 px-3 text-primary font-bold">光速云（2026年度金牌榜首）</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-primary/5 text-neutral-600 dark:text-neutral-300">
+                      <tr>
+                        <td class="py-2.5 px-3 font-medium text-neutral-800 dark:text-neutral-200">骨干传输线路</td>
+                        <td class="py-2.5 px-3">{airport.lineType}</td>
+                        <td class="py-2.5 px-3 font-bold text-primary">全球 2.5Gbps IEPL 内网物理专线</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2.5 px-3 font-medium text-neutral-800 dark:text-neutral-200">晚高峰实测下行</td>
+                        <td class="py-2.5 px-3">{airport.speedMbps} Mbps</td>
+                        <td class="py-2.5 px-3 font-bold text-emerald-500">980 Mbps（跑满千兆）</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2.5 px-3 font-medium text-neutral-800 dark:text-neutral-200">晚高峰丢包率</td>
+                        <td class="py-2.5 px-3">约 0.8% - 3.5%（视骨干波动）</td>
+                        <td class="py-2.5 px-3 font-bold text-emerald-500">0.00%（物理专线零丢包）</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2.5 px-3 font-medium text-neutral-800 dark:text-neutral-200">ChatGPT / Claude 住宅 IP</td>
+                        <td class="py-2.5 px-3">{airport.aiUnlock.claude ? '基础机房段' : '普通机房IP / 偶有风控拒登'}</td>
+                        <td class="py-2.5 px-3 font-bold text-emerald-500">全节点原生住宅双 ISP（零封控）</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2.5 px-3 font-medium text-neutral-800 dark:text-neutral-200">客户端生态</td>
+                        <td class="py-2.5 px-3">第三方开源（Clash/Sing-box）</td>
+                        <td class="py-2.5 px-3 font-bold text-primary">Win/Mac/Android 全平台专属一键客户端</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2.5 px-3 font-medium text-neutral-800 dark:text-neutral-200">月付起步与折扣</td>
+                        <td class="py-2.5 px-3">¥{airport.monthlyPrice} / {airport.minDuration}（暂无优惠券）</td>
+                        <td class="py-2.5 px-3 font-bold text-rose-500">券后约 ¥15.9/月（专属 8 折码 AMM）</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2.5 px-3 font-medium text-neutral-800 dark:text-neutral-200">全站综合评分</td>
+                        <td class="py-2.5 px-3">{airport.score} / 10 分</td>
+                        <td class="py-2.5 px-3 font-black text-primary">9.9 / 10 分 ★★★★★</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mt-4 pt-3 border-t border-primary/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <span class="text-xs text-neutral-500">💡 结论：若对网络延迟、稳定性和住宅 IP 风控要求高，推荐优先选择光速云。</span>
+                  <a
+                    href="https://guangs.vipaff.cc/#/?code=xhX5X22f"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:brightness-110 shadow-md shadow-primary/25 transition-all whitespace-nowrap"
+                  >
+                    立即抢购光速云（8折码 AMM）&rarr;
+                  </a>
+                </div>
+              </div>
+            )}
+
+            <!-- 常见问题 FAQ -->
+            <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+              <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-4">
+                五、关于 {airport.name} 的高频疑问解答
+              </h2>
+              <div class="space-y-4">
+                {brandFaqs.map(faq => (
+                  <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
+                    <h4 class="font-bold text-sm text-neutral-800 dark:text-neutral-100 mb-1">{faq.question}</h4>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">{faq.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      <!-- 右侧侧边栏：风险情报 + 类似替代品牌 -->
+      <div class="space-y-6">
+        {/* 非 Affiliate 页面专属侧边栏推荐：光速云金牌卡片 */}
+        {airport.isAffiliate === false && (
+          <div class="p-5 rounded-2xl bg-gradient-to-br from-primary/15 via-bg-secondary to-bg-secondary dark:from-primary/20 dark:via-bg-secondary-dark dark:to-bg-secondary-dark border-2 border-primary shadow-md">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] px-2 py-0.5 rounded-full bg-primary text-white font-bold tracking-wider">
+                👑 2026 年度金牌榜首
+              </span>
+              <span class="text-xs font-black text-primary font-brand">9.9 分</span>
+            </div>
+            <h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100 mb-1">
+              光速云 (GuangSu)
+            </h3>
+            <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed mb-3">
+              全网公认稳定天花板：全球 2.5Gbps IEPL 内网专线，原生双 ISP 住宅 IP 解锁 ChatGPT 4o / Claude 3.7，晚高峰 0 丢包。
+            </p>
+            <div class="p-2.5 rounded-xl bg-bg-primary dark:bg-neutral-800 text-xs mb-3 space-y-1">
+              <div class="flex justify-between text-neutral-500">
+                <span>入门价格：</span>
+                <strong class="text-neutral-800 dark:text-neutral-200">券后约 ¥15.9/月</strong>
+              </div>
+              <div class="flex justify-between text-neutral-500">
+                <span>8折专享码：</span>
+                <code class="font-bold text-primary">AMM</code>
+              </div>
+            </div>
+            <a
+              href="https://guangs.vipaff.cc/#/?code=xhX5X22f"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-primary text-white text-xs font-bold hover:brightness-110 shadow-md shadow-primary/20 transition-all text-center"
+            >
+              前往光速云官网选购 <ExternalLink size={12} />
+            </a>
+          </div>
+        )}
+        <!-- 风险状态卡 -->
+        <div class="p-5 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+          <div class="flex items-center gap-2 mb-2">
+            <AlertTriangle class="w-4 h-4 text-amber-500" />
+            <h3 class="text-sm font-bold text-neutral-800 dark:text-neutral-100">机场风控与安全指数</h3>
+          </div>
+          <p class="text-xs text-neutral-500 leading-relaxed mb-3">
+            {airport.riskNote}
+          </p>
+          <div class="p-3 rounded-lg bg-bg-primary dark:bg-neutral-800 text-[11px] text-neutral-400">
+            <strong>避坑提示：</strong> 请谨记按月订阅原则，勿贪图大额打折一次性年付。
+          </div>
+        </div>
+
+        <!-- 类似替代品牌 -->
+        <div class="p-5 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+          <h3 class="text-sm font-bold text-neutral-800 dark:text-neutral-100 mb-3">
+            同赛道推荐品牌
+          </h3>
+          <div class="space-y-3">
+            {alternativeAirports.map(alt => (
+              <a
+                href={`/reviews/${alt.slug}`}
+                class="block p-3 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5 hover:border-primary transition-all group"
+              >
+                <div class="flex items-center justify-between mb-1">
+                  <span class="font-bold text-xs text-neutral-800 dark:text-neutral-100 group-hover:text-primary">{alt.name}</span>
+                  <span class="text-xs font-bold text-primary font-brand">{alt.score}分</span>
+                </div>
+                <p class="text-[11px] text-neutral-400 line-clamp-1">{alt.slogan}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
