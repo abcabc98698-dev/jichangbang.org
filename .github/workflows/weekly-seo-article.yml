@@ -61,7 +61,7 @@ jobs:
           
           if [ -n "$(git status --porcelain)" ]; then
             git add src/content/airport-reviews/ seo-system/ public/
-            git commit -m "chore(seo): 自动发布每周深度评测 [skip ci]"
+            git commit -m "chore(seo): 自动发布每周深度评测"
             git push origin main
             echo "✅ 深度评测发布成功并已推送到主分支！"
           else
