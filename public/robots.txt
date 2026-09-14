@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /*?*
+Disallow: /*?
+Disallow: /*&
 
 Sitemap: https://jichangbang.org/sitemap-index.xml

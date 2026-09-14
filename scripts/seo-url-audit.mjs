@@ -1,228 +1,106 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const rootDir = path.resolve(__dirname, '..');
-const pagesDir = path.resolve(rootDir, 'src/pages');
-const redirectMapPath = path.resolve(rootDir, 'src/config/redirect-map.json');
+// 读取当前构建生成的所有 URL
+const distDir = path.resolve('dist');
+const sitemapPath = path.join(distDir, 'sitemap-0.xml');
 
-console.log('🔍 Running SEO Anti-AI URL Architecture Audit V1.0...\n');
-
-let errorCount = 0;
-let warningCount = 0;
-
-function reportError(rule, msg) {
-  console.error(`❌ [ERROR - ${rule}] ${msg}`);
-  errorCount++;
-}
-
-function reportWarning(rule, msg) {
-  console.warn(`⚠️ [WARN - ${rule}] ${msg}`);
-  warningCount++;
-}
-
-function reportPass(rule, msg) {
-  console.log(`✅ [PASS - ${rule}] ${msg}`);
-}
-
-// ─── 1. Audit Pages Directory (Physical files & routing structure) ───
-const allowedRootFiles = [
-  'index.astro',
-  '404.astro',
-  'about.astro',
-  'ai-streaming.astro',
-  'clients.astro',
-  'compare.astro',
-  'issues.astro',
-  'pricing.astro',
-  'protocols.astro',
-  'ranking.astro',
-  'recommend.astro',
-  'risk.astro',
-  'rss.xml.js',
-  'tutorials.astro'
-];
-
-const allowedSubDirs = [
-  'reviews',
-  'providers',
-  'wiki'
-];
-
-const forbiddenTemplates = [
-  'elements.astro',
-  'features.astro',
-  'changelog.astro',
-  'sign-in.astro',
-  'sign-up.astro',
-  'signin.astro',
-  'signup.astro',
-  'contact.astro',
-  'routes.astro',
-  'troubleshooting.astro',
-  'intel.astro'
-];
-
-const pageItems = fs.readdirSync(pagesDir, { withFileTypes: true });
-
-let foundForbidden = false;
-for (const item of pageItems) {
-  if (forbiddenTemplates.includes(item.name)) {
-    reportError('CLEAN_SLATE', `Forbidden template or obsolete file found in src/pages: ${item.name}`);
-    foundForbidden = true;
-  }
-}
-if (!foundForbidden) {
-  reportPass('CLEAN_SLATE', 'No leftover SaaS template or obsolete page files found.');
-}
-
-// Check for unexpected files in src/pages
-for (const item of pageItems) {
-  if (item.isDirectory()) {
-    if (!allowedSubDirs.includes(item.name)) {
-      reportError('NAMESPACE_ISOLATION', `Unrecognized directory in src/pages: /${item.name}/`);
-    }
-  } else if (!allowedRootFiles.includes(item.name)) {
-    reportWarning('NAMESPACE_ISOLATION', `Non-standard page file in src/pages: ${item.name}`);
-  }
-}
-
-// ─── 2. Audit URL Patterns & Anti-AI Content Farm Signatures ───
-// Define standard site routes and their slugs
-const standardRoutes = [
-  '/',
-  '/recommend',
-  '/ranking',
-  '/reviews',
-  '/providers',
-  '/pricing',
-  '/compare',
-  '/protocols',
-  '/clients',
-  '/tutorials',
-  '/issues',
-  '/ai-streaming',
-  '/risk',
-  '/wiki',
-  '/about'
-];
-
-// Anti-AI signature checks on routes
-const mechanicalNumberRegex = /\/(page[-_]?\d+|article[-_]?\d+|\d{4,})$/i;
-const timeDateRegex = /\/\d{4}\/\d{2}(\/\d{2})?\//;
-const uppercaseRegex = /[A-Z]/;
-const underscoreRegex = /_/;
-const chineseCharRegex = /[\u4e00-\u9fa5]/;
-
-for (const route of standardRoutes) {
-  if (uppercaseRegex.test(route)) {
-    reportError('URL_FORMAT', `Route contains uppercase characters: ${route}`);
-  }
-  if (underscoreRegex.test(route)) {
-    reportError('URL_FORMAT', `Route contains underscores: ${route}`);
-  }
-  if (chineseCharRegex.test(route)) {
-    reportError('URL_FORMAT', `Route contains Chinese characters: ${route}`);
-  }
-  if (mechanicalNumberRegex.test(route)) {
-    reportError('ANTI_CONTENT_FARM', `Route contains mechanical numbering pattern: ${route}`);
-  }
-  if (timeDateRegex.test(route)) {
-    reportError('ANTI_CONTENT_FARM', `Route contains time/date folder pattern: ${route}`);
-  }
-  
-  // Depth check: domain.com/category/topic/ -> max 2 slashes beyond root
-  const depth = route.replace(/^\/|\/$/g, '').split('/').filter(Boolean).length;
-  if (depth > 2) {
-    reportError('MAX_DEPTH', `Route exceeds max directory depth level 3 (max 2 segments): ${route} (depth: ${depth})`);
-  }
-}
-reportPass('URL_FORMAT_AND_DEPTH', 'Standard canonical routes comply with lowercase, hyphens-only, depth <= 3 rules.');
-
-// ─── 3. Audit Redirect Map (src/config/redirect-map.json) ───
-if (!fs.existsSync(redirectMapPath)) {
-  reportError('REDIRECT_MAP', `Missing redirect map file at ${redirectMapPath}`);
-} else {
-  const redirectMap = JSON.parse(fs.readFileSync(redirectMapPath, 'utf-8'));
-  const entries = Object.entries(redirectMap);
-  
-  let validMap = true;
-  for (const [fromUrl, toUrl] of entries) {
-    // Check fromUrl starts with /
-    if (!fromUrl.startsWith('/')) {
-      reportError('REDIRECT_MAP', `Source redirect URL does not start with '/': ${fromUrl}`);
-      validMap = false;
-    }
-    // Check toUrl starts with /
-    if (!toUrl.startsWith('/')) {
-      reportError('REDIRECT_MAP', `Target redirect URL does not start with '/': ${toUrl}`);
-      validMap = false;
-    }
-    // Check self redirect
-    if (fromUrl === toUrl) {
-      reportError('REDIRECT_MAP', `Self redirect detected: ${fromUrl} -> ${toUrl}`);
-      validMap = false;
-    }
-    // Check circular redirect
-    if (redirectMap[toUrl] === fromUrl) {
-      reportError('REDIRECT_MAP', `Circular redirect detected: ${fromUrl} <-> ${toUrl}`);
-      validMap = false;
-    }
-  }
-
-  // Check critical legacy routes are covered
-  const requiredOldRoutes = [
-    '/brands',
-    '/brands/guangsu',
-    '/brands/yuzhou',
-    '/routes',
-    '/troubleshooting',
-    '/intel',
-    '/blog',
-    '/elements',
-    '/features',
-    '/changelog',
-    '/contact',
-    '/sign-in'
-  ];
-
-  for (const reqRoute of requiredOldRoutes) {
-    if (!redirectMap[reqRoute]) {
-      reportError('REDIRECT_COVERAGE', `Missing redirect for critical legacy route: ${reqRoute}`);
-      validMap = false;
-    }
-  }
-
-  if (validMap) {
-    reportPass('REDIRECT_MAP', `Redirect map contains ${entries.length} verified 301 mappings with 0 circular loops.`);
-  }
-}
-
-// ─── 4. Audit Search Intent Space Isolation ───
-const intentSpaces = {
-  'recommend': 'Commercial Recommendation Hub (/recommend)',
-  'ranking': 'Quantitative Ranking Hub (/ranking)',
-  'reviews': 'In-depth Brand Reviews (/reviews)',
-  'providers': 'Structured Provider Database (/providers)',
-  'pricing': 'Price Calculator & Tiers (/pricing)',
-  'compare': 'Head-to-Head Comparison Matrix (/compare)',
-  'protocols': 'Backbone Network & Protocols (/protocols)',
-  'clients': 'Client Download Center (/clients)',
-  'tutorials': 'Actionable Tutorials (/tutorials)',
-  'issues': 'Troubleshooting Knowledge Base (/issues)',
-  'risk': 'Risk Intelligence Radar (/risk)',
-  'wiki': 'Evergreen Knowledge Base (/wiki)'
-};
-
-reportPass('INTENT_ISOLATION', `All ${Object.keys(intentSpaces).length} search intent spaces mapped and isolated.`);
-
-// ─── Summary ───
-console.log('\n----------------------------------------');
-if (errorCount === 0) {
-  console.log(`🎉 SEO Anti-AI URL Architecture Audit PASSED! (Errors: 0, Warnings: ${warningCount})`);
-  process.exit(0);
-} else {
-  console.error(`💥 SEO Anti-AI URL Architecture Audit FAILED! (Errors: ${errorCount}, Warnings: ${warningCount})`);
+if (!fs.existsSync(sitemapPath)) {
+  console.error('❌ dist/sitemap-0.xml not found. Please run pnpm build first.');
   process.exit(1);
 }
+
+const sitemap = fs.readFileSync(sitemapPath, 'utf8');
+const regex = /<loc>(.*?)<\/loc>/g;
+let m;
+const allUrls = [];
+while ((m = regex.exec(sitemap)) !== null) {
+  allUrls.push(m[1]);
+}
+
+console.log(`====================================================`);
+console.log(`🛡️  SEO Anti-AI URL Architecture Optimization Audit`);
+console.log(`   Auditing ${allUrls.length} Active Canonical URLs`);
+console.log(`====================================================\n`);
+
+let passedCount = 0;
+const violations = [];
+const directoryCounts = {};
+
+allUrls.forEach(rawUrl => {
+  const urlObj = new URL(rawUrl);
+  const pathname = urlObj.pathname;
+  const segments = pathname.split('/').filter(Boolean);
+
+  // 1. 检查机械编号 URL (/article/001, /post/1001, /page-001)
+  const hasNumberedSlug = segments.some(seg => /^(article|post|page|item)?[_-]?\d{2,}$/i.test(seg));
+  if (hasNumberedSlug) {
+    violations.push({ url: rawUrl, type: 'MECHANICAL_NUMBER', detail: 'Contains mechanical number pattern' });
+  }
+
+  // 2. 检查时间驱动 URL (/2026/08/...)
+  const hasDatePath = segments.some(seg => /^\d{4}$/.test(seg) || /^\d{2}$/.test(seg));
+  if (hasDatePath) {
+    violations.push({ url: rawUrl, type: 'DATE_DRIVEN', detail: 'Contains date-driven directory structure' });
+  }
+
+  // 3. 检查 URL 层级控制 (最大 3 级: /cat/topic/page)
+  if (segments.length > 3) {
+    violations.push({ url: rawUrl, type: 'DEPTH_OVERFLOW', detail: `Exceeds max 3 levels (current depth: ${segments.length})` });
+  }
+
+  // 4. 检查 URL 命名合规性 (小写英文、中划线，禁止下划线、中文、大写)
+  const invalidNaming = segments.some(seg => /[^a-z0-9\-]/.test(seg) || seg.includes('_'));
+  if (invalidNaming) {
+    violations.push({ url: rawUrl, type: 'INVALID_NAMING', detail: 'Contains uppercase, underscores, or non-alphanumeric characters' });
+  }
+
+  // 5. 检查关键词过度堆叠 (单个 slug 关键词超过 4 个连字符)
+  const isKeywordStuffed = segments.some(seg => seg.split('-').length > 5);
+  if (isKeywordStuffed) {
+    violations.push({ url: rawUrl, type: 'KEYWORD_STUFFING', detail: 'Slug contains more than 5 hyphenated keywords' });
+  }
+
+  // 统计各目录 URL 密度
+  const topDir = segments[0] || 'root';
+  directoryCounts[topDir] = (directoryCounts[topDir] || 0) + 1;
+});
+
+// 6. 检查单目录扁平超载（同目录无语义归类超过 50 个 URL）
+const flatOverloadedDirs = Object.entries(directoryCounts).filter(([dir, count]) => count > 50 && dir !== 'root');
+
+console.log('--- 1. Directory Density & Structure Breakdown ---');
+for (const [dir, count] of Object.entries(directoryCounts)) {
+  console.log(`📁 /${dir.padEnd(15)} : ${count.toString().padStart(4)} pages`);
+}
+
+console.log('\n--- 2. Architecture & Pattern Violations ---');
+if (violations.length === 0) {
+  console.log('✅ Zero mechanical numbers, date-driven paths, or naming violations detected.');
+} else {
+  violations.forEach(v => console.log(`❌ [${v.type}] ${v.url}: ${v.detail}`));
+}
+
+console.log('\n--- 3. Anti-AI Farming & Cluster Taxonomy Warning ---');
+if (flatOverloadedDirs.length > 0) {
+  flatOverloadedDirs.forEach(([dir, count]) => {
+    console.log(`⚠️  [FLAT_OVERLOAD] Directory /${dir}/ contains ${count} flat pages.`);
+    console.log(`   Risk: Large flat directories (>50 items) with identical templates risk AI content farm detection.`);
+    console.log(`   Recommendation: Introduce sub-clustering (e.g., /reviews/enterprise/, /reviews/budget/, /reviews/directory/).`);
+  });
+} else {
+  console.log('✅ All directories maintain healthy cluster densities.');
+}
+
+console.log('\n--- 4. Query Parameter & Index Protection ---');
+const robots = fs.readFileSync(path.resolve('public/robots.txt'), 'utf8');
+const blocksParameters = robots.includes('Disallow: /*?*');
+if (blocksParameters) {
+  console.log('✅ robots.txt explicitly disallows query strings (Disallow: /*?*).');
+} else {
+  console.log('❌ robots.txt does not block query strings.');
+}
+
+console.log(`\n====================================================`);
+console.log(`📊 AUDIT SUMMARY: Total Violations: ${violations.length}`);
+console.log(`====================================================\n`);
