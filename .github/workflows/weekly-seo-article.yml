@@ -1,0 +1,69 @@
+name: Weekly SEO Article Auto-Publisher
+
+on:
+  schedule:
+    # 每周一上午 10:00 (UTC 02:00) 自动执行
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+    inputs:
+      target_brand:
+        description: '指定评测的机场品牌 slug 或名称 (例如 guangsu, feimao, breeze)。留空则按队列自动挑选。'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  publish-review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 配置 pnpm 包管理器
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.14.2
+
+      - name: 配置 Node.js 运行环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: 安装项目依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: DeepSeek AI 每周万字级深度评测自动生成
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          TARGET_BRAND: ${{ github.event.inputs.target_brand }}
+        run: |
+          node --experimental-strip-types scripts/auto-publish-weekly-review.mjs
+
+      - name: 重新构建全站静态页面与拆分 Sitemap
+        run: pnpm run build
+
+      - name: 执行全站 SEO 生产安全门禁核验
+        run: pnpm run seo:check
+
+      - name: 提交增量 URL 至 Bing / Yandex IndexNow
+        run: pnpm run indexnow || true
+
+      - name: 提交并推送到 GitHub 仓库
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if [ -n "$(git status --porcelain)" ]; then
+            git add src/content/airport-reviews/ seo-system/ public/
+            git commit -m "chore(seo): 自动发布每周深度评测 [skip ci]"
+            git push origin main
+            echo "✅ 深度评测发布成功并已推送到主分支！"
+          else
+            echo "ℹ️ 未检测到新变更，跳过提交。"
+          fi

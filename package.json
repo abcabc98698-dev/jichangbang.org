@@ -49,7 +49,8 @@
 		"audit:url": "node scripts/seo-url-audit.mjs",
 		"audit:geo": "node scripts/seo-geo-audit.mjs",
 		"indexnow": "node scripts/indexnow.mjs",
-		"seo:check": "node scripts/seo-health-check.mjs"
+		"seo:check": "node scripts/seo-health-check.mjs",
+		"article:weekly": "node --experimental-strip-types scripts/auto-publish-weekly-review.mjs"
 	},
 	"devDependencies": {
 		"@astrojs/check": "^0.9.9",

@@ -2,13 +2,12 @@
   "host": "jichangbang.org",
   "key": "8d7f2b9a4c1e6f3085a2b1c4e9d7f023",
   "keyLocation": "https://jichangbang.org/8d7f2b9a4c1e6f3085a2b1c4e9d7f023.txt",
-  "lastSubmissionTime": "2026-09-13T20:49:00+08:00",
+  "lastSubmissionTime": "2026-09-14T04:19:29.316Z",
   "trackedUrls": {
     "https://jichangbang.org/": "initial_seed",
     "https://jichangbang.org/recommend": "initial_seed",
     "https://jichangbang.org/ranking": "initial_seed",
     "https://jichangbang.org/reviews": "initial_seed",
-    "https://jichangbang.org/reviews/guangsu": "initial_seed",
     "https://jichangbang.org/reviews/yuzhou": "initial_seed",
     "https://jichangbang.org/reviews/breeze": "initial_seed",
     "https://jichangbang.org/reviews/feimao": "initial_seed",
@@ -40,7 +39,18 @@
     "https://jichangbang.org/wiki/design-system-behind-ricofast": "initial_seed",
     "https://jichangbang.org/wiki/introducing-ricofast": "initial_seed",
     "https://jichangbang.org/wiki/launching-v1-0": "initial_seed",
-    "https://jichangbang.org/about": "initial_seed"
+    "https://jichangbang.org/about": "initial_seed",
+    "https://jichangbang.org/free": "2026-09-14T04:19:29.316Z",
+    "https://jichangbang.org/reviews/guangsu": "2026-09-14T04:19:29.316Z"
   },
-  "history": []
+  "history": [
+    {
+      "timestamp": "2026-09-14T04:19:29.316Z",
+      "submittedCount": 2,
+      "urls": [
+        "https://jichangbang.org/free",
+        "https://jichangbang.org/reviews/guangsu"
+      ]
+    }
+  ]
 }
