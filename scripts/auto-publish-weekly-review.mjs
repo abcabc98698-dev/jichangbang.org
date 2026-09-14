@@ -19,6 +19,11 @@ if (!fs.existsSync(reviewsDir)) {
   fs.mkdirSync(reviewsDir, { recursive: true });
 }
 
+const postDir = path.resolve(rootDir, 'src/content/post');
+if (!fs.existsSync(postDir)) {
+  fs.mkdirSync(postDir, { recursive: true });
+}
+
 // 解析命令行参数与环境变量
 const args = process.argv.slice(2);
 let targetParam = process.env.TARGET_BRAND || '';
@@ -41,7 +46,7 @@ const allBrands = [...airports, ...directoryAirports];
 // ─────────────────────────────────────────────────────────────
 function selectTargetAirport() {
   const existingFiles = new Set(
-    fs.readdirSync(reviewsDir).map(f => f.replace(/\.(md|mdx)$/, ''))
+    fs.readdirSync(postDir).map(f => f.replace(/\.(md|mdx)$/, ''))
   );
 
   // 1. 手动指定品牌
@@ -83,15 +88,15 @@ function selectTargetAirport() {
     };
   }
 
-  // 4. 全量品牌均已有评测，找出 lastUpdated 最旧的文章进行轮询深度更新扩写
+  // 4. 全量品牌均已有评测，找出 publishDate 最旧的文章进行轮询深度更新扩写
   let oldestBrand = allBrands[0];
   let oldestDate = new Date();
 
   for (const brand of allBrands) {
-    const filePath = path.join(reviewsDir, `${brand.slug}.md`);
+    const filePath = path.join(postDir, `${brand.slug}.md`);
     if (fs.existsSync(filePath)) {
       const text = fs.readFileSync(filePath, 'utf8');
-      const match = text.match(/lastUpdated:\s*["']?(\d{4}-\d{2}-\d{2})["']?/);
+      const match = text.match(/publishDate:\s*["']?(\d{4}-\d{2}-\d{2})["']?/);
       let fDate = match ? new Date(match[1]) : fs.statSync(filePath).mtime;
       if (fDate < oldestDate) {
         oldestDate = fDate;
@@ -552,9 +557,24 @@ async function main() {
   // 清洗正文文本（确保 0 冒号、0 破折号、0 翻案套话、单 H1）
   const cleanedBody = cleanHumanWritingText(articleBody.trim());
 
-  // 注入 Frontmatter 元数据
   const todayYMD = new Date().toISOString().slice(0, 10);
-  const frontmatter = `---
+
+  // 1. 生成知识百科 (出海网络常青知识百科 /wiki) 专用 Frontmatter
+  const postFrontmatter = `---
+title: "${airport.name} 怎么样？2026最新评测·节点测速·资费与防坑避雷指南"
+description: "${airport.name} 深度评测：全网客观解析 ${airport.name} 真实网络拓扑架构、${airport.lineType}晚高峰测速矩阵、ChatGPT与流媒体解锁能力、全系套餐资费对账与2026金牌专线横向对标。"
+publishDate: ${todayYMD}
+read: 15
+tags: ["机场评测", "${airport.name}", "${airport.lineType}", "出海网络指南"]
+img: "/assets/article-cover.jpg"
+img_alt: "${airport.name} 深度评测与选购指南"
+featured: false
+---
+
+`;
+
+  // 2. 生成品牌评测档案 (/reviews) 专用 Frontmatter
+  const reviewFrontmatter = `---
 title: "${airport.name} 怎么样？2026最新评测·节点测速·资费与防坑避雷指南"
 description: "${airport.name} 深度评测：全网客观解析 ${airport.name} 真实网络拓扑架构、${airport.lineType}晚高峰测速矩阵、ChatGPT与流媒体解锁能力、全系套餐资费对账与2026金牌专线横向对标。"
 targetBrand: "${airport.name}"
@@ -563,34 +583,58 @@ lastUpdated: "${todayYMD}"
 
 `;
 
-  const fullMarkdown = frontmatter + cleanedBody + '\n';
-  const targetFilePath = path.join(reviewsDir, `${airport.slug}.md`);
+  const fullPostMarkdown = postFrontmatter + cleanedBody + '\n';
+  const fullReviewMarkdown = reviewFrontmatter + cleanedBody + '\n';
 
-  console.log(`📊 文章总字数: ${fullMarkdown.length} 字符`);
+  const targetPostPath = path.join(postDir, `${airport.slug}.md`);
+  const targetReviewPath = path.join(reviewsDir, `${airport.slug}.md`);
+
+  console.log(`📊 文章总字数: ${fullPostMarkdown.length} 字符`);
 
   if (isDryRun) {
-    console.log(`🔍 [Dry Run 模式] 模拟写入目标文件: ${targetFilePath}`);
+    console.log(`🔍 [Dry Run 模式] 模拟写入知识百科文件: ${targetPostPath}`);
+    console.log(`🔍 [Dry Run 模式] 模拟写入评测档案文件: ${targetReviewPath}`);
     console.log('✨ 模拟运行成功完成，未做实际文件变更。');
     return;
   }
 
-  // 写入文件
-  fs.writeFileSync(targetFilePath, fullMarkdown, 'utf8');
-  console.log(`💾 成功写入文件: ${targetFilePath}`);
+  // 写入出海知识百科 (https://jichangbang.org/wiki)
+  fs.writeFileSync(targetPostPath, fullPostMarkdown, 'utf8');
+  console.log(`💾 成功发布至【出海网络常青知识百科】: ${targetPostPath}`);
+
+  // 写入品牌评测档案 (https://jichangbang.org/reviews)
+  fs.writeFileSync(targetReviewPath, fullReviewMarkdown, 'utf8');
+  console.log(`💾 成功同步至【品牌评测档案库】: ${targetReviewPath}`);
 
   // 更新 seo-system/existing-url-registry.json
   const registryPath = path.resolve(rootDir, 'seo-system/existing-url-registry.json');
   if (fs.existsSync(registryPath)) {
     try {
       const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
-      const pageUrl = `https://jichangbang.org/reviews/${airport.slug}`;
-      const existingEntry = registry.find(item => item.url === pageUrl || item.slug === airport.slug);
-      if (!existingEntry) {
+      const wikiUrl = `https://jichangbang.org/wiki/${airport.slug}`;
+      const reviewUrl = `https://jichangbang.org/reviews/${airport.slug}`;
+
+      if (!registry.find(item => item.url === wikiUrl)) {
         registry.push({
-          url: pageUrl,
+          url: wikiUrl,
+          slug: `wiki/${airport.slug}`,
+          pageType: 'Article',
+          canonical: wikiUrl,
+          title: `${airport.name}怎么样？2026最新评测·节点测速·资费与防坑避雷指南`,
+          description: `${airport.name} 深度评测：全网客观解析 ${airport.name} 真实网络拓扑架构、${airport.lineType}晚高峰测速矩阵、ChatGPT与流媒体解锁能力。`,
+          category: 'Wiki',
+          cluster: '出海网络常青知识百科',
+          status: 'active',
+          protected: false
+        });
+      }
+
+      if (!registry.find(item => item.url === reviewUrl)) {
+        registry.push({
+          url: reviewUrl,
           slug: airport.slug,
           pageType: 'Brand',
-          canonical: pageUrl,
+          canonical: reviewUrl,
           title: `${airport.name}怎么样？2026最新评测·套餐价格·线路测速与优惠码`,
           description: `${airport.name} 深度测评：2026 权威深度评测与网络架构解析。覆盖最低 ¥${airport.monthlyPrice}/月 起步套餐价格、${airport.lineType}专线分析、晚高峰实测速度 ${airport.speedMbps}M、ChatGPT/Claude解锁能力及优缺点分析。`,
           category: 'Reviews',
@@ -598,9 +642,10 @@ lastUpdated: "${todayYMD}"
           status: 'active',
           protected: true
         });
-        fs.writeFileSync(registryPath, JSON.stringify(registry, null, 2), 'utf8');
-        console.log(`📝 已在 URL 注册表 (existing-url-registry.json) 登记: ${pageUrl}`);
       }
+
+      fs.writeFileSync(registryPath, JSON.stringify(registry, null, 2), 'utf8');
+      console.log(`📝 已在 URL 注册表登记: ${wikiUrl} 与 ${reviewUrl}`);
     } catch (e) {
       console.warn('⚠️ 更新 existing-url-registry.json 时出错:', e.message);
     }
@@ -611,12 +656,15 @@ lastUpdated: "${todayYMD}"
   if (fs.existsSync(indexnowPath)) {
     try {
       const indexnowState = JSON.parse(fs.readFileSync(indexnowPath, 'utf8'));
-      const pageUrl = `https://jichangbang.org/reviews/${airport.slug}`;
-      if (indexnowState.trackedUrls && indexnowState.trackedUrls[pageUrl]) {
-        delete indexnowState.trackedUrls[pageUrl];
+      const wikiUrl = `https://jichangbang.org/wiki/${airport.slug}`;
+      const reviewUrl = `https://jichangbang.org/reviews/${airport.slug}`;
+
+      if (indexnowState.trackedUrls) {
+        delete indexnowState.trackedUrls[wikiUrl];
+        delete indexnowState.trackedUrls[reviewUrl];
       }
       fs.writeFileSync(indexnowPath, JSON.stringify(indexnowState, null, 2), 'utf8');
-      console.log(`📡 已在 IndexNow 队列标记待推送更新: ${pageUrl}`);
+      console.log(`📡 已在 IndexNow 队列标记双 URL 待推送更新`);
     } catch (e) {
       console.warn('⚠️ 更新 indexnow-state.json 时出错:', e.message);
     }
