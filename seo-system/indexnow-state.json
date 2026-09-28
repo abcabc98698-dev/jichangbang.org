@@ -2,7 +2,7 @@
   "host": "jichangbang.org",
   "key": "8d7f2b9a4c1e6f3085a2b1c4e9d7f023",
   "keyLocation": "https://jichangbang.org/8d7f2b9a4c1e6f3085a2b1c4e9d7f023.txt",
-  "lastSubmissionTime": "2026-09-21T07:36:10.183Z",
+  "lastSubmissionTime": "2026-09-28T08:11:25.294Z",
   "trackedUrls": {
     "https://jichangbang.org/": "initial_seed",
     "https://jichangbang.org/recommend": "initial_seed",
@@ -60,7 +60,9 @@
     "https://jichangbang.org/wiki/jilianyun": "2026-09-21T07:36:10.183Z",
     "https://jichangbang.org/wiki/u1s1": "2026-09-21T07:36:10.183Z",
     "https://jichangbang.org/wiki/tag-vpn": "2026-09-21T07:36:10.183Z",
-    "https://jichangbang.org/reviews/tag-vpn": "2026-09-21T07:36:10.183Z"
+    "https://jichangbang.org/reviews/tag-vpn": "2026-09-21T07:36:10.183Z",
+    "https://jichangbang.org/wiki/laotou-vpn": "2026-09-28T08:11:25.294Z",
+    "https://jichangbang.org/reviews/laotou-vpn": "2026-09-28T08:11:25.294Z"
   },
   "history": [
     {
@@ -118,6 +120,14 @@
         "https://jichangbang.org/wiki/u1s1",
         "https://jichangbang.org/wiki/tag-vpn",
         "https://jichangbang.org/reviews/tag-vpn"
+      ]
+    },
+    {
+      "timestamp": "2026-09-28T08:11:25.294Z",
+      "submittedCount": 2,
+      "urls": [
+        "https://jichangbang.org/wiki/laotou-vpn",
+        "https://jichangbang.org/reviews/laotou-vpn"
       ]
     }
   ]
