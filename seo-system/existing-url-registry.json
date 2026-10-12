@@ -742,5 +742,29 @@
     "cluster": "Brand Reviews",
     "status": "active",
     "protected": true
+  },
+  {
+    "url": "https://jichangbang.org/wiki/fastlink",
+    "slug": "wiki/fastlink",
+    "pageType": "Article",
+    "canonical": "https://jichangbang.org/wiki/fastlink",
+    "title": "Fastlink怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
+    "description": "Fastlink 深度评测：全网客观解析 Fastlink 真实网络拓扑架构、BGP隧道中转晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
+    "category": "Wiki",
+    "cluster": "出海网络常青知识百科",
+    "status": "active",
+    "protected": false
+  },
+  {
+    "url": "https://jichangbang.org/reviews/fastlink",
+    "slug": "fastlink",
+    "pageType": "Brand",
+    "canonical": "https://jichangbang.org/reviews/fastlink",
+    "title": "Fastlink怎么样？2026最新评测·套餐价格·线路测速与优惠码",
+    "description": "Fastlink 深度测评：2026 权威深度评测与网络架构解析。覆盖最低 ¥20/月 起步套餐价格、BGP隧道中转专线分析、晚高峰实测速度 580M、ChatGPT/Claude解锁能力及优缺点分析。",
+    "category": "Reviews",
+    "cluster": "Brand Reviews",
+    "status": "active",
+    "protected": true
   }
 ]

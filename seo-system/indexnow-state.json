@@ -2,7 +2,7 @@
   "host": "jichangbang.org",
   "key": "8d7f2b9a4c1e6f3085a2b1c4e9d7f023",
   "keyLocation": "https://jichangbang.org/8d7f2b9a4c1e6f3085a2b1c4e9d7f023.txt",
-  "lastSubmissionTime": "2026-10-05T08:15:08.475Z",
+  "lastSubmissionTime": "2026-10-12T08:33:36.957Z",
   "trackedUrls": {
     "https://jichangbang.org/": "initial_seed",
     "https://jichangbang.org/recommend": "initial_seed",
@@ -64,7 +64,9 @@
     "https://jichangbang.org/wiki/laotou-vpn": "2026-09-28T08:11:25.294Z",
     "https://jichangbang.org/reviews/laotou-vpn": "2026-09-28T08:11:25.294Z",
     "https://jichangbang.org/wiki/nexitally": "2026-10-05T08:15:08.475Z",
-    "https://jichangbang.org/reviews/nexitally": "2026-10-05T08:15:08.475Z"
+    "https://jichangbang.org/reviews/nexitally": "2026-10-05T08:15:08.475Z",
+    "https://jichangbang.org/wiki/fastlink": "2026-10-12T08:33:36.957Z",
+    "https://jichangbang.org/reviews/fastlink": "2026-10-12T08:33:36.957Z"
   },
   "history": [
     {
@@ -138,6 +140,14 @@
       "urls": [
         "https://jichangbang.org/wiki/nexitally",
         "https://jichangbang.org/reviews/nexitally"
+      ]
+    },
+    {
+      "timestamp": "2026-10-12T08:33:36.957Z",
+      "submittedCount": 2,
+      "urls": [
+        "https://jichangbang.org/wiki/fastlink",
+        "https://jichangbang.org/reviews/fastlink"
       ]
     }
   ]
