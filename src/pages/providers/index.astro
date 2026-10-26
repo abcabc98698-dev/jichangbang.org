@@ -24,7 +24,7 @@ const breadcrumbs = [
   { name: "服务商数据库", url: "/providers" }
 ];
 
-// 保持全站统一 18 家排位
+// 保持全站统一 42 家排位
 const sortedAirports = [...airports];
 
 // ItemList 结构化数据映射
@@ -37,7 +37,7 @@ const itemListData = sortedAirports.map((airport, index) => ({
 // 8组高价值数据库与参数检索长尾问答
 const faqItems = [
   {
-    question: "本数据库收录的 18 家机场底层参数多长时间核验更新一次？",
+    question: "本数据库收录的 42 家机场底层参数多长时间核验更新一次？",
     answer: "数据库参数保持动态监测与周期核验机制。连通性、晚高峰平均测速与丢包率采用自动化探针每日 20 点至 23 点进行流式采集；节点数量、套餐价格与当期优惠码每周与各服务商后台同步对账；而原生住宅双 ISP 属性检测（涵盖 ASN 机构属性与 Scamalytics 欺诈分值）每月进行全量回扫重测，确保全站呈现的数据真实客观、具备可复现性。"
   },
   {
@@ -73,7 +73,7 @@ const faqItems = [
 
 <Layout
   title="机场服务商底层参数数据库 18+主流机场节点·协议·物理专线·住宅IP全网大盘【2026权威版】"
-  description="2026机场服务商底层物理参数权威数据库。收录全网18家主流跨境机场真实网络规格：骨干线路（IEPL内网专线/IPLC/BGP中转）、出口协议（Shadowsocks/Trojan/Vless/Hysteria 2）、原生住宅双ISP纯净度、月基准流量与最低价格标准。支持多维动态筛选与快速模糊检索。"
+  description="2026机场服务商底层物理参数权威数据库。收录全网42家主流跨境机场真实网络规格：骨干线路（IEPL内网专线/IPLC/BGP中转）、出口协议（Shadowsocks/Trojan/Vless/Hysteria 2）、原生住宅双ISP纯净度、月基准流量与最低价格标准。支持多维动态筛选与快速模糊检索。"
   keywords="机场数据库, 机场参数查询, 机场服务商大全, 机场节点数, 专线机场清单, 原生住宅IP机场, 机场协议大全, 机场榜一"
 >
   <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
@@ -83,7 +83,7 @@ const faqItems = [
   <!-- 头部英雄区 -->
   <section class="relative z-20 site-container my-10 md:my-14">
     <PageHeader
-      title="机场服务商底层参数数据库：全网 18 家主流品牌技术规格大盘"
+      title="机场服务商底层参数数据库：全网 42 家主流品牌技术规格大盘"
       description="拒绝浮夸宣传，以真实网络拓扑、实测物理吞吐、出网IP风控纯净度与协议支持为基准。结构化收录全网主流专线与中转服务商底层硬核参数，支持多维条件实时筛选与快速精准检索。"
     />
 
@@ -95,7 +95,7 @@ const faqItems = [
         </div>
         <div>
           <div class="font-bold text-neutral-800 dark:text-neutral-200">167+ 家品牌数据库</div>
-          <div class="text-neutral-500 text-[11px]">18 家核心 + 149 家收录</div>
+          <div class="text-neutral-500 text-[11px]">42 家核心 + 149 家收录</div>
         </div>
       </div>
 
@@ -143,7 +143,7 @@ const faqItems = [
         </div>
         <div class="flex items-center gap-3 text-xs">
           <span class="text-neutral-500">
-            当前展示：<span id="filtered-count" class="text-primary font-bold text-sm">18</span> / 18 家品牌
+            当前展示：<span id="filtered-count" class="text-primary font-bold text-sm">18</span> / 42 家品牌
           </span>
           <button
             id="reset-filter-btn"
@@ -177,7 +177,7 @@ const faqItems = [
               id="line-filter"
               class="w-full px-3 py-2 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:border-primary transition"
             >
-              <option value="all">全部骨干拓扑（18家）</option>
+              <option value="all">全部骨干拓扑（42家）</option>
               <option value="专线">仅看物理专线（IPLC / IEPL 内网）</option>
               <option value="BGP">仅看 BGP 隧道中转</option>
               <option value="直连">仅看 直连与多线混合</option>
@@ -224,7 +224,7 @@ const faqItems = [
         <div class="flex items-center gap-2">
           <Database class="w-5 h-5 text-primary" />
           <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
-            全网 18 家机场服务商底层网络参数大盘矩阵
+            全网 42 家机场服务商底层网络参数大盘矩阵
           </h2>
         </div>
         <div class="text-xs text-neutral-500 bg-bg-primary dark:bg-neutral-800 px-3 py-1 rounded-lg border border-primary/10">
@@ -412,7 +412,7 @@ const faqItems = [
                       <a
                         href={item.affiliateUrl}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noopener noreferrer nofollow sponsored"
                         class="px-2.5 py-1 rounded-lg bg-primary text-white hover:bg-primary/90 text-[11px] font-medium inline-flex items-center gap-0.5 transition shadow-sm"
                       >
                         官网 <ExternalLink class="w-2.5 h-2.5 ml-0.5" />
@@ -448,7 +448,7 @@ const faqItems = [
             全网知名品牌客观收录库 ({directoryAirports.length} 家)
           </h2>
           <p class="text-xs md:text-sm text-neutral-500 mt-1">
-            除上方 18 家核心推荐专线外，本站同步收录全网具备一定知名度的加速服务商公网基准与评测档案。
+            除上方 42 家核心推荐专线外，本站同步收录全网具备一定知名度的加速服务商公网基准与评测档案。
           </p>
         </div>
 
@@ -661,7 +661,7 @@ const faqItems = [
           从数据大盘到实战部署，打通全站出海闭环
         </h2>
         <p class="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed mb-6">
-          查阅完 18 家服务商的底层参数后，你可以进一步前往各专项专题深入了解实测榜单、单机 1v1 决策对比、价格套餐测算、客户端下载配置以及风险防骗雷达。
+          查阅完 42 家服务商的底层参数后，你可以进一步前往各专项专题深入了解实测榜单、单机 1v1 决策对比、价格套餐测算、客户端下载配置以及风险防骗雷达。
         </p>
         <div class="flex flex-wrap items-center gap-3">
           <a

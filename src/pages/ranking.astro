@@ -112,10 +112,10 @@ const faqList = [
       <div class="max-w-3xl mb-8">
         <div class="mb-2 inline-block"><Badge variant="primary">核心主榜 · 综合实力天梯</Badge></div>
         <h2 class="text-xl md:text-2xl font-bold font-brand text-neutral-900 dark:text-neutral-100">
-          🏆 2026 机场综合实力超级天梯榜 (全站 18 家品牌全景)
+          🏆 2026 机场综合实力超级天梯榜 (全站 42 家品牌全景)
         </h2>
         <p class="text-xs text-neutral-500 mt-2 leading-relaxed">
-          综合四维指标严格打分，将全站收录的 18 家主流机场清晰划分为 T0 旗舰王者、T1 实力标杆与 T2 场景特色三大梯队。
+          综合四维指标严格打分，将全站收录的 42 家主流机场清晰划分为 T0 旗舰王者、T1 实力标杆与 T2 场景特色三大梯队。
         </p>
       </div>
 
@@ -170,7 +170,7 @@ const faqList = [
                   <a
                     href={airport.affiliateUrl}
                     target="_blank"
-                    rel="noopener noreferrer nofollow"
+                    rel="noopener noreferrer nofollow sponsored"
                     class="px-5 py-1.5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/20 hover:border-primary text-neutral-700 dark:text-neutral-200 text-xs font-medium text-center"
                   >
                     官网入口
@@ -224,7 +224,7 @@ const faqList = [
                 <span class="font-mono text-neutral-400">码：<strong class="text-primary">{airport.couponCode || '无'}</strong></span>
                 <div class="flex gap-2">
                   <a href={`/reviews/${airport.slug}`} class="text-primary font-semibold hover:underline">详细评测 →</a>
-                  <a href={airport.affiliateUrl} target="_blank" rel="noopener noreferrer nofollow" class="text-neutral-500 hover:text-neutral-700">官网</a>
+                  <a href={airport.affiliateUrl} target="_blank" rel="noopener noreferrer nofollow sponsored" class="text-neutral-500 hover:text-neutral-700">官网</a>
                 </div>
               </div>
             </div>

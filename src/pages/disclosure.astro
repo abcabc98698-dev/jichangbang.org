@@ -1,0 +1,116 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import Button from "@/components/ui/Button.astro";
+import { ShieldCheck, HeartHandshake, Scale, AlertCircle, ArrowRight } from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "推广与赞助透明度披露", url: "/disclosure" }
+];
+---
+
+<Layout
+  title="推广与赞助透明度披露声明 (Affiliate Disclosure) — 机场榜一"
+  description="机场榜一 (jichangbang.org) 关于商业推广链接、返利佣金机制、编辑独立性以及用户购买权益保护的公开透明度声明。"
+  keywords="推广声明, 商业披露, 赞助说明, 机场榜一, Affiliate Disclosure"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+
+  <section class="site-container my-10 md:my-14">
+    <PageHeader
+      title="推广与商业合作透明度披露"
+      description="坚持阳光、透明的运营理念。遵循搜索引擎反链接垃圾规范（Link Spam Guidelines）与联邦贸易委员会（FTC）商业披露准则，全透明公示本站的佣金来源与中立原则。"
+    />
+  </section>
+
+  <section class="site-container max-w-3xl mx-auto pb-24 space-y-10 text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+    <!-- 1. 佣金机制与合作说明 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <HeartHandshake class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          一、商业返利与推广机制说明
+        </h2>
+      </div>
+      <p class="mb-4">
+        为了维持多地物理探针服务器集群、长期压测带宽支出以及评测工程师日常内容维护的高昂成本，<strong>机场榜一（jichangbang.org）</strong> 参与了部分网络服务提供商的推广合作计划（Affiliate Program）。
+      </p>
+      <p>
+        当您通过本站文章、榜单、对比页或评测页面中的“直达官网”、“订阅”、“购买”等外部出站链接前往服务商网站并完成购买时，本站可能会从服务商处获得一定比例的推荐佣金或推广分成。
+      </p>
+    </div>
+
+    <!-- 2. 用户零成本与优惠保障 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
+          <ShieldCheck class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          二、用户实付价格零影响与优惠保障
+        </h2>
+      </div>
+      <ul class="space-y-3">
+        <li class="flex items-start gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-2"></span>
+          <span><strong>绝不增加您的支付成本：</strong> 推荐佣金完全来自品牌方的市场营销推广预算，无论您是通过本站链接进入还是自行在浏览器输入域名访问，套餐原价与续费价格完全一致，绝不会向您收取任何额外费用。</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-2"></span>
+          <span><strong>专属优惠码直降福利：</strong> 依托本站与主流优质商家的深度合作，本站争取了包括光速云专属 8 折（优惠码 <code>AMM</code>）在内的多项专属优惠，用户通过本站通道购买往往能获得显著优于官网原价的实际折扣。</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 3. 编辑独立性与中立评测原则 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <Scale class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          三、绝对的编辑独立性原则
+        </h2>
+      </div>
+      <p class="mb-4">
+        商业推广关系<strong>绝不影响本站评测数据的客观性、综合评分与排行榜名次</strong>。我们的底线原则包括：
+      </p>
+      <div class="space-y-3">
+        <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15">
+          <strong>1. 评分不可购买：</strong> 任何服务商均无法通过付费赞助或提高佣金比例来篡改晚高峰测速数据或购买榜一位置。
+        </div>
+        <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15">
+          <strong>2. 缺点如实披露：</strong> 即便对于排名前列的优质品牌，我们在评测报告中同样严格指出其在套餐流量、多设备限制或特定地区节点的短板（详见各品牌评测“不适合人群”章节）。
+        </div>
+        <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15">
+          <strong>3. 违规立即清退：</strong> 任何收录品牌若出现恶意跑路失联、大幅削减带宽超卖、或私自关停客服群组行为，本站将第一时间停止推荐并挂载风险预警徽章。
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 出站链接规范声明 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
+          <AlertCircle class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          四、搜索引擎出站链接属性规范
+        </h2>
+      </div>
+      <p>
+        本站严格遵守 Google、Bing 等主流搜索引擎关于商业外链的合规标准。全站所有指向第三方服务商的商业返利链接，均强制应用 <code>rel="noopener noreferrer nofollow sponsored"</code> 安全属性，不传递非自然 PageRank 权重，确保搜索引擎爬虫合规性。
+      </p>
+    </div>
+
+    <div class="text-center pt-6">
+      <Button url="/recommend" type="fill" className="text-sm px-8 py-3">
+        前往 2026 机场推荐榜 <ArrowRight size={16} />
+      </Button>
+    </div>
+  </section>
+</Layout>

@@ -6,6 +6,64 @@ import type { Airport } from './airports';
 
 export const directoryAirports: Airport[] = [
   {
+    "id": "dir-kuaili",
+    "name": "快狸",
+    "slug": "kuaili",
+    "slogan": "稳定 VLESS 协议叠加 IEPL 专线，自研多端一键客户端",
+    "established": "2023年",
+    "score": 8.5,
+    "ratingCount": 180,
+    "monthlyPrice": 25,
+    "traffic": 150,
+    "lineType": "IEPL专线",
+    "protocols": ["VLESS", "Shadowsocks"],
+    "nodeCount": 66,
+    "speedMbps": 840,
+    "latencyMs": 30,
+    "regions": ["香港", "日本", "新加坡", "美国", "德国"],
+    "aiUnlock": {
+      "chatgpt": true,
+      "claude": true,
+      "gemini": true,
+      "cursor": true
+    },
+    "streamingUnlock": {
+      "netflix": true,
+      "disney": true,
+      "youtube": true,
+      "tiktok": true
+    },
+    "pros": [
+      "VLESS 叠加 IEPL 专线，晚高峰 840Mbps 高速下行",
+      "自研一键连接客户端，新手上手门槛极低",
+      "香港与新加坡主流流媒体及 AI 工具解锁稳定"
+    ],
+    "cons": [
+      "月费 25 元起步，预算敏感型用户定价稍高",
+      "落地节点聚焦 5 个主力地区，长尾小众节点较少"
+    ],
+    "targetUsers": [
+      "日常轻度外网浏览",
+      "Google 与学术资料检索",
+      "YouTube/Netflix 追剧",
+      "备用翻墙线路"
+    ],
+    "riskStatus": "正常运营",
+    "riskNote": "2023 年上线至今持续运行，工单响应平稳，常规运维正常。",
+    "isAffiliate": false,
+    "affiliateUrl": "#",
+    "officialUrl": "https://www.google.com/search?q=快狸%20机场官网",
+    "minDuration": "月付",
+    "priceNote": "月付约 ¥25 起，基准月流量 150GB，建议优先按月订购。",
+    "features": [
+      "IEPL专线",
+      "VLESS协议",
+      "自研客户端",
+      "AI全解"
+    ],
+    "description": "快狸主打 VLESS 协议与 IEPL 国际专线组合，自研客户端对新手极其友好，晚高峰延迟低且流媒体解锁良好。"
+  },
+  {
     "id": "dir-tag-vpn",
     "name": "TAG",
     "slug": "tag-vpn",
@@ -685,75 +743,6 @@ export const directoryAirports: Airport[] = [
     "description": "魔戒在按量计费领域知名度极高，其最大的亮点是流量不限时间、永不过期，非常适合日常流量消耗极少、或把其作为第二条灾备线路的精明用户。"
   },
   {
-    "id": "dir-wgetcloud",
-    "name": "WgetCloud",
-    "slug": "wgetcloud",
-    "slogan": "华为云 BGP 入口与多线智能容灾，独立面板运营典范",
-    "established": "2021年",
-    "score": 8.7,
-    "ratingCount": 560,
-    "monthlyPrice": 49,
-    "traffic": 200,
-    "lineType": "IEPL专线",
-    "protocols": [
-      "Shadowsocks",
-      "Trojan",
-      "VLESS"
-    ],
-    "nodeCount": 85,
-    "speedMbps": 680,
-    "latencyMs": 45,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": false,
-      "claude": false,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": false,
-      "disney": true,
-      "youtube": true,
-      "tiktok": false
-    },
-    "pros": [
-      "华为云企业级 BGP 入口，多线智能容灾",
-      "自主研发独立用户中心与节点调度面板",
-      "客服响应及时，工单处理规范"
-    ],
-    "cons": [
-      "套餐主推年付，月付价格门槛相对较高",
-      "高峰期部分热点节点偶有带宽排队",
-      "不支持按量计费"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=WgetCloud%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "季付",
-    "priceNote": "月付约 ¥49 起，基准月流量 200GB，建议优先按月订购。",
-    "features": [
-      "华为云BGP",
-      "自研管理面板",
-      "多线动态容灾",
-      "全平台客户端"
-    ],
-    "description": "WgetCloud 凭借扎实的华为云 BGP 入口与高可用企业专线在中高端市场占据一席之地。独立开发的后台系统与专属客户端体验良好，不过入门资费相对偏高，对轻度预算用户不太友好。"
-  },
-  {
     "id": "dir-immtelecom",
     "name": "ImmTelecom",
     "slug": "immtelecom",
@@ -888,75 +877,6 @@ export const directoryAirports: Airport[] = [
       "主流流媒体解锁"
     ],
     "description": "Web3加速器 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2023年。其网络架构主要采用 IEPL专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 660 Mbps，端到端延迟控制在 53 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
-    "id": "dir-baiyueguang",
-    "name": "白月光",
-    "slug": "baiyueguang",
-    "slogan": "白月光 专注于提供稳定的 多线混合 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2024年",
-    "score": 8.8,
-    "ratingCount": 329,
-    "monthlyPrice": 40,
-    "traffic": 320,
-    "lineType": "多线混合",
-    "protocols": [
-      "Shadowsocks",
-      "VLESS",
-      "Trojan"
-    ],
-    "nodeCount": 99,
-    "speedMbps": 690,
-    "latencyMs": 74,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": true,
-      "claude": false,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": false
-    },
-    "pros": [
-      "节点在线率高，日常断流情况较少",
-      "支持全平台 Sing-box 与 Clash 规则分流",
-      "拥有活跃的用户社群与故障公告推送"
-    ],
-    "cons": [
-      "入门套餐门槛一般，推荐以季付或半年付更为划算",
-      "部分流媒体节点偶现非自制剧封禁需手动换节点",
-      "官网受阻时需通过备用镜像或群组获取新地址"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=%E7%99%BD%E6%9C%88%E5%85%89%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥40 起，基准月流量 320GB，建议优先按月订购。",
-    "features": [
-      "多线混合架构",
-      "320GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "白月光 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2024年。其网络架构主要采用 多线混合，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 690 Mbps，端到端延迟控制在 74 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   },
   {
     "id": "dir-anyland",
@@ -1504,74 +1424,6 @@ export const directoryAirports: Airport[] = [
     "description": "SpeedCAT 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2020年。其网络架构主要采用 BGP隧道中转，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 420 Mbps，端到端延迟控制在 65 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   },
   {
-    "id": "dir-flyingbird",
-    "name": "FlyingBird",
-    "slug": "flyingbird",
-    "slogan": "FlyingBird 专注于提供稳定的 IEPL专线 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2021年",
-    "score": 8.1,
-    "ratingCount": 196,
-    "monthlyPrice": 30,
-    "traffic": 280,
-    "lineType": "IEPL专线",
-    "protocols": [
-      "VLESS",
-      "Trojan"
-    ],
-    "nodeCount": 56,
-    "speedMbps": 600,
-    "latencyMs": 61,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": false,
-      "claude": false,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": false
-    },
-    "pros": [
-      "入口采用多线 BGP 容灾架构，故障自愈能力强",
-      "价格在同类型产品中具有一定竞争力",
-      "提供全天候工单技术支持"
-    ],
-    "cons": [
-      "晚高峰骨干网极度拥堵时偶有微小抖动",
-      "未提供深度定制的一键专属客户端",
-      "部分小众冷门节点偶尔出现离线检修"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=FlyingBird%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥30 起，基准月流量 280GB，建议优先按月订购。",
-    "features": [
-      "IEPL专线架构",
-      "280GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "FlyingBird 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2021年。其网络架构主要采用 IEPL专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 600 Mbps，端到端延迟控制在 61 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
     "id": "dir-kuromis",
     "name": "Kuromis",
     "slug": "kuromis",
@@ -1910,210 +1762,6 @@ export const directoryAirports: Airport[] = [
       "主流流媒体解锁"
     ],
     "description": "泰山 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2022年。其网络架构主要采用 IEPL专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 480 Mbps，端到端延迟控制在 67 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
-    "id": "dir-cyberguard",
-    "name": "CyberGuard",
-    "slug": "cyberguard",
-    "slogan": "CyberGuard 专注于提供稳定的 IEPL专线 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2021年",
-    "score": 8.5,
-    "ratingCount": 416,
-    "monthlyPrice": 45,
-    "traffic": 200,
-    "lineType": "IEPL专线",
-    "protocols": [
-      "VLESS",
-      "Trojan"
-    ],
-    "nodeCount": 96,
-    "speedMbps": 600,
-    "latencyMs": 71,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": false,
-      "claude": false,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": false
-    },
-    "pros": [
-      "入口采用多线 BGP 容灾架构，故障自愈能力强",
-      "价格在同类型产品中具有一定竞争力",
-      "提供全天候工单技术支持"
-    ],
-    "cons": [
-      "晚高峰骨干网极度拥堵时偶有微小抖动",
-      "未提供深度定制的一键专属客户端",
-      "部分小众冷门节点偶尔出现离线检修"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=CyberGuard%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥45 起，基准月流量 200GB，建议优先按月订购。",
-    "features": [
-      "IEPL专线架构",
-      "200GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "CyberGuard 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2021年。其网络架构主要采用 IEPL专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 600 Mbps，端到端延迟控制在 71 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
-    "id": "dir-longmaoyun",
-    "name": "龙猫云",
-    "slug": "longmaoyun",
-    "slogan": "龙猫云 专注于提供稳定的 BGP隧道中转 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2021年",
-    "score": 8.7,
-    "ratingCount": 356,
-    "monthlyPrice": 20,
-    "traffic": 200,
-    "lineType": "BGP隧道中转",
-    "protocols": [
-      "VLESS",
-      "Trojan"
-    ],
-    "nodeCount": 66,
-    "speedMbps": 600,
-    "latencyMs": 71,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": true,
-      "claude": false,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": false
-    },
-    "pros": [
-      "入口采用多线 BGP 容灾架构，故障自愈能力强",
-      "价格在同类型产品中具有一定竞争力",
-      "提供全天候工单技术支持"
-    ],
-    "cons": [
-      "无不限时按量计费套餐，流量到期清零",
-      "对多设备并发连接数有一定限制",
-      "晚高峰突发大带宽下载时速率有所波动"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=%E9%BE%99%E7%8C%AB%E4%BA%91%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥20 起，基准月流量 200GB，建议优先按月订购。",
-    "features": [
-      "BGP隧道中转架构",
-      "200GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "龙猫云 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2021年。其网络架构主要采用 BGP隧道中转，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 600 Mbps，端到端延迟控制在 71 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
-    "id": "dir-fatcat",
-    "name": "FATCAT",
-    "slug": "fatcat",
-    "slogan": "FATCAT 专注于提供稳定的 IPLC专线 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2020年",
-    "score": 8.2,
-    "ratingCount": 375,
-    "monthlyPrice": 40,
-    "traffic": 240,
-    "lineType": "IPLC专线",
-    "protocols": [
-      "Shadowsocks",
-      "Trojan"
-    ],
-    "nodeCount": 85,
-    "speedMbps": 570,
-    "latencyMs": 60,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": true,
-      "claude": true,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": false,
-      "disney": true,
-      "youtube": true,
-      "tiktok": true
-    },
-    "pros": [
-      "节点延迟低，常规网页浏览瞬时响应",
-      "主流流媒体与 YouTube 4K 解锁稳定",
-      "支持常见主流客户端快捷订阅导入"
-    ],
-    "cons": [
-      "性价比属于行业中等水平，缺乏超低价小额月付包",
-      "客服响应时间在节假日可能有所延迟",
-      "部分节点对严苛住宅 IP 风控平台解锁偶有不稳定"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=FATCAT%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "季付",
-    "priceNote": "月付约 ¥40 起，基准月流量 240GB，建议优先按月订购。",
-    "features": [
-      "IPLC专线架构",
-      "240GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "FATCAT 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2020年。其网络架构主要采用 IPLC专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 570 Mbps，端到端延迟控制在 60 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   },
   {
     "id": "dir-coffee-cloud",
@@ -2524,74 +2172,6 @@ export const directoryAirports: Airport[] = [
     "description": "AladdinNet 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2022年。其网络架构主要采用 IEPL专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 480 Mbps，端到端延迟控制在 47 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   },
   {
-    "id": "dir-tntcloud",
-    "name": "TNTCloud",
-    "slug": "tntcloud",
-    "slogan": "TNTCloud 专注于提供稳定的 BGP隧道中转 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2023年",
-    "score": 8.7,
-    "ratingCount": 498,
-    "monthlyPrice": 35,
-    "traffic": 120,
-    "lineType": "BGP隧道中转",
-    "protocols": [
-      "Trojan",
-      "Hysteria 2"
-    ],
-    "nodeCount": 58,
-    "speedMbps": 660,
-    "latencyMs": 63,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": true,
-      "claude": true,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": true
-    },
-    "pros": [
-      "线路冗余度较好，遇到节点维护有备用节点自动接管",
-      "对于常用 AI 工具（ChatGPT/Gemini）具备基础解锁支持",
-      "流量给付充足，适合日常中度娱乐追剧"
-    ],
-    "cons": [
-      "无不限时按量计费套餐，流量到期清零",
-      "对多设备并发连接数有一定限制",
-      "晚高峰突发大带宽下载时速率有所波动"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=TNTCloud%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥35 起，基准月流量 120GB，建议优先按月订购。",
-    "features": [
-      "BGP隧道中转架构",
-      "120GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "TNTCloud 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2023年。其网络架构主要采用 BGP隧道中转，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 660 Mbps，端到端延迟控制在 63 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
     "id": "dir-shanhuyun",
     "name": "闪狐云",
     "slug": "shanhuyun",
@@ -2795,74 +2375,6 @@ export const directoryAirports: Airport[] = [
       "大带宽保障"
     ],
     "description": "FlowerCloud（花云）是专线圈子里的标杆品牌之一，提供稳定的多入口 IEPL 线路和高品质流媒体解锁。适合对网络可用性要求极为严苛的商务与学术人士。"
-  },
-  {
-    "id": "dir-qingyunti",
-    "name": "青云梯",
-    "slug": "qingyunti",
-    "slogan": "青云梯 专注于提供稳定的 多线混合 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2022年",
-    "score": 8.8,
-    "ratingCount": 497,
-    "monthlyPrice": 30,
-    "traffic": 320,
-    "lineType": "多线混合",
-    "protocols": [
-      "Shadowsocks",
-      "VLESS"
-    ],
-    "nodeCount": 87,
-    "speedMbps": 630,
-    "latencyMs": 62,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": true,
-      "claude": false,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": false
-    },
-    "pros": [
-      "晚高峰测速表现较为坚挺，日常看视频无缓冲",
-      "节点分布覆盖主流亚太与欧美核心区域",
-      "协议支持丰富，适配 iOS/Android/Windows/Mac"
-    ],
-    "cons": [
-      "入门套餐门槛一般，推荐以季付或半年付更为划算",
-      "部分流媒体节点偶现非自制剧封禁需手动换节点",
-      "官网受阻时需通过备用镜像或群组获取新地址"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=%E9%9D%92%E4%BA%91%E6%A2%AF%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥30 起，基准月流量 320GB，建议优先按月订购。",
-    "features": [
-      "多线混合架构",
-      "320GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "青云梯 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2022年。其网络架构主要采用 多线混合，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 630 Mbps，端到端延迟控制在 62 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   },
   {
     "id": "dir-baiyangxing",
@@ -3954,75 +3466,6 @@ export const directoryAirports: Airport[] = [
     "description": "影子云 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2021年。其网络架构主要采用 多线混合，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 450 Mbps，端到端延迟控制在 56 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   },
   {
-    "id": "dir-shanshuiyun",
-    "name": "山水云",
-    "slug": "shanshuiyun",
-    "slogan": "山水云 专注于提供稳定的 IEPL专线 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2024年",
-    "score": 8.1,
-    "ratingCount": 454,
-    "monthlyPrice": 40,
-    "traffic": 280,
-    "lineType": "IEPL专线",
-    "protocols": [
-      "Shadowsocks",
-      "VLESS",
-      "Trojan"
-    ],
-    "nodeCount": 44,
-    "speedMbps": 540,
-    "latencyMs": 49,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": false,
-      "claude": false,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": false
-    },
-    "pros": [
-      "节点在线率高，日常断流情况较少",
-      "支持全平台 Sing-box 与 Clash 规则分流",
-      "拥有活跃的用户社群与故障公告推送"
-    ],
-    "cons": [
-      "晚高峰骨干网极度拥堵时偶有微小抖动",
-      "未提供深度定制的一键专属客户端",
-      "部分小众冷门节点偶尔出现离线检修"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=%E5%B1%B1%E6%B0%B4%E4%BA%91%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥40 起，基准月流量 280GB，建议优先按月订购。",
-    "features": [
-      "IEPL专线架构",
-      "280GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "山水云 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2024年。其网络架构主要采用 IEPL专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 540 Mbps，端到端延迟控制在 49 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
     "id": "dir-edge-x",
     "name": "Edge-X",
     "slug": "edge-x",
@@ -4158,143 +3601,6 @@ export const directoryAirports: Airport[] = [
       "主流流媒体解锁"
     ],
     "description": "迅达 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2023年。其网络架构主要采用 多线混合，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 510 Mbps，端到端延迟控制在 58 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
-    "id": "dir-lingdongyun",
-    "name": "灵动云",
-    "slug": "lingdongyun",
-    "slogan": "灵动云 专注于提供稳定的 多线混合 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2024年",
-    "score": 8.8,
-    "ratingCount": 499,
-    "monthlyPrice": 25,
-    "traffic": 160,
-    "lineType": "多线混合",
-    "protocols": [
-      "Shadowsocks",
-      "VLESS",
-      "Trojan"
-    ],
-    "nodeCount": 59,
-    "speedMbps": 690,
-    "latencyMs": 64,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": true,
-      "claude": false,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": false
-    },
-    "pros": [
-      "节点在线率高，日常断流情况较少",
-      "支持全平台 Sing-box 与 Clash 规则分流",
-      "拥有活跃的用户社群与故障公告推送"
-    ],
-    "cons": [
-      "入门套餐门槛一般，推荐以季付或半年付更为划算",
-      "部分流媒体节点偶现非自制剧封禁需手动换节点",
-      "官网受阻时需通过备用镜像或群组获取新地址"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=%E7%81%B5%E5%8A%A8%E4%BA%91%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥25 起，基准月流量 160GB，建议优先按月订购。",
-    "features": [
-      "多线混合架构",
-      "160GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "灵动云 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2024年。其网络架构主要采用 多线混合，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 690 Mbps，端到端延迟控制在 64 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
-    "id": "dir-langwang",
-    "name": "浪网",
-    "slug": "langwang",
-    "slogan": "浪网 专注于提供稳定的 IPLC专线 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2022年",
-    "score": 8.2,
-    "ratingCount": 527,
-    "monthlyPrice": 25,
-    "traffic": 320,
-    "lineType": "IPLC专线",
-    "protocols": [
-      "Shadowsocks",
-      "VLESS"
-    ],
-    "nodeCount": 57,
-    "speedMbps": 630,
-    "latencyMs": 62,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": true,
-      "claude": false,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": false
-    },
-    "pros": [
-      "晚高峰测速表现较为坚挺，日常看视频无缓冲",
-      "节点分布覆盖主流亚太与欧美核心区域",
-      "协议支持丰富，适配 iOS/Android/Windows/Mac"
-    ],
-    "cons": [
-      "性价比属于行业中等水平，缺乏超低价小额月付包",
-      "客服响应时间在节假日可能有所延迟",
-      "部分节点对严苛住宅 IP 风控平台解锁偶有不稳定"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=%E6%B5%AA%E7%BD%91%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥25 起，基准月流量 320GB，建议优先按月订购。",
-    "features": [
-      "IPLC专线架构",
-      "320GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "浪网 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2022年。其网络架构主要采用 IPLC专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 630 Mbps，端到端延迟控制在 62 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   },
   {
     "id": "dir-superbiu",
@@ -5114,74 +4420,6 @@ export const directoryAirports: Airport[] = [
       "主流流媒体解锁"
     ],
     "description": "XXAI 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2022年。其网络架构主要采用 IEPL专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 480 Mbps，端到端延迟控制在 67 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
-    "id": "dir-edgenova",
-    "name": "EdgeNova",
-    "slug": "edgenova",
-    "slogan": "EdgeNova 专注于提供稳定的 IEPL专线 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2022年",
-    "score": 8.1,
-    "ratingCount": 582,
-    "monthlyPrice": 30,
-    "traffic": 120,
-    "lineType": "IEPL专线",
-    "protocols": [
-      "Shadowsocks",
-      "VLESS"
-    ],
-    "nodeCount": 52,
-    "speedMbps": 480,
-    "latencyMs": 57,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": false,
-      "claude": true,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": true
-    },
-    "pros": [
-      "晚高峰测速表现较为坚挺，日常看视频无缓冲",
-      "节点分布覆盖主流亚太与欧美核心区域",
-      "协议支持丰富，适配 iOS/Android/Windows/Mac"
-    ],
-    "cons": [
-      "晚高峰骨干网极度拥堵时偶有微小抖动",
-      "未提供深度定制的一键专属客户端",
-      "部分小众冷门节点偶尔出现离线检修"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=EdgeNova%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥30 起，基准月流量 120GB，建议优先按月订购。",
-    "features": [
-      "IEPL专线架构",
-      "120GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "EdgeNova 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2022年。其网络架构主要采用 IEPL专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 480 Mbps，端到端延迟控制在 57 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   },
   {
     "id": "dir-haoyayun",
@@ -8735,74 +7973,6 @@ export const directoryAirports: Airport[] = [
     "description": "XLM Cloud 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2020年。其网络架构主要采用 多线混合，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 570 Mbps，端到端延迟控制在 60 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   },
   {
-    "id": "dir-yinghuochong",
-    "name": "萤火虫机场",
-    "slug": "yinghuochong",
-    "slogan": "萤火虫机场 专注于提供稳定的 BGP隧道中转 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2020年",
-    "score": 8.7,
-    "ratingCount": 390,
-    "monthlyPrice": 30,
-    "traffic": 120,
-    "lineType": "BGP隧道中转",
-    "protocols": [
-      "Shadowsocks",
-      "Trojan"
-    ],
-    "nodeCount": 70,
-    "speedMbps": 420,
-    "latencyMs": 45,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": true,
-      "claude": true,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": false,
-      "disney": true,
-      "youtube": true,
-      "tiktok": true
-    },
-    "pros": [
-      "节点延迟低，常规网页浏览瞬时响应",
-      "主流流媒体与 YouTube 4K 解锁稳定",
-      "支持常见主流客户端快捷订阅导入"
-    ],
-    "cons": [
-      "无不限时按量计费套餐，流量到期清零",
-      "对多设备并发连接数有一定限制",
-      "晚高峰突发大带宽下载时速率有所波动"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=%E8%90%A4%E7%81%AB%E8%99%AB%E6%9C%BA%E5%9C%BA%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "季付",
-    "priceNote": "月付约 ¥30 起，基准月流量 120GB，建议优先按月订购。",
-    "features": [
-      "BGP隧道中转架构",
-      "120GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "萤火虫机场 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2020年。其网络架构主要采用 BGP隧道中转，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 420 Mbps，端到端延迟控制在 45 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
     "id": "dir-tudouyun",
     "name": "土豆云",
     "slug": "tudouyun",
@@ -8870,75 +8040,6 @@ export const directoryAirports: Airport[] = [
       "主流流媒体解锁"
     ],
     "description": "土豆云 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2024年。其网络架构主要采用 多线混合，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 690 Mbps，端到端延迟控制在 74 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
-  },
-  {
-    "id": "dir-sslar",
-    "name": "sslar",
-    "slug": "sslar",
-    "slogan": "sslar 专注于提供稳定的 多线混合 跨境互联服务，适配日常办公、学术检索与流媒体播放。",
-    "established": "2024年",
-    "score": 8.8,
-    "ratingCount": 589,
-    "monthlyPrice": 35,
-    "traffic": 160,
-    "lineType": "多线混合",
-    "protocols": [
-      "Shadowsocks",
-      "VLESS",
-      "Trojan"
-    ],
-    "nodeCount": 59,
-    "speedMbps": 690,
-    "latencyMs": 64,
-    "regions": [
-      "香港",
-      "日本",
-      "新加坡",
-      "美国",
-      "台湾"
-    ],
-    "aiUnlock": {
-      "chatgpt": true,
-      "claude": false,
-      "gemini": true,
-      "cursor": true
-    },
-    "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
-      "youtube": true,
-      "tiktok": false
-    },
-    "pros": [
-      "节点在线率高，日常断流情况较少",
-      "支持全平台 Sing-box 与 Clash 规则分流",
-      "拥有活跃的用户社群与故障公告推送"
-    ],
-    "cons": [
-      "入门套餐门槛一般，推荐以季付或半年付更为划算",
-      "部分流媒体节点偶现非自制剧封禁需手动换节点",
-      "官网受阻时需通过备用镜像或群组获取新地址"
-    ],
-    "targetUsers": [
-      "日常轻度外网浏览",
-      "Google 与学术资料检索",
-      "YouTube/Netflix 追剧",
-      "备用翻墙线路"
-    ],
-    "riskStatus": "正常运营",
-    "riskNote": "根据实时网络探针监测，该机场当前节点处于正常在线轮询状态。建议用户遵守单月订阅原则，避免一次性长期大额投入。",
-    "affiliateUrl": "#",
-    "officialUrl": "https://www.google.com/search?q=sslar%20%E6%9C%BA%E5%9C%BA%E5%AE%98%E7%BD%91",
-    "isAffiliate": false,
-    "minDuration": "月付",
-    "priceNote": "月付约 ¥35 起，基准月流量 160GB，建议优先按月订购。",
-    "features": [
-      "多线混合架构",
-      "160GB 基准流量",
-      "全平台协议适配",
-      "主流流媒体解锁"
-    ],
-    "description": "sslar 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2024年。其网络架构主要采用 多线混合，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 690 Mbps，端到端延迟控制在 64 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   },
   {
     "id": "dir-danzaiyun",
@@ -10167,11 +9268,3 @@ export const directoryAirports: Airport[] = [
     "description": "XueQiuCloud 是中文网络圈内有一定知名度的网络中继服务品牌，运营始于 2023年。其网络架构主要采用 IEPL专线，节点覆盖香港、日本、新加坡、美国等亚太及欧美主力节点。全站平均晚高峰下行测速达到 660 Mbps，端到端延迟控制在 63 ms 上下。该品牌在日常网页浏览、YouTube 4K 流媒体播放及基础学术科研查阅方面表现尚可，但在超高并发稳定性及原生双 ISP 住宅纯净度上，相较行业顶级专线仍有提升空间。对于追求极致低延迟与 0 丢包体验的用户，可进一步对比金牌专线方案。"
   }
 ];
-
-export function getDirectoryAirportBySlug(slug: string): Airport | undefined {
-  return directoryAirports.find(a => a.slug === slug);
-}
-
-export function getAllReviewSlugs(): string[] {
-  return directoryAirports.map(a => a.slug);
-}

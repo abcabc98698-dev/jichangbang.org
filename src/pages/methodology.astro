@@ -1,0 +1,194 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import Badge from "@/components/ui/Badge.astro";
+import Button from "@/components/ui/Button.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import {
+  Server,
+  Activity,
+  ShieldCheck,
+  Cpu,
+  Layers,
+  Sparkles,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight
+} from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "评测方法论", url: "/methodology" }
+];
+---
+
+<Layout
+  title="评测方法论与测速标准体系 — 机场榜一 (jichangbang.org)"
+  description="详细揭秘机场榜一的第三方独立评测方法学：硬件探针集群、晚高峰三网并发测速标准、流媒体与AI风控检验模型、综合评分权重计算法则及数据状态真实性声明。"
+  keywords="机场评测方法论, 测速标准, 晚高峰测速, 机场评分规则, 机场榜一"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+
+  <section class="site-container my-10 md:my-14">
+    <PageHeader
+      title="评测方法论与测速技术标准"
+      description="拒绝纸面跑分与主观印象。了解机场榜一如何基于自建物理探针集群、晚高峰三网高并发压力测试、以及严格的流媒体/AI风控白名单模型构建量化评测体系。"
+    />
+  </section>
+
+  <section class="site-container max-w-4xl mx-auto pb-24 space-y-12 text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+    <!-- 1. 硬件探针与测试环境 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <Server class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          一、多地物理探针与测试环境基准
+        </h2>
+      </div>
+      <p class="mb-4">
+        网络代理服务的真实质量强依赖于国内客户端运营商与骨干出口网络的协同情况。单一宽带环境下的偶发测试无法代表全网普遍表现。为此，本站建立了覆盖国内主力运营商的测试探针节点：
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+        <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15">
+          <div class="font-bold text-neutral-800 dark:text-neutral-200 mb-1">主干探针 A（华南核心）</div>
+          <div class="text-xs text-primary font-mono mb-2">珠海联通 9Gbps / 5Gbps 高性能集群</div>
+          <div class="text-xs text-neutral-500 dark:text-neutral-400">专用于多线程峰值吞吐压力测试与国际出口突发带宽承载上限探测。</div>
+        </div>
+        <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15">
+          <div class="font-bold text-neutral-800 dark:text-neutral-200 mb-1">主干探针 B（华东核心）</div>
+          <div class="text-xs text-primary font-mono mb-2">上海电信 1Gbps CN2/163 探针</div>
+          <div class="text-xs text-neutral-500 dark:text-neutral-400">专用于检验国际跨网互联在晚高峰期间的丢包抖动与路由劣化表现。</div>
+        </div>
+        <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/15">
+          <div class="font-bold text-neutral-800 dark:text-neutral-200 mb-1">主干探针 C（华北核心）</div>
+          <div class="text-xs text-primary font-mono mb-2">北京移动 1Gbps CMIN2/CMI 探针</div>
+          <div class="text-xs text-neutral-500 dark:text-neutral-400">专用于检验跨运营商穿透调度与冷门落地节点的连通一致性。</div>
+        </div>
+      </div>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400">
+        * 测试工具链：采用 MiaoKO 集群调度引擎与 MAI-TEST-BOT 进行 32 线程并发拉流测试，消除本地单机浏览器渲染造成的性能瓶颈。
+      </p>
+    </div>
+
+    <!-- 2. 测试时段与压力窗口 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <Activity class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          二、测试时段与晚高峰压力准则
+        </h2>
+      </div>
+      <p>
+        白天工作时段国际骨干网通常负载平稳，绝大多数直连或公网隧道均能跑出好看的测速图，但该数据对消费者<strong>完全不具备参考价值</strong>。本站所有基准评分严格基于：
+      </p>
+      <ul class="space-y-3 mt-4">
+        <li class="flex items-start gap-2">
+          <CheckCircle2 class="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+          <span><strong>极端晚高峰核心窗口（20:00 - 23:00）：</strong> 此时间段为全网跨境流量绝对峰值期，唯有此时段持续稳定、无明显降速断流的服务商方能进入推荐第一梯队。</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <CheckCircle2 class="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+          <span><strong>连续 72 小时稳定性轮询：</strong> 每隔 15 分钟发起一次 HTTP 连通心跳与握手延迟采样，计算标准差（Jitter），杜绝偶发性满速带来的数据偏差。</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 3. 五大核心考核维度与加权算法 -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <Layers class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          三、综合评分权重模型 (0 - 10 分)
+        </h2>
+      </div>
+      <div class="space-y-4">
+        <div class="border-b border-primary/10 pb-3">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-neutral-800 dark:text-neutral-200">1. 线路稳定性与抗封锁能力 (Stability & SLA)</span>
+            <span class="font-mono text-primary font-bold">35% 权重</span>
+          </div>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400">
+            重点考核是否具备企业级物理专线（IPLC/IEPL）、内网故障冗余自动倒换能力，以及晚高峰平均丢包率（目标需低于 1%）。
+          </p>
+        </div>
+        <div class="border-b border-primary/10 pb-3">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-neutral-800 dark:text-neutral-200">2. 晚高峰吞吐与网络延迟 (Speed & Latency)</span>
+            <span class="font-mono text-primary font-bold">25% 权重</span>
+          </div>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400">
+            实测亚太常用节点（香港/日本/新加坡）与美西主力节点的下行带宽上限，以及 YouTube 4K/8K 缓冲首帧加载耗时。
+          </p>
+        </div>
+        <div class="border-b border-primary/10 pb-3">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-neutral-800 dark:text-neutral-200">3. IP 纯净度与流媒体/AI 解锁 (IP Quality & Unlock)</span>
+            <span class="font-mono text-primary font-bold">20% 权重</span>
+          </div>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400">
+            检验 ChatGPT、Claude、Google Gemini 的原生白名单过风控概率，以及 Netflix、Disney+ 等区域版权流媒体的完整解锁能力。
+          </p>
+        </div>
+        <div class="border-b border-primary/10 pb-3">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-neutral-800 dark:text-neutral-200">4. 真实性价比与计费透明度 (Value & Pricing)</span>
+            <span class="font-mono text-primary font-bold">15% 权重</span>
+          </div>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400">
+            依据实际可用倍率折算真实每GB单价，重点考察是否存在 3x/5x 虚高倍率暗扣流量，以及是否支持月付起购。
+          </p>
+        </div>
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold text-neutral-800 dark:text-neutral-200">5. 客户支持与运营历史 (Support & Reputation)</span>
+            <span class="font-mono text-primary font-bold">5% 权重</span>
+          </div>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400">
+            考核工单响应平均时长、官方 Telegram 群组公告透明度，以及连续运营年限（优先推荐运营满 3 年以上的成熟品牌）。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 数据状态标注 (Data Status Transparency) -->
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <ShieldCheck class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          四、数据状态标签与透明度规范 (Data Status)
+        </h2>
+      </div>
+      <p class="mb-4">
+        为保证严谨客观，本站评测报告中所有展示参数均带有明确的数据属性标注：
+      </p>
+      <div class="space-y-3">
+        <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-emerald-500/20 flex items-start gap-3">
+          <span class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">measured</span>
+          <div class="text-xs">
+            <strong>实测验证数据：</strong> 由本站独立探针在晚高峰发起真实压测，并提供带有测速时间戳与并发线程记录的图表支撑，代表客观可复现结果。
+          </div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-blue-500/20 flex items-start gap-3">
+          <span class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/30">vendor</span>
+          <div class="text-xs">
+            <strong>官方品牌核定数据：</strong> 来源于服务商公开套餐规格、官方线路拓扑说明或用户中心标价，本站定期核查校验一致性。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center pt-6">
+      <Button url="/recommend" type="fill" className="text-sm px-8 py-3">
+        查看按本规范评测的 2026 推荐主榜 <ArrowRight size={16} />
+      </Button>
+    </div>
+  </section>
+</Layout>

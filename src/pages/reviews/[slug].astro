@@ -78,6 +78,26 @@ const breadcrumbs = [
 >
   <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
   <JsonLd type="FAQPage" faqItems={brandFaqs} />
+  <JsonLd
+    type="Review"
+    data={{
+      title: `${airport.name} 深度测评与晚高峰测速报告`,
+      airportName: airport.name,
+      description: airport.slogan || airport.description,
+      monthlyPrice: airport.monthlyPrice,
+      score: airport.score,
+    }}
+  />
+  <JsonLd
+    type="Article"
+    article={{
+      title: `${airport.name} 怎么样？2026最新评测·套餐价格·线路测速与优惠码`,
+      description: `${airport.name} 深度测评：${airport.slogan}。覆盖最低 ¥${airport.monthlyPrice} 套餐价格、${airport.lineType} 线路分析、晚高峰实测速度 ${airport.speedMbps}M。`,
+      publishDate: "2026-08-19",
+      author: "机场榜网络技术评测组",
+      url: `https://jichangbang.org/reviews/${airport.slug}`
+    }}
+  />
 
   <!-- 品牌顶部 Hero -->
   <section class="relative z-20 site-container my-8 md:my-14">
@@ -128,9 +148,9 @@ const breadcrumbs = [
                 访问官网 (无专属折扣) <ExternalLink size={12} />
               </a>
               <a
-                href="https://guangs.vipaff.cc/#/?code=xhX5X22f"
+                href="https://sahude.gsyvipaff.com/#/?code=keqgvT5Y"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow sponsored noopener noreferrer"
                 class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-primary text-white text-xs font-bold hover:brightness-110 shadow-md shadow-primary/20 transition-all animate-pulse"
               >
                 ★ 前往金牌专线【光速云】<Sparkles size={12} />
@@ -181,9 +201,9 @@ const breadcrumbs = [
         </div>
         <div class="flex items-center gap-2 shrink-0 w-full md:w-auto">
           <a
-            href="https://guangs.vipaff.cc/#/?code=xhX5X22f"
+            href="https://sahude.gsyvipaff.com/#/?code=keqgvT5Y"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow sponsored noopener noreferrer"
             class="w-full md:w-auto text-center px-4 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:brightness-110 shadow-md shadow-primary/25 transition-all whitespace-nowrap"
           >
             直接抢购光速云 8 折 &rarr;
@@ -306,7 +326,7 @@ const breadcrumbs = [
                   "rounded-xl overflow-hidden border border-primary/15 bg-neutral-900 group",
                   airport.screenshots?.length === 1 ? "w-full shadow-md" : ""
                 ]}>
-                  <a href={imgSrc} target="_blank" rel="noopener noreferrer">
+                  <a href={imgSrc} target="_blank" rel="nofollow sponsored noopener">
                     <img
                       src={imgSrc}
                       alt={`${airport.name} 真实晚高峰测速与解锁实测图 ${i + 1}`}
@@ -541,9 +561,9 @@ const breadcrumbs = [
                 <div class="mt-4 pt-3 border-t border-primary/10 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <span class="text-xs text-neutral-500">💡 结论：若对网络延迟、稳定性和住宅 IP 风控要求高，推荐优先选择光速云。</span>
                   <a
-                    href="https://guangs.vipaff.cc/#/?code=xhX5X22f"
+                    href="https://sahude.gsyvipaff.com/#/?code=keqgvT5Y"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="nofollow sponsored noopener noreferrer"
                     class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:brightness-110 shadow-md shadow-primary/25 transition-all whitespace-nowrap"
                   >
                     立即抢购光速云（8折码 AMM）&rarr;
@@ -598,9 +618,9 @@ const breadcrumbs = [
               </div>
             </div>
             <a
-              href="https://guangs.vipaff.cc/#/?code=xhX5X22f"
+              href="https://sahude.gsyvipaff.com/#/?code=keqgvT5Y"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow sponsored noopener noreferrer"
               class="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-primary text-white text-xs font-bold hover:brightness-110 shadow-md shadow-primary/20 transition-all text-center"
             >
               前往光速云官网选购 <ExternalLink size={12} />

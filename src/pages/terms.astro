@@ -1,0 +1,94 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import { Scale, FileText, AlertCircle, ShieldCheck } from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "服务条款与免责声明", url: "/terms" }
+];
+---
+
+<Layout
+  title="服务条款与免责声明 (Terms of Service) — 机场榜一 (jichangbang.org)"
+  description="机场榜一 (jichangbang.org) 服务条款与法律免责声明：明确网站使用范围、评测数据参考性质、跨境网络合规指引与知识产权归属。"
+  keywords="服务条款, 免责声明, 法律合规, 用户协议, 机场榜一, Terms of Service"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+
+  <section class="site-container my-10 md:my-14">
+    <PageHeader
+      title="服务条款与法律免责声明"
+      description="请在访问或使用本站服务前仔细阅读以下条款。访问本站即视为您无保留地理解并同意遵守以下所有规范与法律声明。"
+    />
+  </section>
+
+  <section class="site-container max-w-3xl mx-auto pb-24 space-y-10 text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <FileText class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          一、信息性质与参考用途
+        </h2>
+      </div>
+      <p>
+        <strong>机场榜一（jichangbang.org）</strong> 提供的所有内容（包括但不限于机场评测文章、综合排行榜单、价格套餐对账、测速图表、协议分析教程及排障问答）仅供出海网络开发者、科研学者、跨境电商从业者及网络技术爱好者进行<strong>技术研究、科学选型与学术交流参考</strong>。
+      </p>
+    </div>
+
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
+          <AlertCircle class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          二、网络服务质量与免责声明
+        </h2>
+      </div>
+      <ul class="space-y-3">
+        <li class="flex items-start gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0 mt-2"></span>
+          <span><strong>网络动态波动免责：</strong> 网络速度、连接延迟和丢包率受用户本地 ISP 运营商、物理光纤路由、晚高峰突发流量及不可抗力因素影响。本站实测数据代表特定探针在特定时段的客观表现，<strong>不构成对任何第三方服务商网络质量的持续 SLA 保证或商业承诺</strong>。</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0 mt-2"></span>
+          <span><strong>交易与资金安全免责：</strong> 本站并非网络代理服务的提供者或交易中介。用户与第三方服务商之间的购买、续费、退款或争议纠纷，属于用户与该第三方之间的独立民事行为。本站不承担任何因第三方服务商跑路、故障或政策变化导致的间接损失。为此，<strong>本站始终强烈倡导用户优先选择单月月付订阅</strong>。</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <Scale class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          三、网络合规与合法使用守则
+        </h2>
+      </div>
+      <p>
+        用户在使用出海网络工具时，必须自觉遵守所在国家和地区的法律法规与行业合规规范。严禁将本站技术文档或推荐服务商用于任何危害国家网络安全、传播违法信息、侵犯他人合法知识产权或进行网络黑客攻击的行为。因用户个人违法违规使用所导致的法律后果均由行为人自行承担。
+      </p>
+    </div>
+
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <ShieldCheck class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          四、原创知识产权保护
+        </h2>
+      </div>
+      <p>
+        本站发布的原创技术评测文章、拓扑示意图、专线数据统计表及测速实测图表均受国际版权法规保护。欢迎各大技术社区在保留出处链接的前提下进行非商业性学术引用。未经书面授权，严禁任何聚合网站通过脚本抓取进行商业化镜像发布。
+      </p>
+      <div class="mt-4 pt-3 border-t border-primary/10 text-xs text-neutral-400">
+        最近核验生效日期：2026 年 10 月
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -18,6 +18,8 @@ const providersUrls = [];
 const wikiUrls = [];
 const guidesUrls = [];
 
+const today = new Date().toISOString().split('T')[0];
+
 urlMatches.forEach(block => {
   const locMatch = block.match(/<loc>(.*?)<\/loc>/);
   if (!locMatch) return;
@@ -25,14 +27,43 @@ urlMatches.forEach(block => {
   const urlObj = new URL(loc);
   const pathname = urlObj.pathname;
 
+  // 1. Filter out redirect stubs (/blog/page/...) and duplicate first page (/wiki/page/1/)
+  if (pathname.startsWith('/blog/page/')) return;
+  if (pathname === '/wiki/page/1/' || pathname === '/wiki/page/1') return;
+
+  // Check corresponding dist HTML file if it's a redirect or 404
+  let checkHtml = path.join(distDir, pathname.replace(/^\//, ''), 'index.html');
+  if (!fs.existsSync(checkHtml)) {
+    checkHtml = path.join(distDir, pathname.replace(/^\//, '') + '.html');
+  }
+  if (fs.existsSync(checkHtml)) {
+    const html = fs.readFileSync(checkHtml, 'utf8');
+    if (html.includes('http-equiv="refresh"') || html.includes('content="noindex')) {
+      return; // Skip redirect or noindex pages
+    }
+  }
+
+  // 2. Ensure block has lastmod
+  let updatedBlock = block;
+  if (!block.includes('<lastmod>')) {
+    // get file mtime if exists
+    let lastmodDate = today;
+    if (fs.existsSync(checkHtml)) {
+      const stat = fs.statSync(checkHtml);
+      lastmodDate = stat.mtime.toISOString().split('T')[0];
+    }
+    updatedBlock = block.replace('</loc>', `</loc>\n    <lastmod>${lastmodDate}</lastmod>`);
+  }
+
+  // 3. Categorize
   if (pathname.startsWith('/reviews/')) {
-    reviewsUrls.push(block);
+    reviewsUrls.push(updatedBlock);
   } else if (pathname === '/reviews') {
-    reviewsUrls.push(block);
+    reviewsUrls.push(updatedBlock);
   } else if (pathname.startsWith('/providers')) {
-    providersUrls.push(block);
+    providersUrls.push(updatedBlock);
   } else if (pathname.startsWith('/wiki')) {
-    wikiUrls.push(block);
+    wikiUrls.push(updatedBlock);
   } else if (
     pathname.startsWith('/tutorials') ||
     pathname.startsWith('/protocols') ||
@@ -41,9 +72,9 @@ urlMatches.forEach(block => {
     pathname.startsWith('/risk') ||
     pathname.startsWith('/ai-streaming')
   ) {
-    guidesUrls.push(block);
+    guidesUrls.push(updatedBlock);
   } else {
-    mainUrls.push(block);
+    mainUrls.push(updatedBlock);
   }
 });
 
@@ -65,17 +96,17 @@ const outputs = [
 outputs.forEach(({ file, urls }) => {
   const xml = createSitemapXml(urls);
   fs.writeFileSync(path.join(distDir, file), xml, 'utf8');
-  console.log(`Generated ${file} (${urls.length} URLs)`);
+  console.log(`Generated ${file} (${urls.length} 200 OK URLs with <lastmod>)`);
 });
 
 // 生成拆分索引 sitemap-index.xml
 const sitemapIndexXml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <sitemap><loc>https://jichangbang.org/sitemap-main.xml</loc></sitemap>
-  <sitemap><loc>https://jichangbang.org/sitemap-reviews.xml</loc></sitemap>
-  <sitemap><loc>https://jichangbang.org/sitemap-providers.xml</loc></sitemap>
-  <sitemap><loc>https://jichangbang.org/sitemap-wiki.xml</loc></sitemap>
-  <sitemap><loc>https://jichangbang.org/sitemap-guides.xml</loc></sitemap>
+  <sitemap><loc>https://jichangbang.org/sitemap-main.xml</loc><lastmod>${today}</lastmod></sitemap>
+  <sitemap><loc>https://jichangbang.org/sitemap-reviews.xml</loc><lastmod>${today}</lastmod></sitemap>
+  <sitemap><loc>https://jichangbang.org/sitemap-providers.xml</loc><lastmod>${today}</lastmod></sitemap>
+  <sitemap><loc>https://jichangbang.org/sitemap-wiki.xml</loc><lastmod>${today}</lastmod></sitemap>
+  <sitemap><loc>https://jichangbang.org/sitemap-guides.xml</loc><lastmod>${today}</lastmod></sitemap>
 </sitemapindex>`;
 
 fs.writeFileSync(path.join(distDir, 'sitemap-index.xml'), sitemapIndexXml, 'utf8');

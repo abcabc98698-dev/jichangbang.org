@@ -1,7 +1,7 @@
 ---
 // JSON-LD 结构化数据生成组件 - SEO & GEO 友好
 export interface Props {
-  type?: 'WebSite' | 'Organization' | 'FAQPage' | 'ItemList' | 'BreadcrumbList' | 'Article' | 'HowTo' | 'WebPage' | 'CollectionPage';
+  type?: 'WebSite' | 'Organization' | 'FAQPage' | 'ItemList' | 'BreadcrumbList' | 'Article' | 'Review' | 'HowTo' | 'WebPage' | 'CollectionPage';
   data?: any;
   faqItems?: Array<{ question: string; answer: string }>;
   breadcrumbs?: Array<{ name: string; url: string }>;
@@ -57,6 +57,47 @@ if (type === 'Organization') {
       "query-input": "required name=search_term_string"
     },
     "description": "专业客观的 2026 机场推荐、综合排行榜、品牌测评与价格对比平台。"
+  };
+} else if (type === 'Review' && data) {
+  jsonLdPayload = {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "name": data.title,
+    "headline": data.title,
+    "reviewBody": data.description,
+    "itemReviewed": {
+      "@type": "Product",
+      "name": data.airportName,
+      "description": data.description,
+      "brand": {
+        "@type": "Brand",
+        "name": data.airportName
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": data.monthlyPrice,
+        "priceCurrency": "CNY",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": data.score,
+      "bestRating": "10",
+      "worstRating": "1"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "机场榜网络技术评测组",
+      "jobTitle": "资深网络评测工程师"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "机场榜一",
+      "url": "https://jichangbang.org"
+    },
+    "datePublished": "2026-08-19",
+    "dateModified": "2026-10-26"
   };
 } else if (type === 'Article' && article) {
   jsonLdPayload = {

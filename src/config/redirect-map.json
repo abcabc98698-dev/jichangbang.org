@@ -38,5 +38,9 @@
   "/sign-in": "/",
   "/sign-up": "/",
   "/signin": "/",
-  "/signup": "/"
+  "/signup": "/",
+  "/blog/page/2": "/wiki/page/2",
+  "/blog/page/3": "/wiki/page/3",
+  "/blog/page/4": "/wiki/page/4",
+  "/blog/page/5": "/wiki/page/5"
 }

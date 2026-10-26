@@ -5,6 +5,7 @@ import BlogCard from "@/components/cards/BlogCard.astro";
 import SectionHeader from "@/components/elements/SectionHeader.astro";
 import Button from "@/components/ui/Button.astro";
 import AnimatedText from "@/components/ui/AnimatedText.astro";
+
 // 定义组件接收的属性
 const {
   title = "Latest Articles",
@@ -12,11 +13,12 @@ const {
   limit = 3,
   listPage = false,
   showViewAllButton = true,
+  collection = "wiki",
   pagination = {
     enable: false,
     currentPage: 1
   },
-  postsPerPage = 3
+  postsPerPage = 12
 } = Astro.props;
 
 // 获取博客文章集合
@@ -52,7 +54,7 @@ if (pagination.enable) {
 const postsWithLinks = posts.map(post => {
   // Content Layer 的 entry.id 是条目的唯一标识符
   // 将原博客路径统一映射至 /wiki/ 知识百科 Topic Cluster
-  const link = `/wiki/${post.id}`;
+  const link = `/${collection}/${post.id}`;
   return {
     ...post,
     data: {
@@ -67,7 +69,7 @@ const featuredPostWithLink = featuredPost ? {
   ...featuredPost,
   data: {
     ...featuredPost.data,
-    link: `/wiki/${featuredPost.id}`
+    link: `/${collection}/${featuredPost.id}`
   }
 } : null;
 ---
@@ -77,7 +79,7 @@ const featuredPostWithLink = featuredPost ? {
   <section class="mb-16">
     <div class="site-container">
       <h2 class="text-3xl font-brand mb-6 text-neutral-800 dark:text-white">
-            <AnimatedText delay={0.75} stagger={0.08} content="Featured" />
+        <AnimatedText delay={0.75} stagger={0.08} content="Featured" />
       </h2>
       <div class=" dark:from-neutral-900 dark:to-neutral-800 p-1 rounded-2xl ">
         <BlogCard
@@ -94,7 +96,7 @@ const featuredPostWithLink = featuredPost ? {
 <section>
   <div class="site-container space-y-10 md:space-y-16">
     {!listPage && title && (
-      <SectionHeader title={title}  description={description}/>
+      <SectionHeader title={title} description={description}/>
     )}
 
     {/* 列表页标题 */}
@@ -114,9 +116,9 @@ const featuredPostWithLink = featuredPost ? {
       ))}
     </div>
 
-    {listPage && totalPages > 1 && (
+    {listPage && pagination.enable && totalPages > 1 && (
       <Pagination
-        collection="blog"
+        collection={collection}
         currentPage={pagination.currentPage || 1}
         totalPages={totalPages}
       />
@@ -126,7 +128,7 @@ const featuredPostWithLink = featuredPost ? {
   {/* "View All Articles" 按钮 - 仅在非列表页且启用时显示 */}
   {!listPage && showViewAllButton && (
     <div class="flex justify-center mt-12 mb-12">
-      <Button url="/blog" className="w-full max-w-60">View All Articles</Button>
+      <Button url={`/${collection}`} className="w-full max-w-60">View All Articles</Button>
     </div>
   )}
 </section>

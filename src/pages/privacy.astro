@@ -1,0 +1,94 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import { Lock, Shield, EyeOff, Cookie, ArrowRight } from "@lucide/astro";
+
+const breadcrumbs = [
+  { name: "首页", url: "/" },
+  { name: "隐私政策", url: "/privacy" }
+];
+---
+
+<Layout
+  title="隐私政策声明 (Privacy Policy) — 机场榜一 (jichangbang.org)"
+  description="机场榜一 (jichangbang.org) 隐私保护政策：严格坚持零个人信息收集、匿名流量分析、本地存储使用规范与第三方外链安全说明。"
+  keywords="隐私政策, 隐私声明, 数据安全, 零日志, 机场榜一, Privacy Policy"
+>
+  <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+
+  <section class="site-container my-10 md:my-14">
+    <PageHeader
+      title="隐私保护政策声明"
+      description="我们高度尊重并严格保护每一位访问者的数字隐私权。本站遵循极简数据处理原则与零个人身份标识政策，为您提供纯净安全的浏览环境。"
+    />
+  </section>
+
+  <section class="site-container max-w-3xl mx-auto pb-24 space-y-10 text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <EyeOff class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          一、零个人身份信息收集承诺
+        </h2>
+      </div>
+      <p>
+        <strong>机场榜一（jichangbang.org）</strong> 纯粹作为一个静态网络技术知识库与客观评测聚合站运行。我们<strong>不提供用户注册功能、不记录用户真实姓名、不索取手机号码、不收集邮箱地址或支付密码</strong>。您在浏览本站任何页面时均处于完全匿名的状态。
+      </p>
+    </div>
+
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <Cookie class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          二、Cookie 与本地存储 (Local Storage) 使用规范
+        </h2>
+      </div>
+      <p class="mb-3">
+        本站仅在浏览器端使用最基础的 Local Storage 技术来存储对您的访问体验至关重要的前端偏好设置：
+      </p>
+      <ul class="list-disc pl-5 space-y-2">
+        <li><strong>主题深浅模式（Dark/Light Mode）：</strong> 记录您在夜间模式或日间模式之间的切换偏好。</li>
+        <li><strong>表格筛选状态：</strong> 记录您在价格对账大盘中的临时排序规则，刷新后无需重新勾选。</li>
+      </ul>
+      <p class="mt-3">
+        此类数据仅保存在您的本地浏览器中，绝不会上传至任何远程服务器进行用户画像或行为追踪。
+      </p>
+    </div>
+
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <Shield class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          三、第三方服务商网站免责声明
+        </h2>
+      </div>
+      <p>
+        本站文章中包含指向外部第三方服务商（如机场官网、客户端 GitHub 仓库等）的超链接。当您点击离开本站进入第三方网站时，您的个人信息（如注册邮箱、支付流水）将受该第三方自身隐私政策的管辖与约束。我们强烈建议您在向任何第三方平台输入敏感信息前仔细阅读其对应隐私政策。
+      </p>
+    </div>
+
+    <div class="p-6 md:p-8 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <Lock class="w-5 h-5" />
+        </div>
+        <h2 class="text-xl font-bold font-brand text-neutral-800 dark:text-neutral-100">
+          四、政策更新与联系方式
+        </h2>
+      </div>
+      <p>
+        随着网络安全标准与法律法规的演进，我们可能会适时更新本隐私保护声明。最新版本将始终公布于本页面并更新生效日期。如有任何隐私关切或安全报告，请联系评测技术组：<code>contact@jichangbang.org</code>。
+      </p>
+      <div class="mt-4 pt-3 border-t border-primary/10 text-xs text-neutral-400">
+        最近修订核验日期：2026 年 10 月
+      </div>
+    </div>
+  </section>
+</Layout>

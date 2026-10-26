@@ -1,0 +1,20 @@
+---
+export async function getStaticPaths() {
+  return [
+    { params: { page: "1" } },
+    { params: { page: "2" } },
+    { params: { page: "3" } },
+    { params: { page: "4" } },
+    { params: { page: "5" } },
+    { params: { page: "6" } },
+    { params: { page: "7" } },
+    { params: { page: "8" } },
+    { params: { page: "9" } },
+    { params: { page: "10" } },
+  ];
+}
+
+const { page } = Astro.params;
+const target = page === "1" ? "/wiki" : `/wiki/page/${page}`;
+return Astro.redirect(target, 301);
+---
