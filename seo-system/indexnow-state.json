@@ -2,7 +2,7 @@
   "host": "jichangbang.org",
   "key": "8d7f2b9a4c1e6f3085a2b1c4e9d7f023",
   "keyLocation": "https://jichangbang.org/8d7f2b9a4c1e6f3085a2b1c4e9d7f023.txt",
-  "lastSubmissionTime": "2026-10-19T07:17:04.085Z",
+  "lastSubmissionTime": "2026-10-26T07:23:56.595Z",
   "trackedUrls": {
     "https://jichangbang.org/": "initial_seed",
     "https://jichangbang.org/recommend": "initial_seed",
@@ -68,7 +68,9 @@
     "https://jichangbang.org/wiki/fastlink": "2026-10-12T08:33:36.957Z",
     "https://jichangbang.org/reviews/fastlink": "2026-10-12T08:33:36.957Z",
     "https://jichangbang.org/wiki/amytelecom": "2026-10-19T07:17:04.085Z",
-    "https://jichangbang.org/reviews/amytelecom": "2026-10-19T07:17:04.085Z"
+    "https://jichangbang.org/reviews/amytelecom": "2026-10-19T07:17:04.085Z",
+    "https://jichangbang.org/wiki/baigeiyun": "2026-10-26T07:23:56.594Z",
+    "https://jichangbang.org/reviews/baigeiyun": "2026-10-26T07:23:56.595Z"
   },
   "history": [
     {
@@ -158,6 +160,14 @@
       "urls": [
         "https://jichangbang.org/wiki/amytelecom",
         "https://jichangbang.org/reviews/amytelecom"
+      ]
+    },
+    {
+      "timestamp": "2026-10-26T07:23:56.595Z",
+      "submittedCount": 2,
+      "urls": [
+        "https://jichangbang.org/wiki/baigeiyun",
+        "https://jichangbang.org/reviews/baigeiyun"
       ]
     }
   ]
