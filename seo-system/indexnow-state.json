@@ -2,7 +2,7 @@
   "host": "jichangbang.org",
   "key": "8d7f2b9a4c1e6f3085a2b1c4e9d7f023",
   "keyLocation": "https://jichangbang.org/8d7f2b9a4c1e6f3085a2b1c4e9d7f023.txt",
-  "lastSubmissionTime": "2026-11-02T08:50:12.851Z",
+  "lastSubmissionTime": "2026-11-09T09:03:05.648Z",
   "trackedUrls": {
     "https://jichangbang.org/": "initial_seed",
     "https://jichangbang.org/recommend": "initial_seed",
@@ -72,7 +72,9 @@
     "https://jichangbang.org/wiki/baigeiyun": "2026-10-26T07:23:56.594Z",
     "https://jichangbang.org/reviews/baigeiyun": "2026-10-26T07:23:56.595Z",
     "https://jichangbang.org/wiki/muguang": "2026-11-02T08:50:12.851Z",
-    "https://jichangbang.org/reviews/muguang": "2026-11-02T08:50:12.851Z"
+    "https://jichangbang.org/reviews/muguang": "2026-11-02T08:50:12.851Z",
+    "https://jichangbang.org/wiki/dalaoyun": "2026-11-09T09:03:05.647Z",
+    "https://jichangbang.org/reviews/dalaoyun": "2026-11-09T09:03:05.648Z"
   },
   "history": [
     {
@@ -178,6 +180,14 @@
       "urls": [
         "https://jichangbang.org/wiki/muguang",
         "https://jichangbang.org/reviews/muguang"
+      ]
+    },
+    {
+      "timestamp": "2026-11-09T09:03:05.648Z",
+      "submittedCount": 2,
+      "urls": [
+        "https://jichangbang.org/wiki/dalaoyun",
+        "https://jichangbang.org/reviews/dalaoyun"
       ]
     }
   ]
