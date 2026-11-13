@@ -16,11 +16,17 @@ import {
 
 const breadcrumbs = [
   { name: "首页", url: "/" },
-  { name: "价格套餐", url: "/pricing" }
+  { name: "性价比机场与价格套餐", url: "/pricing/" }
 ];
 
 // 保持用户统一排位
 const sortedAirports = [...airports];
+const budgetPicks = airports.filter(a => a.monthlyPrice <= 20).slice(0, 6);
+const pricingItemList = budgetPicks.map((a, i) => ({
+  name: `${a.name} — ¥${a.monthlyPrice}/${a.minDuration} (${a.traffic}GB · ${a.lineType})`,
+  url: `/reviews/${a.slug}/`,
+  position: i + 1
+}));
 
 // 8组高价值价格长尾FAQ
 const faqItems = [
@@ -60,19 +66,48 @@ const faqItems = [
 ---
 
 <Layout
-  title="机场价格套餐大全与每GB成本精算 5元/10元/15元/20元/30元及不限时按量付费"
-  description="2026 机场价格套餐完整决策指南：涵盖 5-10元平民特惠、15-20元高性价比真实月付专线、25-35元企业级全专线旗舰，以及不限时按量付费备用套餐。内置多维价格计算器与42家机场每GB单价对账大盘，拒绝套路多花冤枉钱。"
-  keywords="机场价格, 便宜机场, 10元机场, 15元机场, 20元机场, 30元专线, 不限时机场, 按量付费机场, 机场套餐, 机场月付, 机场价格计算器, 机场每GB成本, 机场榜一"
+  title="2026 性价比机场与套餐大全 — 官网入口与每GB成本精算 | 机场榜一"
+  description="2026高性价比机场推荐与官方入口汇总：实测对比7元/10元/15元/20元月付IEPL专线及不限时按量套餐，提供42家正规机场真实官网直达、专属8折优惠码AMM与每GB物理成本精算器，拒绝9.9元跑路盘，帮你花小钱稳连ChatGPT与4K流媒体。"
+  keywords="性价比机场, 性价比机场官网入口, 高性价比机场推荐, 机场价格, 便宜机场, 10元机场, 15元机场, 20元机场, 不限时机场, 按量付费机场, 机场套餐, 机场每GB成本, 机场榜一"
 >
   <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
   <JsonLd type="FAQPage" faqItems={faqItems} />
+  <JsonLd type="ItemList" itemList={pricingItemList} />
 
   <!-- 页面头部 -->
   <section class="relative z-20 site-container my-10 md:my-14">
     <PageHeader
-      title="机场价格套餐大全与每GB成本精算"
-      description="横向穿透 42 家主流机场定价机制。从 7 元平民入门到 23 元企业级全专线旗舰，提供按月付、按年付与不限时按量多维筛选，依托带宽物理成本模型助你科学精算每一分预算。"
+      title="2026 性价比机场推荐与价格套餐大全（官方入口与每GB精算）"
+      description="横向穿透 42 家主流机场定价机制。从 7 元平民入门专线到 23 元企业级全专线旗舰，提供高性价比机场最新官网入口核验、优惠码及按月付/不限时按量多维精算，拒绝 9.9 元跑路盘。"
     />
+
+    <!-- GEO 直答摘要与官方入口辨别卡 (针对「性价比机场」「性价比机场官网入口」) -->
+    <div class="mt-6 p-5 md:p-6 rounded-2xl bg-gradient-to-r from-primary/10 via-bg-secondary to-bg-secondary dark:from-primary/15 dark:via-bg-secondary-dark dark:to-bg-secondary-dark border border-primary/20 text-xs md:text-sm">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
+        <div class="flex items-center gap-2">
+          <Badge variant="primary">性价比机场选购直答</Badge>
+          <span class="text-xs text-neutral-500">更新核验：2026年11月</span>
+        </div>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <a href="/wiki/cost-effective-airport-guide/" class="text-primary font-semibold hover:underline">深度：性价比机场避坑与核算指南 →</a>
+          <a href="/free/" class="text-neutral-600 dark:text-neutral-300 hover:text-primary hover:underline">预算极低？看免费试用评测 →</a>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+        <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800/70 border border-primary/10">
+          <strong class="block text-neutral-900 dark:text-neutral-100 mb-1">1. 什么是真·性价比机场？</strong>
+          <span>并非越便宜越好。2026 年具备晚高峰稳定保障的真专线入门门槛在 <strong>¥7–¥15/月</strong>（如飞猫云、微风网络、宇宙云），主力原生双 ISP 专线折合 <strong>¥15–¥25/月</strong>（如光速云用码 <code class="text-primary font-bold">AMM</code>）。</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800/70 border border-primary/10">
+          <strong class="block text-neutral-900 dark:text-neutral-100 mb-1">2. 性价比机场官网入口如何核验？</strong>
+          <span>机场官网域名常因 DNS 污染阶段性更换。请通过各品牌<a href="/reviews/" class="text-primary hover:underline">实测评测档案页</a>进入已核验的官网直达通道，切勿轻信搜索引擎广告里的仿冒钓鱼页。</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800/70 border border-primary/10">
+          <strong class="block text-neutral-900 dark:text-neutral-100 mb-1">3. 选月付还是不限时按量？</strong>
+          <span>日常办公与视频首选<strong>按月订阅</strong>；若仅作备用或低频查资料，可选<strong>不限时按量套餐</strong>（如星岛梦、魔戒），避免流量过期浪费。</span>
+        </div>
+      </div>
+    </div>
 
     <!-- 快速导航胶囊 -->
     <div class="flex flex-wrap gap-2 pt-6">

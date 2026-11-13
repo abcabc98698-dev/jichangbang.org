@@ -114,10 +114,10 @@
         "https://jichangbang.org/protocols"
       ],
       "supportingPages": [
-        "https://jichangbang.org/wiki/customize-your-saas-site",
-        "https://jichangbang.org/wiki/design-system-behind-ricofast",
-        "https://jichangbang.org/wiki/introducing-ricofast",
-        "https://jichangbang.org/wiki/launching-v1-0"
+        "https://jichangbang.org/wiki/iepl-vs-iplc-guide",
+        "https://jichangbang.org/wiki/chatgpt-claude-native-ip-guide",
+        "https://jichangbang.org/wiki/airport-selection-guide",
+        "https://jichangbang.org/wiki/airport-runaway-warning-signs"
       ],
       "linkingStrategy": {
         "articlesToWiki": "所有文章头部标签与面包屑回链 /wiki",

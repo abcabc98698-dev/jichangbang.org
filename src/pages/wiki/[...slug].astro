@@ -3,19 +3,39 @@ import { getCollection, render } from "astro:content";
 import PostLayout from "@/layouts/PostLayout.astro";
 import Toc from '@/components/widgets/Toc.astro';
 import JsonLd from "@/components/seo/JsonLd.astro";
+import { airports } from "@/data/airports";
+import { directoryAirports } from "@/data/directory-airports";
 
 export async function getStaticPaths() {
 	const postEntries = await getCollection("post");
+	const allBrands = [...airports, ...directoryAirports];
+	const brandMap = new Map(allBrands.map((b) => [b.slug, b]));
+
 	return postEntries.map((entry) => {
 		const slugString = entry.id;
+		const entryTags = new Set(entry.data.tags || []);
+		const relatedPosts = postEntries
+			.filter((p) => p.id !== entry.id)
+			.map((p) => {
+				const shared = (p.data.tags || []).filter((t) => entryTags.has(t)).length;
+				return { entry: p, score: shared * 10 + (p.data.publishDate ? p.data.publishDate.getTime() / 1e12 : 0) };
+			})
+			.sort((a, b) => b.score - a.score)
+			.slice(0, 3)
+			.map((item) => item.entry);
+
 		return {
 			params: { slug: slugString },
-			props: { entry },
+			props: {
+				entry,
+				matchedBrand: brandMap.get(slugString) || null,
+				relatedPosts,
+			},
 		};
 	});
 }
 
-const { entry } = Astro.props;
+const { entry, matchedBrand, relatedPosts } = Astro.props;
 
 if (!entry) {
 	return Astro.redirect("/404");
@@ -24,29 +44,35 @@ if (!entry) {
 const { Content, headings } = await render(entry);
 const filtered = headings.filter(h => h.depth <= 2);
 
+const rawDesc = (entry.data.description || "").trim();
+const seoDescription = rawDesc.length >= 152
+	? rawDesc
+	: `${rawDesc}${rawDesc.endsWith("。") ? "" : "。"}由机场榜一实测核验：涵盖线路测速、官网防钓鱼排查与避坑建议。`;
+
 const breadcrumbs = [
   { name: "首页", url: "/" },
-  { name: "知识百科", url: "/wiki" },
-  { name: entry.data.title, url: `/wiki/${entry.id}` }
+  { name: "知识百科", url: "/wiki/" },
+  { name: entry.data.title, url: `/wiki/${entry.id}/` }
 ];
 ---
 
-<PostLayout title={entry.data.title} description={entry.data.description}>
+<PostLayout title={`${entry.data.title} — 机场榜一`} description={seoDescription}>
 	<JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
 	<JsonLd
 		type="Article"
 		article={{
 			title: entry.data.title,
-			description: entry.data.description,
+			description: seoDescription,
 			publishDate: entry.data.publishDate,
-			url: `https://jichangbang.org/wiki/${entry.id}`
+			author: "机场榜一网络技术评测组",
+			url: `https://jichangbang.org/wiki/${entry.id}/`
 		}}
 	/>
 	<!-- Reading progress bar -->
 	<div id="reading-progress" class="reading-progress" style="transform: scaleX(0);"></div>
 
 	<div class="post article">
-		<main class="relative site-container mx-auto my-8 md:my-12">
+		<div class="relative site-container mx-auto my-8 md:my-12">
 			<!-- Article header -->
 			<header class="article-header">
 				<!-- Tags -->
@@ -73,10 +99,28 @@ const breadcrumbs = [
 				)}
 
 				<!-- Article meta -->
-				<div class="article-meta text-xs text-neutral-500">
-					<span>发布日期：{entry.data.publishDate.toLocaleDateString('zh-CN')}</span>
-					{entry.data.read && <span> · 阅读需 {entry.data.read} 分钟</span>}
+				<div class="article-meta flex flex-wrap items-center gap-3 text-xs text-neutral-500">
+					<span>发布/核验：{entry.data.publishDate.toLocaleDateString('zh-CN')}</span>
+					<span>·</span>
+					<span>编辑：机场榜一技术评测组</span>
+					{entry.data.read && <span>· 阅读需 {entry.data.read} 分钟</span>}
 				</div>
+
+				{/* 商业测评与百科百科职责分流提示卡：消除同品牌页内竞争 */}
+				{matchedBrand && (
+					<div class="mt-5 p-4 rounded-xl bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+						<div class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+							<strong class="text-blue-700 dark:text-blue-400">研究与购买分流提示：</strong>
+							本页侧重 <strong>{matchedBrand.name}</strong> 的网络拓扑原理、风险核查与深度场景分析；如需核对实时月付价格、官网可用入口或优惠码状态，请前往商业测评详情页。
+						</div>
+						<a
+							href={`/reviews/${matchedBrand.slug}/`}
+							class="flex-shrink-0 inline-flex items-center justify-center px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors"
+						>
+							查看 {matchedBrand.name} 实时价格与官网入口 →
+						</a>
+					</div>
+				)}
 			</header>
 
 			<!-- Article content layout -->
@@ -84,6 +128,36 @@ const breadcrumbs = [
 				<!-- Main content -->
 				<article class="lg:col-span-3 prose dark:prose-invert max-w-none">
 					<Content />
+
+					{/* 文末 Pillar-Cluster 延伸阅读与全站专题入口 */}
+					<section class="not-prose mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 space-y-6">
+						{relatedPosts.length > 0 && (
+							<div>
+								<h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">延伸阅读与相关百科</h2>
+								<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+									{relatedPosts.map((rel) => (
+										<a href={`/wiki/${rel.id}/`} class="block p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 transition-colors bg-white dark:bg-slate-900/60">
+											<div class="text-xs text-slate-500 mb-1">{rel.data.publishDate.toLocaleDateString('zh-CN')}</div>
+											<div class="font-semibold text-sm text-slate-900 dark:text-white line-clamp-2 mb-1.5">{rel.data.title}</div>
+											<p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">{rel.data.description}</p>
+										</a>
+									))}
+								</div>
+							</div>
+						)}
+
+						<div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800">
+							<div class="text-sm font-bold text-slate-900 dark:text-white mb-3">机场榜一核心专题导览</div>
+							<div class="flex flex-wrap gap-2 text-xs">
+								<a href="/pricing/" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-200">性价比机场与官网入口</a>
+								<a href="/recommend/" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-200">2026 机场综合推荐榜</a>
+								<a href="/free/" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-200">免费机场试用与白嫖指南</a>
+								<a href="/reviews/" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-200">170+ 机场品牌实测库</a>
+								<a href="/tutorials/" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-200">Clash/Shadowrocket 教程</a>
+								<a href="/wiki/" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-200">返回知识百科首页</a>
+							</div>
+						</div>
+					</section>
 				</article>
 
 				<!-- Table of contents -->
@@ -96,6 +170,6 @@ const breadcrumbs = [
 					</aside>
 				)}
 			</div>
-		</main>
+		</div>
 	</div>
 </PostLayout>

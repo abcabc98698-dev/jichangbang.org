@@ -38,6 +38,7 @@ function rehypeLazyImages() {
 export default defineConfig({
   site: siteUrl,
   base: '/',
+  trailingSlash: 'always',
   envPrefix: 'PUBLIC_',
   redirects: redirectMap,
   markdown: {
@@ -56,5 +57,16 @@ export default defineConfig({
     port: 5200,
   },
 
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => {
+        const pathname = new URL(page).pathname;
+        // 过滤 301 重定向占位页、旧版博客分页、/wiki/page/1/ 与 404 页，避免进入 sitemap
+        if (/^\/blog\/page\/\d+\/?$/.test(pathname)) return false;
+        if (pathname === '/wiki/page/1/' || pathname === '/404/' || pathname === '/404') return false;
+        return true;
+      }
+    }),
+  ],
 });

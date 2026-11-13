@@ -54,7 +54,7 @@ if (pagination.enable) {
 const postsWithLinks = posts.map(post => {
   // Content Layer 的 entry.id 是条目的唯一标识符
   // 将原博客路径统一映射至 /wiki/ 知识百科 Topic Cluster
-  const link = `/${collection}/${post.id}`;
+  const link = `/${collection}/${post.id}/`;
   return {
     ...post,
     data: {
@@ -69,7 +69,7 @@ const featuredPostWithLink = featuredPost ? {
   ...featuredPost,
   data: {
     ...featuredPost.data,
-    link: `/${collection}/${featuredPost.id}`
+    link: `/${collection}/${featuredPost.id}/`
   }
 } : null;
 ---
@@ -79,7 +79,7 @@ const featuredPostWithLink = featuredPost ? {
   <section class="mb-16">
     <div class="site-container">
       <h2 class="text-3xl font-brand mb-6 text-neutral-800 dark:text-white">
-        <AnimatedText delay={0.75} stagger={0.08} content="Featured" />
+        <AnimatedText delay={0.75} stagger={0.08} content="精选置顶指南" />
       </h2>
       <div class=" dark:from-neutral-900 dark:to-neutral-800 p-1 rounded-2xl ">
         <BlogCard
@@ -128,7 +128,7 @@ const featuredPostWithLink = featuredPost ? {
   {/* "View All Articles" 按钮 - 仅在非列表页且启用时显示 */}
   {!listPage && showViewAllButton && (
     <div class="flex justify-center mt-12 mb-12">
-      <Button url={`/${collection}`} className="w-full max-w-60">View All Articles</Button>
+      <Button url={`/${collection}/`} className="w-full max-w-60">查看全部知识百科</Button>
     </div>
   )}
 </section>

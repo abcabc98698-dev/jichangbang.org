@@ -12,10 +12,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/recommend",
+    "url": "https://jichangbang.org/recommend/",
     "slug": "recommend",
     "pageType": "Pillar",
-    "canonical": "https://jichangbang.org/recommend",
+    "canonical": "https://jichangbang.org/recommend/",
     "title": "2026 稳定好用机场推荐 — 晚高峰实测·高性价比与专线机场指南【金牌榜】",
     "description": "2026年度权威机场推荐指南：基于晚高峰实测速度、流媒体与 ChatGPT/Claude 解锁率，为您精选 18 家靠谱机场。覆盖 10元学生低价、15元高性价比月付及 IPLC/IEPL 极速企业专线。",
     "category": "Recommendation",
@@ -24,10 +24,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/ranking",
+    "url": "https://jichangbang.org/ranking/",
     "slug": "ranking",
     "pageType": "Pillar",
-    "canonical": "https://jichangbang.org/ranking",
+    "canonical": "https://jichangbang.org/ranking/",
     "title": "2026 机场综合权威排行榜 — 晚高峰测速天梯榜·性价比榜与AI解锁排名",
     "description": "2026 机场排行榜：综合性能天梯榜、晚高峰千兆测速榜、最低价格性价比榜、ChatGPT/Claude AI 解锁榜及纯专线排行榜。多维度实测打分，每月动态更新。",
     "category": "Ranking",
@@ -36,10 +36,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews",
+    "url": "https://jichangbang.org/reviews/",
     "slug": "reviews",
     "pageType": "Pillar",
-    "canonical": "https://jichangbang.org/reviews",
+    "canonical": "https://jichangbang.org/reviews/",
     "title": "机场品牌深度评测大厅 — 2026晚高峰实测·测速图·流媒体AI解锁【全面评测】",
     "description": "机场榜一深度评测中心：全网首家提供全天候晚高峰 20:00-23:00 真实测速、Netflix/Disney+ 原生解锁、ChatGPT 4o 与 Claude 3.7 双 ISP 住宅 IP 验证实测截图的评测专栏。",
     "category": "Reviews",
@@ -48,10 +48,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/free",
+    "url": "https://jichangbang.org/free/",
     "slug": "free",
     "pageType": "Pillar",
-    "canonical": "https://jichangbang.org/free",
+    "canonical": "https://jichangbang.org/free/",
     "title": "2026 免费机场与免费节点全景评测：白嫖资源领取、安全风险揭秘与稳定专线选型指南",
     "description": "2026年全网免费机场与免费节点深度评测：客观实测免费订阅与公开节点的晚高峰丢包率与存活期，揭露公共免费翻墙的 5 大安全隐私隐患，提供正规支持免费试用的机场推荐及高性价比稳定专线替代指南。",
     "category": "Free Resources",
@@ -60,10 +60,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/guangsu",
+    "url": "https://jichangbang.org/reviews/guangsu/",
     "slug": "guangsu",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/guangsu",
+    "canonical": "https://jichangbang.org/reviews/guangsu/",
     "title": "光速云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "光速云 深度测评：2026 综合推荐金牌榜首 · 老牌企业级高速物理专线。覆盖最低 ¥7.5-8/月 起步套餐价格、全球 IPLC/IEPL 专线分析、晚高峰实测速度 980M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -72,10 +72,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/yuzhou",
+    "url": "https://jichangbang.org/reviews/yuzhou/",
     "slug": "yuzhou",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/yuzhou",
+    "canonical": "https://jichangbang.org/reviews/yuzhou/",
     "title": "宇宙云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "宇宙云 深度测评：15元档超高性价比标杆 · 纯 IEPL 内网专线。覆盖最低 ¥14.9/月 真实月付套餐价格、IEPL 专线分析、晚高峰实测速度 820M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -84,10 +84,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/breeze",
+    "url": "https://jichangbang.org/reviews/breeze/",
     "slug": "breeze",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/breeze",
+    "canonical": "https://jichangbang.org/reviews/breeze/",
     "title": "微风网络怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "微风网络 深度测评：7元超低门槛小流量体验 · 全线 IEPL 专线。覆盖最低 ¥7/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 560M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -96,10 +96,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/feimao",
+    "url": "https://jichangbang.org/reviews/feimao/",
     "slug": "feimao",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/feimao",
+    "canonical": "https://jichangbang.org/reviews/feimao/",
     "title": "飞猫云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "飞猫云 深度测评：百G大流量低价首选 · 晚高峰抗封锁旗舰。覆盖最低 ¥7/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 620M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -108,10 +108,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/xingdaomeng",
+    "url": "https://jichangbang.org/reviews/xingdaomeng/",
     "slug": "xingdaomeng",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/xingdaomeng",
+    "canonical": "https://jichangbang.org/reviews/xingdaomeng/",
     "title": "星岛梦怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "星岛梦 深度测评：不限时按量付费标杆 · 2020老牌防失联备用神器。覆盖最低 ¥8/月 起步套餐价格、企业级内网专线分析、晚高峰实测速度 510M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -120,10 +120,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/sujie",
+    "url": "https://jichangbang.org/reviews/sujie/",
     "slug": "sujie",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/sujie",
+    "canonical": "https://jichangbang.org/reviews/sujie/",
     "title": "速界怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "速界 深度测评：海外大模型专属优化 · 150GB AI洁净大流量专线。覆盖最低 ¥25/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 750M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -132,10 +132,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/yifanyun",
+    "url": "https://jichangbang.org/reviews/yifanyun/",
     "slug": "yifanyun",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/yifanyun",
+    "canonical": "https://jichangbang.org/reviews/yifanyun/",
     "title": "一翻云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "一翻云 深度测评：20元150G大流量专线旗舰 · VLESS 极速协议。覆盖最低 ¥20/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 780M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -144,10 +144,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/weitu",
+    "url": "https://jichangbang.org/reviews/weitu/",
     "slug": "weitu",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/weitu",
+    "canonical": "https://jichangbang.org/reviews/weitu/",
     "title": "唯兔云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "唯兔云 深度测评：60+ 丰富节点覆盖 · 14.9元平价月付新选择。覆盖最低 ¥14.9/月 起步套餐价格、BGP 隧道中转分析、晚高峰实测速度 480M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -156,10 +156,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/sogoyun",
+    "url": "https://jichangbang.org/reviews/sogoyun/",
     "slug": "sogoyun",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/sogoyun",
+    "canonical": "https://jichangbang.org/reviews/sogoyun/",
     "title": "SOGO云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "SOGO云 深度测评：2026 架构全新轻载 · 自研多端小白友好。覆盖最低 ¥25/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 720M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -168,10 +168,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/lingmao",
+    "url": "https://jichangbang.org/reviews/lingmao/",
     "slug": "lingmao",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/lingmao",
+    "canonical": "https://jichangbang.org/reviews/lingmao/",
     "title": "灵猫网络怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "灵猫网络 深度测评：19元150G专线大带宽 · 极速晚高峰秒开。覆盖最低 ¥19/月 起步套餐价格、企业级内网专线分析、晚高峰实测速度 690M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -180,10 +180,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/guangnianti",
+    "url": "https://jichangbang.org/reviews/guangnianti/",
     "slug": "guangnianti",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/guangnianti",
+    "canonical": "https://jichangbang.org/reviews/guangnianti/",
     "title": "光年代怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "光年代 (GuangNianTi) 深度测评：纯内网物理专线架构 · 18元均衡月付体验。覆盖最低 ¥18/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 650M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -192,10 +192,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/kuaili",
+    "url": "https://jichangbang.org/reviews/kuaili/",
     "slug": "kuaili",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/kuaili",
+    "canonical": "https://jichangbang.org/reviews/kuaili/",
     "title": "快狸怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "快狸 深度测评：多流媒体全绿解锁 · 自研一键客户端无脑上手。覆盖最低 ¥25/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 710M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -204,10 +204,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/kexinyun",
+    "url": "https://jichangbang.org/reviews/kexinyun/",
     "slug": "kexinyun",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/kexinyun",
+    "canonical": "https://jichangbang.org/reviews/kexinyun/",
     "title": "可信云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "可信云 深度测评：企业级多设备合租支持 · 晚高峰稳定零丢包。覆盖最低 ¥25/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 680M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -216,10 +216,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/ermaoyun",
+    "url": "https://jichangbang.org/reviews/ermaoyun/",
     "slug": "ermaoyun",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/ermaoyun",
+    "canonical": "https://jichangbang.org/reviews/ermaoyun/",
     "title": "二猫云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "二猫云 深度测评：20元130G均衡专线 · 极客进阶协议支持。覆盖最低 ¥20/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 630M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -228,10 +228,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/quanqiuyun",
+    "url": "https://jichangbang.org/reviews/quanqiuyun/",
     "slug": "quanqiuyun",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/quanqiuyun",
+    "canonical": "https://jichangbang.org/reviews/quanqiuyun/",
     "title": "全球云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "全球云 深度测评：冷门多国节点覆盖 · 2026性价比专线新势力。覆盖最低 ¥20/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 600M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -240,10 +240,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/jilianyun",
+    "url": "https://jichangbang.org/reviews/jilianyun/",
     "slug": "jilianyun",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/jilianyun",
+    "canonical": "https://jichangbang.org/reviews/jilianyun/",
     "title": "极联云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "极联云 (JiLian Cloud) 深度测评：18元极速专线体验 · 自研极简客户端加持。覆盖最低 ¥18/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 640M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -252,10 +252,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/u1s1",
+    "url": "https://jichangbang.org/reviews/u1s1/",
     "slug": "u1s1",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/u1s1",
+    "canonical": "https://jichangbang.org/reviews/u1s1/",
     "title": "U1S1怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "U1S1 深度测评：真实月付口碑专线 · 绝不虚标倍率与流量。覆盖最低 ¥20/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 670M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -264,10 +264,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/reviews/wuyou",
+    "url": "https://jichangbang.org/reviews/wuyou/",
     "slug": "wuyou",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/wuyou",
+    "canonical": "https://jichangbang.org/reviews/wuyou/",
     "title": "无忧云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "无忧云 (WuYou Cloud) 深度测评：轻量6元体验起步 · 灵活按月低负担出海。覆盖最低 ¥19/月 起步套餐价格、IEPL 专线分析、晚高峰实测速度 590M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -276,10 +276,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/providers",
+    "url": "https://jichangbang.org/providers/",
     "slug": "providers",
     "pageType": "Pillar",
-    "canonical": "https://jichangbang.org/providers",
+    "canonical": "https://jichangbang.org/providers/",
     "title": "机场服务商底层参数数据库 — 18+主流机场节点·协议·价格全网大盘【2026版】",
     "description": "机场榜一服务商结构化数据库：收录 18 家主流专线及中转机场底层网络规格、入口机房、出口协议（VLESS/Trojan/Shadowsocks）、月度基准流量与最低价格标准。",
     "category": "Database",
@@ -288,10 +288,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/pricing",
+    "url": "https://jichangbang.org/pricing/",
     "slug": "pricing",
     "pageType": "Cluster",
-    "canonical": "https://jichangbang.org/pricing",
+    "canonical": "https://jichangbang.org/pricing/",
     "title": "2026 机场价格套餐与预算筛选 — 10元/15元平价月付与不限时按量资费【价格计算器】",
     "description": "按预算选机场：10元/月及以下极速备用、15-20元高性价比主力机、23元+全专线 IPLC 极速旗舰。内置在线价格计算器，拒绝年付绑架套路。",
     "category": "Pricing",
@@ -300,10 +300,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/compare",
+    "url": "https://jichangbang.org/compare/",
     "slug": "compare",
     "pageType": "Comparison",
-    "canonical": "https://jichangbang.org/compare",
+    "canonical": "https://jichangbang.org/compare/",
     "title": "机场横向对比中心 — 旗舰专线 vs 15元档标杆·两家机场综合PK与选购建议",
     "description": "机场客观横向 PK 矩阵：深度对比光速云、宇宙云等多家服务商在晚高峰速度、延迟、流媒体与 AI 解锁、退款政策及客户端支持维度的真实差异。",
     "category": "Comparison",
@@ -312,10 +312,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/protocols",
+    "url": "https://jichangbang.org/protocols/",
     "slug": "protocols",
     "pageType": "Cluster",
-    "canonical": "https://jichangbang.org/protocols",
+    "canonical": "https://jichangbang.org/protocols/",
     "title": "线路网络与协议知识库 — IEPL·IPLC·BGP中转与VLESS深度科普【2026专业篇】",
     "description": "机场榜一线路与协议专栏：全面解析 IEPL 专线、IPLC 专线、BGP 隧道中转、原生 IP 与住宅家宽 IP 的区别。详解晚高峰丢包根源与节点倍率（1x/2x/3x）计算方法。",
     "category": "Protocols",
@@ -324,10 +324,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/clients",
+    "url": "https://jichangbang.org/clients/",
     "slug": "clients",
     "pageType": "Cluster",
-    "canonical": "https://jichangbang.org/clients",
+    "canonical": "https://jichangbang.org/clients/",
     "title": "全平台代理客户端下载中心 — Windows·Mac·iOS·Android官方开源软件合集",
     "description": "2026 全平台科学上网客户端一站式下载：包含 Clash Verge Rev、v2rayN、Shadowrocket（小火箭）、Stash、Surge、Clash Meta 等开源与自研软件官方安全发布渠道。",
     "category": "Clients",
@@ -336,10 +336,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/tutorials",
+    "url": "https://jichangbang.org/tutorials/",
     "slug": "tutorials",
     "pageType": "Pillar",
-    "canonical": "https://jichangbang.org/tutorials",
+    "canonical": "https://jichangbang.org/tutorials/",
     "title": "机场新手与进阶使用教程 — 订阅导入·分流规则·测速规范【手把手图文】",
     "description": "从零开始上手出海网络：包含机场订阅链接一键导入、Clash 规则分流设置、PAC 模式与 TUN 虚拟网卡接管、晚高峰真实测速标准及防失联备用方案指南。",
     "category": "Tutorials",
@@ -348,10 +348,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/issues",
+    "url": "https://jichangbang.org/issues/",
     "slug": "issues",
     "pageType": "Troubleshooting",
-    "canonical": "https://jichangbang.org/issues",
+    "canonical": "https://jichangbang.org/issues/",
     "title": "机场常见网络故障与排障自救指南 — 节点超时·打不开网页·断连修复【实战手册】",
     "description": "出海网络急救手册：节点全部超时怎么办？开代理打不开微信/百度？TUN 网卡冲突排查、DNS 污染处理及客户端系统代理死锁一键修复全解。",
     "category": "Troubleshooting",
@@ -360,10 +360,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/ai-streaming",
+    "url": "https://jichangbang.org/ai-streaming/",
     "slug": "ai-streaming",
     "pageType": "Cluster",
-    "canonical": "https://jichangbang.org/ai-streaming",
+    "canonical": "https://jichangbang.org/ai-streaming/",
     "title": "AI 与全球流媒体专线解锁指南 — ChatGPT 4o·Claude 3.7·Netflix 4K纯净IP方案",
     "description": "拒绝 Access Denied 与地区受限：深度剖析 OpenAI 与 Anthropic 严苛风控逻辑，手把手教你挑选住宅原生 IP 与纯净专线机场，流畅畅享 ChatGPT 语音与 Netflix 4K 全区片库。",
     "category": "Scenes",
@@ -372,10 +372,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/risk",
+    "url": "https://jichangbang.org/risk/",
     "slug": "risk",
     "pageType": "Risk",
-    "canonical": "https://jichangbang.org/risk",
+    "canonical": "https://jichangbang.org/risk/",
     "title": "机场风险情报与安全雷达 — 跑路监测·节点检修·避坑指南【2026实时预警】",
     "description": "机场榜一安全雷达中心：实时公布全网机场连通异常、节点检修、长达48小时失联及跑路高危风险预警。为出海用户提供避坑指南与主备容灾方案。",
     "category": "Risk",
@@ -384,10 +384,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/wiki",
+    "url": "https://jichangbang.org/wiki/",
     "slug": "wiki",
     "pageType": "Pillar",
-    "canonical": "https://jichangbang.org/wiki",
+    "canonical": "https://jichangbang.org/wiki/",
     "title": "出海网络常青知识百科 — 专线原理·住宅IP·抗封锁技术【2026百科】",
     "description": "机场榜一知识百科专栏：发布专线原理深度科普、住宅家宽 IP 与机房 IP 辨析、晚高峰网络抖动成因以及出海网络抗封锁核心知识。",
     "category": "Wiki",
@@ -396,58 +396,62 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/wiki/customize-your-saas-site",
+    "url": "https://jichangbang.org/wiki/customize-your-saas-site/",
     "slug": "customize-your-saas-site",
     "pageType": "Cluster",
-    "canonical": "https://jichangbang.org/wiki/customize-your-saas-site",
+    "canonical": "https://jichangbang.org/wiki/customize-your-saas-site/",
     "title": "How to Customize Your SaaS Site with RicoFast: Complete Guide",
     "description": "Learn how to customize your SaaS website using RicoFast template. From brand colors to typography, layout components to SEO settings, this comprehensive guide covers everything you need.",
     "category": "Wiki",
     "cluster": "Evergreen Knowledge Base",
-    "status": "active",
-    "protected": true
+    "status": "redirected",
+    "protected": true,
+    "redirectTo": "https://jichangbang.org/wiki/iepl-vs-iplc-guide/"
   },
   {
-    "url": "https://jichangbang.org/wiki/design-system-behind-ricofast",
+    "url": "https://jichangbang.org/wiki/design-system-behind-ricofast/",
     "slug": "design-system-behind-ricofast",
     "pageType": "Cluster",
-    "canonical": "https://jichangbang.org/wiki/design-system-behind-ricofast",
+    "canonical": "https://jichangbang.org/wiki/design-system-behind-ricofast/",
     "title": "The Design System Behind RicoFast: Building Better SaaS Sites Faster",
     "description": "Explore the comprehensive design system powering RicoFast. Learn how our component architecture, typography system, and design tokens help developers build beautiful, consistent SaaS websites in record time.",
     "category": "Wiki",
     "cluster": "Evergreen Knowledge Base",
-    "status": "active",
-    "protected": true
+    "status": "redirected",
+    "protected": true,
+    "redirectTo": "https://jichangbang.org/wiki/chatgpt-claude-native-ip-guide/"
   },
   {
-    "url": "https://jichangbang.org/wiki/introducing-ricofast",
+    "url": "https://jichangbang.org/wiki/introducing-ricofast/",
     "slug": "introducing-ricofast",
     "pageType": "Cluster",
-    "canonical": "https://jichangbang.org/wiki/introducing-ricofast",
+    "canonical": "https://jichangbang.org/wiki/introducing-ricofast/",
     "title": "Introducing RicoFast: The Modern SaaS Template for High-Converting Websites",
     "description": "Discover RicoFast, the cutting-edge Astro template built for SaaS startups. Designed with performance, accessibility, and conversions in mind, RicoFast helps you launch faster and grow smarter.",
     "category": "Wiki",
     "cluster": "Evergreen Knowledge Base",
-    "status": "active",
-    "protected": true
+    "status": "redirected",
+    "protected": true,
+    "redirectTo": "https://jichangbang.org/wiki/airport-selection-guide/"
   },
   {
-    "url": "https://jichangbang.org/wiki/launching-v1-0",
+    "url": "https://jichangbang.org/wiki/launching-v1-0/",
     "slug": "launching-v1-0",
     "pageType": "Cluster",
-    "canonical": "https://jichangbang.org/wiki/launching-v1-0",
+    "canonical": "https://jichangbang.org/wiki/launching-v1-0/",
     "title": "Launching RicoFast v1.0: Next-Gen SaaS Template",
     "description": "We are thrilled to announce the official release of RicoFast v1.0. Discover the features, performance benchmarks, and what makes this template the best choice for modern SaaS websites.",
     "category": "Wiki",
     "cluster": "Evergreen Knowledge Base",
-    "status": "active",
-    "protected": true
+    "status": "redirected",
+    "protected": true,
+    "redirectTo": "https://jichangbang.org/wiki/airport-runaway-warning-signs/"
   },
   {
-    "url": "https://jichangbang.org/about",
+    "url": "https://jichangbang.org/about/",
     "slug": "about",
     "pageType": "Pillar",
-    "canonical": "https://jichangbang.org/about",
+    "canonical": "https://jichangbang.org/about/",
     "title": "关于机场榜一 (jichangbang.org) — 独立客观评测公约与团队介绍",
     "description": "关于机场榜一：坚持真实晚高峰采样、自费实测与跑路风险雷达监测的客观第三方平台。了解我们的评测标准与联系方式。",
     "category": "About",
@@ -456,10 +460,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/404",
+    "url": "https://jichangbang.org/404/",
     "slug": "404",
     "pageType": "System",
-    "canonical": "https://jichangbang.org/404",
+    "canonical": "https://jichangbang.org/404/",
     "title": "404 - 页面未找到 | 机场榜一",
     "description": "抱歉，您访问的页面不存在或已被永久重定向迁移。请返回机场榜一首页或通过导航检索最新机场推荐与排行。",
     "category": "System",
@@ -468,10 +472,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/wiki/feimao",
+    "url": "https://jichangbang.org/wiki/feimao/",
     "slug": "wiki/feimao",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/feimao",
+    "canonical": "https://jichangbang.org/wiki/feimao/",
     "title": "飞猫云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "飞猫云 深度评测：全网客观解析 飞猫云 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -480,10 +484,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/breeze",
+    "url": "https://jichangbang.org/wiki/breeze/",
     "slug": "wiki/breeze",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/breeze",
+    "canonical": "https://jichangbang.org/wiki/breeze/",
     "title": "微风网络怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "微风网络 深度评测：全网客观解析 微风网络 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -492,10 +496,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/xingdaomeng",
+    "url": "https://jichangbang.org/wiki/xingdaomeng/",
     "slug": "wiki/xingdaomeng",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/xingdaomeng",
+    "canonical": "https://jichangbang.org/wiki/xingdaomeng/",
     "title": "星岛梦怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "星岛梦 深度评测：全网客观解析 星岛梦 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -504,10 +508,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/wuyou",
+    "url": "https://jichangbang.org/wiki/wuyou/",
     "slug": "wiki/wuyou",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/wuyou",
+    "canonical": "https://jichangbang.org/wiki/wuyou/",
     "title": "无忧链接怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "无忧链接 深度评测：全网客观解析 无忧链接 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -516,10 +520,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/yuzhou",
+    "url": "https://jichangbang.org/wiki/yuzhou/",
     "slug": "wiki/yuzhou",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/yuzhou",
+    "canonical": "https://jichangbang.org/wiki/yuzhou/",
     "title": "宇宙云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "宇宙云 深度评测：全网客观解析 宇宙云 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -528,10 +532,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/weitu",
+    "url": "https://jichangbang.org/wiki/weitu/",
     "slug": "wiki/weitu",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/weitu",
+    "canonical": "https://jichangbang.org/wiki/weitu/",
     "title": "唯兔云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "唯兔云 深度评测：全网客观解析 唯兔云 真实网络拓扑架构、BGP隧道中转晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -540,10 +544,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/sujie",
+    "url": "https://jichangbang.org/wiki/sujie/",
     "slug": "wiki/sujie",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/sujie",
+    "canonical": "https://jichangbang.org/wiki/sujie/",
     "title": "速界怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "速界 深度评测：全网客观解析 速界 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -552,10 +556,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/yifanyun",
+    "url": "https://jichangbang.org/wiki/yifanyun/",
     "slug": "wiki/yifanyun",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/yifanyun",
+    "canonical": "https://jichangbang.org/wiki/yifanyun/",
     "title": "一翻云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "一翻云 深度评测：全网客观解析 一翻云 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -564,10 +568,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/sogoyun",
+    "url": "https://jichangbang.org/wiki/sogoyun/",
     "slug": "wiki/sogoyun",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/sogoyun",
+    "canonical": "https://jichangbang.org/wiki/sogoyun/",
     "title": "SOGO云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "SOGO云 深度评测：全网客观解析 SOGO云 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -576,10 +580,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/lingmao",
+    "url": "https://jichangbang.org/wiki/lingmao/",
     "slug": "wiki/lingmao",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/lingmao",
+    "canonical": "https://jichangbang.org/wiki/lingmao/",
     "title": "灵猫网络怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "灵猫网络 深度评测：全网客观解析 灵猫网络 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -588,10 +592,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/guangnianti",
+    "url": "https://jichangbang.org/wiki/guangnianti/",
     "slug": "wiki/guangnianti",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/guangnianti",
+    "canonical": "https://jichangbang.org/wiki/guangnianti/",
     "title": "光年梯怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "光年梯 深度评测：全网客观解析 光年梯 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -600,10 +604,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/kexinyun",
+    "url": "https://jichangbang.org/wiki/kexinyun/",
     "slug": "wiki/kexinyun",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/kexinyun",
+    "canonical": "https://jichangbang.org/wiki/kexinyun/",
     "title": "可信云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "可信云 深度评测：全网客观解析 可信云 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -612,10 +616,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/kuaili",
+    "url": "https://jichangbang.org/wiki/kuaili/",
     "slug": "wiki/kuaili",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/kuaili",
+    "canonical": "https://jichangbang.org/wiki/kuaili/",
     "title": "快狸怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "快狸 深度评测：全网客观解析 快狸 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -624,10 +628,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/ermaoyun",
+    "url": "https://jichangbang.org/wiki/ermaoyun/",
     "slug": "wiki/ermaoyun",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/ermaoyun",
+    "canonical": "https://jichangbang.org/wiki/ermaoyun/",
     "title": "二猫云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "二猫云 深度评测：全网客观解析 二猫云 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -636,10 +640,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/quanqiuyun",
+    "url": "https://jichangbang.org/wiki/quanqiuyun/",
     "slug": "wiki/quanqiuyun",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/quanqiuyun",
+    "canonical": "https://jichangbang.org/wiki/quanqiuyun/",
     "title": "全球云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "全球云 深度评测：全网客观解析 全球云 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -648,10 +652,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/jilianyun",
+    "url": "https://jichangbang.org/wiki/jilianyun/",
     "slug": "wiki/jilianyun",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/jilianyun",
+    "canonical": "https://jichangbang.org/wiki/jilianyun/",
     "title": "极连云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "极连云 深度评测：全网客观解析 极连云 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -660,10 +664,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/u1s1",
+    "url": "https://jichangbang.org/wiki/u1s1/",
     "slug": "wiki/u1s1",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/u1s1",
+    "canonical": "https://jichangbang.org/wiki/u1s1/",
     "title": "U1S1怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "U1S1 深度评测：全网客观解析 U1S1 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -672,10 +676,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/wiki/tag-vpn",
+    "url": "https://jichangbang.org/wiki/tag-vpn/",
     "slug": "wiki/tag-vpn",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/tag-vpn",
+    "canonical": "https://jichangbang.org/wiki/tag-vpn/",
     "title": "TAG怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "TAG 深度评测：全网客观解析 TAG 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -684,10 +688,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/reviews/tag-vpn",
+    "url": "https://jichangbang.org/reviews/tag-vpn/",
     "slug": "tag-vpn",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/tag-vpn",
+    "canonical": "https://jichangbang.org/reviews/tag-vpn/",
     "title": "TAG怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "TAG 深度测评：2026 权威深度评测与网络架构解析。覆盖最低 ¥45/月 起步套餐价格、IEPL专线专线分析、晚高峰实测速度 650M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -696,10 +700,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/wiki/laotou-vpn",
+    "url": "https://jichangbang.org/wiki/laotou-vpn/",
     "slug": "wiki/laotou-vpn",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/laotou-vpn",
+    "canonical": "https://jichangbang.org/wiki/laotou-vpn/",
     "title": "老头VPN怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "老头VPN 深度评测：全网客观解析 老头VPN 真实网络拓扑架构、BGP隧道中转晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -708,10 +712,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/reviews/laotou-vpn",
+    "url": "https://jichangbang.org/reviews/laotou-vpn/",
     "slug": "laotou-vpn",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/laotou-vpn",
+    "canonical": "https://jichangbang.org/reviews/laotou-vpn/",
     "title": "老头VPN怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "老头VPN 深度测评：2026 权威深度评测与网络架构解析。覆盖最低 ¥40/月 起步套餐价格、BGP隧道中转专线分析、晚高峰实测速度 600M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -720,10 +724,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/wiki/nexitally",
+    "url": "https://jichangbang.org/wiki/nexitally/",
     "slug": "wiki/nexitally",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/nexitally",
+    "canonical": "https://jichangbang.org/wiki/nexitally/",
     "title": "Nexitally怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "Nexitally 深度评测：全网客观解析 Nexitally 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -732,10 +736,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/reviews/nexitally",
+    "url": "https://jichangbang.org/reviews/nexitally/",
     "slug": "nexitally",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/nexitally",
+    "canonical": "https://jichangbang.org/reviews/nexitally/",
     "title": "Nexitally怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "Nexitally 深度测评：2026 权威深度评测与网络架构解析。覆盖最低 ¥62/月 起步套餐价格、IEPL专线专线分析、晚高峰实测速度 720M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -744,10 +748,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/wiki/fastlink",
+    "url": "https://jichangbang.org/wiki/fastlink/",
     "slug": "wiki/fastlink",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/fastlink",
+    "canonical": "https://jichangbang.org/wiki/fastlink/",
     "title": "Fastlink怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "Fastlink 深度评测：全网客观解析 Fastlink 真实网络拓扑架构、BGP隧道中转晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -756,10 +760,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/reviews/fastlink",
+    "url": "https://jichangbang.org/reviews/fastlink/",
     "slug": "fastlink",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/fastlink",
+    "canonical": "https://jichangbang.org/reviews/fastlink/",
     "title": "Fastlink怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "Fastlink 深度测评：2026 权威深度评测与网络架构解析。覆盖最低 ¥20/月 起步套餐价格、BGP隧道中转专线分析、晚高峰实测速度 580M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -768,10 +772,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/wiki/amytelecom",
+    "url": "https://jichangbang.org/wiki/amytelecom/",
     "slug": "wiki/amytelecom",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/amytelecom",
+    "canonical": "https://jichangbang.org/wiki/amytelecom/",
     "title": "AmyTelecom怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "AmyTelecom 深度评测：全网客观解析 AmyTelecom 真实网络拓扑架构、BGP隧道中转晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -780,10 +784,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/reviews/amytelecom",
+    "url": "https://jichangbang.org/reviews/amytelecom/",
     "slug": "amytelecom",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/amytelecom",
+    "canonical": "https://jichangbang.org/reviews/amytelecom/",
     "title": "AmyTelecom怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "AmyTelecom 深度测评：2026 权威深度评测与网络架构解析。覆盖最低 ¥35/月 起步套餐价格、BGP隧道中转专线分析、晚高峰实测速度 600M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -792,10 +796,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/wiki/baigeiyun",
+    "url": "https://jichangbang.org/wiki/baigeiyun/",
     "slug": "wiki/baigeiyun",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/baigeiyun",
+    "canonical": "https://jichangbang.org/wiki/baigeiyun/",
     "title": "白给云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "白给云 深度评测：全网客观解析 白给云 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -804,10 +808,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/reviews/baigeiyun",
+    "url": "https://jichangbang.org/reviews/baigeiyun/",
     "slug": "baigeiyun",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/baigeiyun",
+    "canonical": "https://jichangbang.org/reviews/baigeiyun/",
     "title": "白给云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "白给云 深度测评：2026 权威深度评测与网络架构解析。覆盖最低 ¥15/月 起步套餐价格、IEPL专线专线分析、晚高峰实测速度 540M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -816,10 +820,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/wiki/muguang",
+    "url": "https://jichangbang.org/wiki/muguang/",
     "slug": "wiki/muguang",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/muguang",
+    "canonical": "https://jichangbang.org/wiki/muguang/",
     "title": "暮光加速怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "暮光加速 深度评测：全网客观解析 暮光加速 真实网络拓扑架构、IEPL专线晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -828,10 +832,10 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/reviews/muguang",
+    "url": "https://jichangbang.org/reviews/muguang/",
     "slug": "muguang",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/muguang",
+    "canonical": "https://jichangbang.org/reviews/muguang/",
     "title": "暮光加速怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "暮光加速 深度测评：2026 权威深度评测与网络架构解析。覆盖最低 ¥18/月 起步套餐价格、IEPL专线专线分析、晚高峰实测速度 620M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
@@ -840,10 +844,10 @@
     "protected": true
   },
   {
-    "url": "https://jichangbang.org/wiki/dalaoyun",
+    "url": "https://jichangbang.org/wiki/dalaoyun/",
     "slug": "wiki/dalaoyun",
     "pageType": "Article",
-    "canonical": "https://jichangbang.org/wiki/dalaoyun",
+    "canonical": "https://jichangbang.org/wiki/dalaoyun/",
     "title": "大佬云怎么样？2026最新评测·节点测速·资费与防坑避雷指南",
     "description": "大佬云 深度评测：全网客观解析 大佬云 真实网络拓扑架构、BGP隧道中转晚高峰测速矩阵、ChatGPT与流媒体解锁能力。",
     "category": "Wiki",
@@ -852,14 +856,98 @@
     "protected": false
   },
   {
-    "url": "https://jichangbang.org/reviews/dalaoyun",
+    "url": "https://jichangbang.org/reviews/dalaoyun/",
     "slug": "dalaoyun",
     "pageType": "Brand",
-    "canonical": "https://jichangbang.org/reviews/dalaoyun",
+    "canonical": "https://jichangbang.org/reviews/dalaoyun/",
     "title": "大佬云怎么样？2026最新评测·套餐价格·线路测速与优惠码",
     "description": "大佬云 深度测评：2026 权威深度评测与网络架构解析。覆盖最低 ¥5.6/月 起步套餐价格、BGP隧道中转专线分析、晚高峰实测速度 450M、ChatGPT/Claude解锁能力及优缺点分析。",
     "category": "Reviews",
     "cluster": "Brand Reviews",
+    "status": "active",
+    "protected": true
+  },
+  {
+    "url": "https://jichangbang.org/wiki/cost-effective-airport-guide/",
+    "slug": "wiki/cost-effective-airport-guide",
+    "pageType": "Article",
+    "canonical": "https://jichangbang.org/wiki/cost-effective-airport-guide/",
+    "title": "2026 高性价比机场怎么选？月付价格梯度·IEPL专线对比与官网防坑指南",
+    "description": "聚焦“性价比机场”与“性价比机场官网入口”核心检索需求：系统对比 6-19 元入门性价比梯度与 20-35 元企业 IEPL 专线真实单价，提供官网防钓鱼核验四步法、1.0x 透明倍率检查及光速云/飞猫云/微风网络/无忧链接等真实月付参数对比，助您按月稳妥选型。",
+    "category": "Wiki",
+    "cluster": "性价比机场选购与官网防坑",
+    "status": "active",
+    "protected": true
+  },
+  {
+    "url": "https://jichangbang.org/wiki/free-airport-trial-guide/",
+    "slug": "wiki/free-airport-trial-guide",
+    "pageType": "Article",
+    "canonical": "https://jichangbang.org/wiki/free-airport-trial-guide/",
+    "title": "2026 白嫖机场与免费机场试用全解析：真实存活率·隐私安全红线与平替推荐",
+    "description": "聚焦“白嫖机场”、“免费机场节点”与“免费机场试用”真实诉求：客观分析公开免费订阅存活周期与中间人嗅探风险，梳理飞猫云、微风网络、宇宙云等正规品牌低门槛验证路径，提供 0 成本试水与 ¥6-15 元高性价比专线平替对比，助您安全省钱避坑。",
+    "category": "Wiki",
+    "cluster": "免费试用与安全避坑",
+    "status": "active",
+    "protected": true
+  },
+  {
+    "url": "https://jichangbang.org/wiki/airport-coupon-official-guide/",
+    "slug": "wiki/airport-coupon-official-guide/",
+    "pageType": "Article",
+    "canonical": "https://jichangbang.org/wiki/airport-coupon-official-guide/",
+    "title": "2026 热门机场优惠码真伪核查与官网防钓鱼指南（起帆Cloud·泡泡狗·CocoDuck·MESL·魔戒）",
+    "description": "客观核查 起帆Cloud、泡泡狗、CocoDuck、MESL、魔戒 真实定价与有无公开优惠码真相：明确区分官方无码品牌与实测可用折扣码（如光速云 AMM、宇宙云 YUZHOU553、飞猫云 flycat888），拆解虚假优惠码钓鱼套路并提供同价位 IEPL 专线平替对照表。",
+    "category": "Wiki",
+    "cluster": "品牌官网核验与优惠核查",
+    "status": "active",
+    "protected": true
+  },
+  {
+    "url": "https://jichangbang.org/wiki/iepl-vs-iplc-guide/",
+    "slug": "iepl-vs-iplc-guide",
+    "pageType": "Cluster",
+    "canonical": "https://jichangbang.org/wiki/iepl-vs-iplc-guide/",
+    "title": "IEPL 与 IPLC 专线有什么区别？为什么晚高峰专线不卡顿？",
+    "description": "IEPL 与 IPLC 专线有什么区别？为什么晚高峰专线不卡顿？",
+    "category": "Wiki",
+    "cluster": "Evergreen Knowledge Base",
+    "status": "active",
+    "protected": true
+  },
+  {
+    "url": "https://jichangbang.org/wiki/chatgpt-claude-native-ip-guide/",
+    "slug": "chatgpt-claude-native-ip-guide",
+    "pageType": "Cluster",
+    "canonical": "https://jichangbang.org/wiki/chatgpt-claude-native-ip-guide/",
+    "title": "ChatGPT 与 Claude 原生解锁深度指南：如何避免 Access Denied？",
+    "description": "ChatGPT 与 Claude 原生解锁深度指南：如何避免 Access Denied？",
+    "category": "Wiki",
+    "cluster": "Evergreen Knowledge Base",
+    "status": "active",
+    "protected": true
+  },
+  {
+    "url": "https://jichangbang.org/wiki/airport-selection-guide/",
+    "slug": "airport-selection-guide",
+    "pageType": "Cluster",
+    "canonical": "https://jichangbang.org/wiki/airport-selection-guide/",
+    "title": "2026 机场推荐与选购指南：从线路、价格和节点怎么选",
+    "description": "2026 机场推荐与选购指南：从线路、价格和节点怎么选",
+    "category": "Wiki",
+    "cluster": "Evergreen Knowledge Base",
+    "status": "active",
+    "protected": true
+  },
+  {
+    "url": "https://jichangbang.org/wiki/airport-runaway-warning-signs/",
+    "slug": "airport-runaway-warning-signs",
+    "pageType": "Cluster",
+    "canonical": "https://jichangbang.org/wiki/airport-runaway-warning-signs/",
+    "title": "如何判断机场是否跑路？资深玩家总结的跑路前 5 大危险信号",
+    "description": "如何判断机场是否跑路？资深玩家总结的跑路前 5 大危险信号",
+    "category": "Wiki",
+    "cluster": "Evergreen Knowledge Base",
     "status": "active",
     "protected": true
   }

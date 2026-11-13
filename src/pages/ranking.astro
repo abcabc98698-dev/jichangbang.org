@@ -20,8 +20,13 @@ const lineRanking = airports.filter(a => a.lineType.includes('专线'));
 
 const breadcrumbs = [
   { name: "首页", url: "/" },
-  { name: "机场排行", url: "/ranking" }
+  { name: "机场排行", url: "/ranking/" }
 ];
+const rankingItemList = comprehensiveRanking.slice(0, 10).map((a, i) => ({
+  name: `Top ${i + 1}: ${a.name} (${a.score}分 · ${a.speedMbps}Mbps)`,
+  url: `/reviews/${a.slug}/`,
+  position: i + 1
+}));
 
 // 8 组高价值排行榜选购与客观衡量问答
 const faqList = [
@@ -61,12 +66,13 @@ const faqList = [
 ---
 
 <Layout
-  title="2026 机场排行榜 — 综合天梯榜·晚高峰测速榜·高性价比价格榜·AI与专线榜【权威客观榜单系统】 | 机场榜一"
-  description="机场榜一 2026 权威机场排行榜单系统：拒绝竞价买榜，基于晚高峰 20:00-23:00 三网宽带实测数据，发布综合实力天梯榜、千兆测速榜、低预算价格榜、ChatGPT/Claude AI 场景榜与 IEPL/IPLC 纯专线榜，提供透明评分规则与选购参考。"
+  title="2026 机场排行榜 — 晚高峰测速·高性价比与AI专线天梯榜 | 机场榜一"
+  description="机场榜一 2026 权威机场排行榜单系统：拒绝竞价买榜，基于电信/联通/移动晚高峰 20:00-23:00 三网宽带实测，发布综合实力天梯榜、千兆测速榜、高性价比价格榜、ChatGPT/Claude AI 解锁榜与 IEPL/IPLC 纯专线榜，附公开评分规则与评测入口。"
   keywords="机场排行榜, 2026机场排行榜, 机场速度排行, 便宜机场排行, 机场综合排行榜, 专线机场排行, ChatGPT机场排行, 机场榜一"
 >
   <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
   <JsonLd type="FAQPage" faqItems={faqList} />
+  <JsonLd type="ItemList" itemList={rankingItemList} />
 
   <!-- 页面头部 -->
   <section class="relative z-20 site-container my-10 md:my-14">

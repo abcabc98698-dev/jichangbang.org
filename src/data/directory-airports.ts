@@ -61,7 +61,23 @@ export const directoryAirports: Airport[] = [
       "自研客户端",
       "AI全解"
     ],
-    "description": "快狸主打 VLESS 协议与 IEPL 国际专线组合，自研客户端对新手极其友好，晚高峰延迟低且流媒体解锁良好。"
+    "description": "快狸主打 VLESS 协议与 IEPL 国际专线组合，自研客户端对新手极其友好，晚高峰延迟低且流媒体解锁良好。",
+    "speedtestNote": "已录入 2026-08-11 19:52:22 (CST) 50 节点 VLESS 实测快照图（珠海联通 9Gbps 32线程）：香港 15 个节点均速 505–550MB/s，新加坡多数节点 205–419MB/s（新加坡08 停滞），日本 106–189MB/s，台湾 47–90MB/s，美国 8.6–13.8MB/s。",
+    "screenshots": [
+      "/assets/speedtest/kuaili-speedtest.png"
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/kuaili-speedtest.png",
+        "caption": "快狸 50节点 VLESS 节点测速实测（main 4.3.3 / miaosu 4.7.0，2026-08-11 19:52:22 CST，珠海联通 9Gbps 32线程）",
+        "alt": "快狸 2026-08-11 VLESS 节点测速实测截图（香港均速 505–550MB/s）",
+        "testedAt": "2026-08-11 19:52:22 (CST)",
+        "toolFamily": "main 4.3.3 (696) / miaosu 4.7.0 (A11-32)（珠海联通 9Gbps 32线程）",
+        "protocolDisplayed": "VLESS",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，仅反映 2026-08-11 19:52 采样环境，不包含 AI 与流媒体解锁逐项验证。"
+      }
+    ]
   },
   {
     "id": "dir-tag-vpn",

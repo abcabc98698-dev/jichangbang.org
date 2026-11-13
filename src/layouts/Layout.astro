@@ -51,7 +51,9 @@ import '../styles/article-enhancements.css';
   <body class="antialiased bg-bg-primary dark:bg-bg-primary-dark max-w-full overflow-x-hidden">
     <TopBg />
     <Header />
-    <slot />
+    <main class="flex-1">
+      <slot />
+    </main>
     <Footer />
     <script src="../assets/js/main.js"></script>
   </body>

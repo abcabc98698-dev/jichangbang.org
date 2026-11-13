@@ -6,22 +6,54 @@ import JsonLd from "@/components/seo/JsonLd.astro";
 
 const breadcrumbs = [
   { name: "首页", url: "/" },
-  { name: "知识百科", url: "/wiki" }
+  { name: "知识百科", url: "/wiki/" }
 ];
 ---
 
 <Layout
-  title="出海网络常青知识百科 — 专线原理·住宅IP·抗封锁技术【2026百科】"
-  description="机场榜一知识百科专栏：发布专线原理深度科普、住宅家宽 IP 与机房 IP 辨析、晚高峰网络抖动成因以及出海网络抗封锁核心知识。"
-  keywords="机场百科, 出海网络知识库, IEPL专线原理, 住宅IP科普, 机场选购指南, 机场榜一"
+  title="出海网络知识百科 — 性价比机场·白嫖避坑·官网核验与专线原理 | 机场榜一"
+  description="机场榜一（jichangbang.org）常青知识百科专栏：系统拆解高性价比机场选购标准、IEPL物理专线与住宅家宽IP原理、免费机场试用与白嫖避坑策略、官网入口防钓鱼核验、各品牌优惠码真伪核查、跑路预警识别、晚高峰丢包排查、三网路由测试与客户端分流教程，帮助出海开发者及跨境用户科学避坑高效选型。"
+  keywords="机场百科, 出海网络知识库, 性价比机场选购, 免费机场试用, 白嫖机场避坑, IEPL专线原理, 住宅IP科普, 机场榜一"
 >
   <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+  <JsonLd
+    type="CollectionPage"
+    webPage={{
+      name: "出海网络常青知识百科",
+      description: "聚焦性价比机场选购、免费试用避坑、官网核验、优惠码真伪及物理专线原理的百科专栏。",
+      url: "https://jichangbang.org/wiki/"
+    }}
+  />
 
   <section class="relative z-20 site-container my-10 md:my-16">
     <PageHeader
       title="出海网络常青知识百科"
-      description="去伪存真，系统拆解物理专线、海外 IP 归属、晚高峰 QoS 策略与客户端底层的常青知识库。"
+      description="去伪存真，系统拆解物理专线、性价比选型、免费试用避坑、官网与优惠码核验及客户端分流底层的常青知识库。"
     />
+
+    <!-- Pillar-Cluster 专题导航矩阵 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+      <a href="/wiki/cost-effective-airport-guide/" class="group block rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 hover:border-blue-500 transition-colors">
+        <div class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-1">核心专题 · 性价比选型</div>
+        <h2 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">性价比机场怎么选</h2>
+        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1.5 line-clamp-2">2026年高性价比机场套餐分级、线路区别与官网防坑识别全攻略。</p>
+      </a>
+      <a href="/wiki/free-airport-trial-guide/" class="group block rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 hover:border-emerald-500 transition-colors">
+        <div class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-1">核心专题 · 免费与白嫖</div>
+        <h2 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 transition-colors">白嫖机场与试用避坑</h2>
+        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1.5 line-clamp-2">免费机场节点与试用额度客观盘点，拆解蜜罐风险与稳定平替方案。</p>
+      </a>
+      <a href="/wiki/airport-coupon-official-guide/" class="group block rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 hover:border-amber-500 transition-colors">
+        <div class="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-1">核心专题 · 官网与优惠</div>
+        <h2 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-amber-600 transition-colors">官网核验与优惠码真相</h2>
+        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1.5 line-clamp-2">核查起帆Cloud、泡泡狗、CocoDuck、MESL 等热门搜索品牌的真实入口与优惠机制。</p>
+      </a>
+      <a href="/reviews/" class="group block rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 hover:border-purple-500 transition-colors">
+        <div class="text-xs font-semibold text-purple-600 dark:text-purple-400 mb-1">商业测评 · 品牌库</div>
+        <h2 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-600 transition-colors">170+ 品牌评测与定价</h2>
+        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1.5 line-clamp-2">跳转机场评测总库、性价比套餐榜（/pricing/）与综合推荐榜（/recommend/）。</p>
+      </a>
+    </div>
   </section>
 
   <section class="relative z-20 site-container mb-16">

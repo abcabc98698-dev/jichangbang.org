@@ -13,13 +13,16 @@ import {
 export async function getStaticPaths() {
   const allAirports = [...airports, ...directoryAirports];
   const allReviews = await getCollection("airportReviews");
+  const allWikiPosts = await getCollection("post");
   const reviewMap = new Map(allReviews.map(r => [r.id.replace(/\.(md|mdx)$/, ''), r]));
+  const wikiSlugSet = new Set(allWikiPosts.map(p => p.id));
 
   return allAirports.map((airport) => ({
     params: { slug: airport.slug },
     props: {
       airport,
       reviewEntry: reviewMap.get(airport.slug) || null,
+      hasWikiPost: wikiSlugSet.has(airport.slug),
     },
   }));
 }
@@ -27,9 +30,10 @@ export async function getStaticPaths() {
 interface Props {
   airport: Airport;
   reviewEntry?: any;
+  hasWikiPost?: boolean;
 }
 
-const { airport, reviewEntry } = Astro.props;
+const { airport, reviewEntry, hasWikiPost = false } = Astro.props;
 
 let RenderedContent: any = null;
 let headings: Array<{ depth: number; slug: string; text: string }> = [];
@@ -44,7 +48,79 @@ const alternativeAirports = airport.isAffiliate === false
   ? airports.slice(0, 3)
   : airports.filter(a => a.id !== airport.id).slice(0, 3);
 
-// 品牌 FAQ 数据
+// 从 Markdown 正文动态提取可见 FAQ 问答对，确保 JSON-LD FAQPage 与页面 DOM 100% 一致
+function stripMdInline(s: string): string {
+  return s
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractVisibleFaqsFromMarkdown(body: string): Array<{ question: string; answer: string }> {
+  const lines = body.split(/\r?\n/);
+  let faqStart = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (/^##\s+.*(FAQ|疑问|问答)/i.test(lines[i])) {
+      faqStart = i;
+      break;
+    }
+  }
+  if (faqStart === -1) return [];
+
+  const faqs: Array<{ question: string; answer: string }> = [];
+  let curQ = "";
+  let curA: string[] = [];
+
+  const flush = () => {
+    const q = curQ.trim();
+    const a = curA.join(" ").replace(/^(答[：:]\s*)+/, "").trim();
+    if (q && a) faqs.push({ question: q, answer: a });
+    curQ = "";
+    curA = [];
+  };
+
+  for (let i = faqStart + 1; i < lines.length; i++) {
+    const raw = lines[i].trim();
+    if (/^##\s+/.test(raw)) break;
+    if (!raw || /^---+$/.test(raw)) continue;
+
+    const h3M = raw.match(/^###\s+(.+)$/);
+    const boldQM = raw.match(/^\*\*((?:Q\d+|问题[一二三四五六七八九十\d]+)[^*]*)\*\*$/i);
+    const sumQM = raw.match(/^<summary[^>]*>([\s\S]*?)<\/summary>$/i);
+
+    if (h3M) {
+      flush();
+      curQ = stripMdInline(h3M[1]);
+    } else if (boldQM) {
+      flush();
+      curQ = stripMdInline(boldQM[1]);
+    } else if (sumQM) {
+      flush();
+      curQ = stripMdInline(sumQM[1]);
+    } else if (curQ && !/^<\/?details>$/i.test(raw)) {
+      const cleaned = stripMdInline(raw);
+      if (cleaned) curA.push(cleaned);
+    }
+  }
+  flush();
+  return faqs;
+}
+
+const visibleFaqs = reviewEntry?.body ? extractVisibleFaqsFromMarkdown(reviewEntry.body) : [];
+
+const brandDateModified =
+  reviewEntry?.data?.lastUpdated ||
+  airport.screenshotMeta?.[0]?.testedAt?.slice(0, 10) ||
+  "2026-10-19";
+const brandDatePublished =
+  reviewEntry?.data?.publishDate
+    ? new Date(reviewEntry.data.publishDate).toISOString().slice(0, 10)
+    : brandDateModified;
+
+// 品牌 FAQ 数据（仅在无 Markdown 评测正文走兜底卡片时渲染并入库）
 const brandFaqs = [
   {
     question: `${airport.name} 怎么样？好用稳定吗？`,
@@ -64,38 +140,60 @@ const brandFaqs = [
   }
 ];
 
+const schemaFaqs = RenderedContent ? visibleFaqs : brandFaqs;
+
+const seoTitle = airport.isAffiliate === false
+  ? `${airport.name} 官网入口·价格与优惠码核查【2026实测评价】`
+  : airport.couponCode
+    ? `${airport.name} 怎么样？2026最新评测·优惠码 ${airport.couponCode}·套餐价格与测速`
+    : `${airport.name} 怎么样？2026最新评测·套餐价格·线路测速与官网入口`;
+
+const couponNote = airport.isAffiliate === false
+  ? `目前暂无官方公开专属优惠码，站内客观披露其真实定价（¥${airport.monthlyPrice}/月起）、官网防钓鱼入口及高性价比专线平替方案`
+  : airport.couponCode
+    ? `实测可用专属优惠码 ${airport.couponCode}，最低 ¥${airport.monthlyPrice}/月，附官方直达入口与防跑路状态监测`
+    : `月付最低 ¥${airport.monthlyPrice}/月，附官方直达入口、实测速度分析与按月订阅避坑建议`;
+
+const rawSeoDescription = `${airport.name}（${airport.established}）2026深度评测：${airport.slogan}。采用 ${airport.lineType}，晚高峰实测速度 ${airport.speedMbps} Mbps（延迟 ${airport.latencyMs}ms），支持ChatGPT(${airport.aiUnlock.chatgpt ? '是' : '否'})/Netflix(${airport.streamingUnlock.netflix ? '是' : '否'})。${couponNote}。`;
+const seoDescription = rawSeoDescription.length >= 155
+  ? rawSeoDescription
+  : `${rawSeoDescription}附多端配置教程与风险雷达实时状态核验。`;
+
 const breadcrumbs = [
   { name: "首页", url: "/" },
-  { name: "品牌评测", url: "/reviews" },
-  { name: airport.name, url: `/reviews/${airport.slug}` }
+  { name: "品牌评测", url: "/reviews/" },
+  { name: airport.name, url: `/reviews/${airport.slug}/` }
 ];
 ---
 
 <Layout
-  title={`${airport.name} 怎么样？2026最新评测·套餐价格·线路测速与优惠码`}
-  description={`${airport.name} 深度测评：${airport.slogan}。覆盖最低 ¥${airport.monthlyPrice} 套餐价格、${airport.lineType} 线路分析、晚高峰实测速度 ${airport.speedMbps}M、ChatGPT/Claude解锁能力及优缺点分析。`}
+  title={seoTitle}
+  description={seoDescription}
   keywords={`${airport.name}, ${airport.name}怎么样, ${airport.name}评测, ${airport.name}官网, ${airport.name}优惠码, ${airport.name}跑路了吗, 机场榜一`}
 >
   <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
-  <JsonLd type="FAQPage" faqItems={brandFaqs} />
+  {schemaFaqs.length > 0 && <JsonLd type="FAQPage" faqItems={schemaFaqs} />}
   <JsonLd
     type="Review"
     data={{
       title: `${airport.name} 深度测评与晚高峰测速报告`,
       airportName: airport.name,
-      description: airport.slogan || airport.description,
+      description: seoDescription,
       monthlyPrice: airport.monthlyPrice,
       score: airport.score,
+      datePublished: brandDatePublished,
+      dateModified: brandDateModified,
     }}
   />
   <JsonLd
     type="Article"
     article={{
-      title: `${airport.name} 怎么样？2026最新评测·套餐价格·线路测速与优惠码`,
-      description: `${airport.name} 深度测评：${airport.slogan}。覆盖最低 ¥${airport.monthlyPrice} 套餐价格、${airport.lineType} 线路分析、晚高峰实测速度 ${airport.speedMbps}M。`,
-      publishDate: "2026-08-19",
+      title: seoTitle,
+      description: seoDescription,
+      publishDate: brandDatePublished,
+      modifiedDate: brandDateModified,
       author: "机场榜网络技术评测组",
-      url: `https://jichangbang.org/reviews/${airport.slug}`
+      url: `https://jichangbang.org/reviews/${airport.slug}/`
     }}
   />
 
@@ -128,6 +226,38 @@ const breadcrumbs = [
               💡 <strong>价格提示：</strong> {airport.priceNote}
             </div>
           )}
+
+          {/* GEO 直答结论卡：直接给出月付门槛、优惠码真伪状态、AI/流媒体支持与百科内链 */}
+          <div class="mt-4 p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-900/70 border border-primary/10 text-xs grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div>
+              <span class="text-neutral-400 block">月付门槛</span>
+              <strong class="text-neutral-800 dark:text-neutral-100">¥{airport.monthlyPrice}/月 起</strong>
+            </div>
+            <div>
+              <span class="text-neutral-400 block">优惠码核验</span>
+              <strong class="text-neutral-800 dark:text-neutral-100">
+                {airport.isAffiliate === false ? "暂无公开专属码" : airport.couponCode || "官网直减/无码"}
+              </strong>
+            </div>
+            <div>
+              <span class="text-neutral-400 block">晚高峰测速</span>
+              <strong class="text-neutral-800 dark:text-neutral-100">{airport.speedMbps} Mbps / {airport.latencyMs}ms</strong>
+            </div>
+            <div>
+              <span class="text-neutral-400 block">AI与流媒体</span>
+              <strong class="text-neutral-800 dark:text-neutral-100">
+                GPT:{airport.aiUnlock.chatgpt ? "✓" : "×"} · NF:{airport.streamingUnlock.netflix ? "✓" : "×"}
+              </strong>
+            </div>
+          </div>
+
+          {hasWikiPost && (
+            <div class="mt-3 text-xs">
+              <a href={`/wiki/${airport.slug}/`} class="inline-flex items-center gap-1 text-primary hover:underline font-medium">
+                📖 阅读《{airport.name} 技术拓扑实测与防坑深度百科》→
+              </a>
+            </div>
+          )}
         </div>
 
         <!-- 评分与官网直达卡片 -->
@@ -136,7 +266,7 @@ const breadcrumbs = [
           <div class="text-3xl font-black text-primary font-brand mb-1">
             {airport.score} <span class="text-xs font-normal text-neutral-400">/ 10</span>
           </div>
-          <p class="text-[11px] text-neutral-400 mb-3">基于 {airport.ratingCount}+ 真实用户评测</p>
+          <p class="text-[11px] text-neutral-400 mb-3">2026 多时段实测综合评分 · {airport.lineType}</p>
           {airport.isAffiliate === false ? (
             <div class="space-y-2">
               <a
@@ -145,7 +275,7 @@ const breadcrumbs = [
                 rel="nofollow noopener noreferrer"
                 class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-800 dark:text-neutral-100 text-xs font-semibold transition-colors"
               >
-                访问官网 (无专属折扣) <ExternalLink size={12} />
+                {airport.officialUrl.includes("google.com/search") ? "检索品牌公开入口 (Google)" : "访问官网 (无专属折扣)"} <ExternalLink size={12} />
               </a>
               <a
                 href="https://sahude.gsyvipaff.com/#/?code=keqgvT5Y"
@@ -157,14 +287,19 @@ const breadcrumbs = [
               </a>
             </div>
           ) : (
-            <Button url={airport.affiliateUrl} target="_blank" type="fill" className="text-xs w-full justify-center">
-              进入官网选购 <ExternalLink size={12} />
-            </Button>
+            <div class="space-y-1.5">
+              <Button url={airport.affiliateUrl} target="_blank" rel="nofollow sponsored noopener" type="fill" className="text-xs w-full justify-center">
+                进入官网选购 <ExternalLink size={12} />
+              </Button>
+              <p class="text-[10px] leading-snug text-neutral-400 max-w-[230px] mx-auto">
+                含推广链接，通过链接注册可能为本站带来佣金，不影响用户支付价格
+              </p>
+            </div>
           )}
           {airport.isAffiliate === false ? (
             <div class="mt-2.5 pt-2 border-t border-dashed border-primary/20 text-center">
               <span class="text-[11px] text-neutral-400 block">金牌榜首 8 折专享码：</span>
-              <a href="/reviews/guangsu" class="text-xs px-2 py-0.5 rounded bg-primary/10 text-primary font-bold tracking-wider inline-block mt-1 hover:underline">
+              <a href="/reviews/guangsu/" class="text-xs px-2 py-0.5 rounded bg-primary/10 text-primary font-bold tracking-wider inline-block mt-1 hover:underline">
                 AMM (光速云专用)
               </a>
             </div>
@@ -174,6 +309,11 @@ const breadcrumbs = [
               <code class="text-xs px-2 py-0.5 rounded bg-primary/10 text-primary font-bold tracking-wider inline-block mt-1">
                 {airport.couponCode}
               </code>
+              {airport.secondaryCoupon && (
+                <span class="text-[10px] text-neutral-400 block mt-1">
+                  历史/备选码：<code>{airport.secondaryCoupon}</code>
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -265,12 +405,19 @@ const breadcrumbs = [
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- 左侧主体内容 -->
       <div class="lg:col-span-2 space-y-8">
-        {/* 1. 详细套餐规格（如果有 packages，始终保留展示，保障转化） */}
+        {/* 1. 详细套餐规格与全系套餐资费表 */}
         {airport.packages && airport.packages.length > 0 && (
-          <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
-            <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2">
-              <Sparkles class="w-5 h-5 text-primary" /> {airport.name} 热门主推套餐资费
-            </h2>
+          <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                <Sparkles class="w-5 h-5 text-primary" /> {airport.name} 套餐资费与规格明细
+              </h2>
+              {airport.usageMode && (
+                <span class="text-[11px] px-2.5 py-1 rounded-full bg-primary/10 text-primary font-medium">
+                  使用方式：{airport.usageMode}
+                </span>
+              )}
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               {airport.packages.map((pkg, idx) => (
                 <div class:list={[
@@ -294,50 +441,194 @@ const breadcrumbs = [
                       ))}
                     </ul>
                   </div>
-                  <Button url={airport.affiliateUrl} target="_blank" type={idx === 1 ? "fill" : "outline"} className="text-xs w-full justify-center">
-                    立即订阅
+                  <Button url={airport.isAffiliate === false ? airport.officialUrl : airport.affiliateUrl} target="_blank" rel={airport.isAffiliate === false ? "nofollow noopener noreferrer" : "nofollow sponsored noopener"} type={idx === 1 ? "fill" : "outline"} className="text-xs w-full justify-center">
+                    {airport.isAffiliate === false ? "前往官方页面" : "立即订阅"}
                   </Button>
                 </div>
               ))}
             </div>
+
+            {airport.allPackages && airport.allPackages.length > 0 && (
+              <div class="pt-4 border-t border-primary/10">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                  <h3 class="text-sm font-bold text-neutral-800 dark:text-neutral-100">
+                    全系完整套餐价目档案（共 {airport.allPackages.length} 档）
+                  </h3>
+                  <span class="text-[11px] text-neutral-400">以官方结账页实时显示为准</span>
+                </div>
+                <div class="overflow-x-auto rounded-xl border border-primary/10">
+                  <table class="w-full text-xs text-left border-collapse">
+                    <thead>
+                      <tr class="bg-primary/5 text-neutral-700 dark:text-neutral-200 border-b border-primary/10">
+                        <th class="py-2.5 px-3 font-semibold">套餐名称</th>
+                        <th class="py-2.5 px-3 font-semibold">计费方式</th>
+                        <th class="py-2.5 px-3 font-semibold">官方报价</th>
+                        <th class="py-2.5 px-3 font-semibold">包含流量</th>
+                        <th class="py-2.5 px-3 font-semibold">重置周期</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-primary/10 bg-bg-primary dark:bg-neutral-900/40 text-neutral-600 dark:text-neutral-300">
+                      {airport.allPackages.map(row => (
+                        <tr class="hover:bg-primary/5 transition-colors">
+                          <td class="py-2 px-3 font-medium text-neutral-900 dark:text-neutral-100">{row.name}</td>
+                          <td class="py-2 px-3">{row.billingCycle}</td>
+                          <td class="py-2 px-3 font-bold text-primary">{row.price}</td>
+                          <td class="py-2 px-3">{row.traffic}</td>
+                          <td class="py-2 px-3">{row.period || '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {airport.priceNote && (
+                  <p class="mt-2.5 text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+                    <strong>资费说明：</strong>{airport.priceNote}
+                    {airport.isAffiliate !== false && '（含推广链接，通过链接注册可能为本站带来佣金，不影响用户支付价格）'}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         )}
 
-        {/* 2. 晚高峰测速与解锁实测截图展厅（如果有截图，始终保留展示，保障真实证据） */}
-        {airport.screenshots && airport.screenshots.length > 0 && (
-          <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
-            <div class="flex items-center justify-between mb-4">
+        {/* 1.5 分地区参考测速与 AI/流媒体精细解锁核验 */}
+        {((airport.regionalSpeedtests && airport.regionalSpeedtests.length > 0) || airport.unlockDetails || airport.speedtestNote) && (
+          <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10 space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
               <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-                <ImageIcon class="w-5 h-5 text-primary" /> 晚高峰真实测速与流媒体解锁截图
+                <Zap class="w-5 h-5 text-primary" /> 分地区测速档案与流媒体 / AI 解锁边界
               </h2>
-              <span class="text-xs text-neutral-400">真实设备本地跑测</span>
+              {airport.dataVerificationDate && (
+                <span class="text-[11px] text-neutral-400">核验批次：{airport.dataVerificationDate}</span>
+              )}
             </div>
-            <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-              以下截图为 2026 年最新实测采集，涵盖北方联通、南方电信以及移动多网晚高峰测速、千兆宽带跑满带宽及 Netflix/Disney+/ChatGPT 原生解锁矩阵：
+
+            {airport.speedtestNote && (
+              <div class="p-3.5 rounded-xl bg-bg-primary dark:bg-neutral-800/80 border border-primary/10 text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                <strong>实测数据说明：</strong>{airport.speedtestNote}
+              </div>
+            )}
+
+            {airport.regionalSpeedtests && airport.regionalSpeedtests.length > 0 && (
+              <div>
+                <h3 class="text-xs font-bold text-neutral-700 dark:text-neutral-200 mb-2.5">
+                  地区延迟与下行下载参考（仅代表当次采样环境，不代表晚高峰或长期实时均值）
+                </h3>
+                <div class="overflow-x-auto rounded-xl border border-primary/10">
+                  <table class="w-full text-xs text-left border-collapse">
+                    <thead>
+                      <tr class="bg-primary/5 text-neutral-700 dark:text-neutral-200 border-b border-primary/10">
+                        <th class="py-2 px-3 font-semibold">节点地区</th>
+                        <th class="py-2 px-3 font-semibold">采样延迟</th>
+                        <th class="py-2 px-3 font-semibold">采样下载速率</th>
+                        <th class="py-2 px-3 font-semibold">测试口径 / 日期</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-primary/10 bg-bg-primary dark:bg-neutral-900/40 text-neutral-600 dark:text-neutral-300">
+                      {airport.regionalSpeedtests.map(st => (
+                        <tr>
+                          <td class="py-2 px-3 font-medium text-neutral-900 dark:text-neutral-100">{st.region}</td>
+                          <td class="py-2 px-3 font-mono">{st.latency}</td>
+                          <td class="py-2 px-3 font-mono font-bold text-emerald-600 dark:text-emerald-400">{st.download}</td>
+                          <td class="py-2 px-3 text-neutral-500">{st.testDate || '历史记录'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {airport.unlockDetails && (
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                {airport.unlockDetails.supported.length > 0 && (
+                  <div class="p-3.5 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
+                    <span class="font-bold text-emerald-600 dark:text-emerald-400 block mb-1.5">✓ 明确支持解锁</span>
+                    <ul class="space-y-1 text-neutral-600 dark:text-neutral-300">
+                      {airport.unlockDetails.supported.map(item => <li>• {item}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {airport.unlockDetails.conditional.length > 0 && (
+                  <div class="p-3.5 rounded-xl bg-amber-500/5 border border-amber-500/20">
+                    <span class="font-bold text-amber-600 dark:text-amber-400 block mb-1.5">⚠ 视节点而定 / 需切换</span>
+                    <ul class="space-y-1 text-neutral-600 dark:text-neutral-300">
+                      {airport.unlockDetails.conditional.map(item => <li>• {item}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {airport.unlockDetails.untested && airport.unlockDetails.untested.length > 0 && (
+                  <div class="p-3.5 rounded-xl bg-neutral-500/5 border border-neutral-500/20">
+                    <span class="font-bold text-neutral-600 dark:text-neutral-300 block mb-1.5">? 待核实 / 未覆盖项</span>
+                    <ul class="space-y-1 text-neutral-500 dark:text-neutral-400">
+                      {airport.unlockDetails.untested.map(item => <li>• {item}</li>)}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 2. 真实节点测速与流媒体解锁实测截图展厅（仅展示已核验原图，含严格时间与局限声明） */}
+        {((airport.screenshotMeta && airport.screenshotMeta.length > 0) || (airport.screenshots && airport.screenshots.length > 0)) && (
+          <div class="p-6 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/10">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                <ImageIcon class="w-5 h-5 text-primary" /> 节点测速与流媒体解锁实测原图
+              </h2>
+              <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold">
+                dataStatus: measured · 原始探针截图
+              </span>
+            </div>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-4 leading-relaxed">
+              以下截图保留原始探针时间戳与客户端协议显示。请注意：各品牌采样时间与测试线程不同，<strong>不构成跨品牌实时横向排名</strong>；仅显示速率的单图亦不代表 AI / 流媒体永久解锁承诺。
             </p>
             <div class:list={[
               "gap-4",
-              airport.screenshots?.length === 1
+              (airport.screenshotMeta?.length || airport.screenshots?.length || 0) === 1
                 ? "flex justify-center max-w-3xl mx-auto"
                 : "grid grid-cols-1 sm:grid-cols-2"
             ]}>
-              {airport.screenshots.map((imgSrc, i) => (
-                <div class:list={[
-                  "rounded-xl overflow-hidden border border-primary/15 bg-neutral-900 group",
-                  airport.screenshots?.length === 1 ? "w-full shadow-md" : ""
+              {(airport.screenshotMeta && airport.screenshotMeta.length > 0
+                ? airport.screenshotMeta
+                : (airport.screenshots || []).map((imgSrc, i) => ({
+                    src: imgSrc,
+                    caption: `${airport.name} 实测节点样本 #${i + 1}`,
+                    alt: `${airport.name} 节点测速与解锁实测原图 ${i + 1}`,
+                    testedAt: undefined,
+                    toolFamily: undefined,
+                    protocolDisplayed: undefined,
+                    dataStatus: 'measured' as const,
+                    limitation: '单次测试快照，点击可查看大图核对明细。'
+                  }))
+              ).map((meta, i) => (
+                <figure class:list={[
+                  "rounded-xl overflow-hidden border border-primary/15 bg-neutral-900 group flex flex-col",
+                  (airport.screenshotMeta?.length || airport.screenshots?.length || 0) === 1 ? "w-full shadow-md" : ""
                 ]}>
-                  <a href={imgSrc} target="_blank" rel="nofollow sponsored noopener">
+                  <a href={meta.src} target="_blank" rel="nofollow noopener noreferrer" class="block">
                     <img
-                      src={imgSrc}
-                      alt={`${airport.name} 真实晚高峰测速与解锁实测图 ${i + 1}`}
-                      class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
+                      src={meta.src}
+                      alt={meta.alt}
+                      class="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-300"
                       loading="lazy"
                     />
                   </a>
-                  <div class="p-2 text-center text-[11px] text-neutral-400 bg-neutral-800">
-                    实测节点样本 #{i + 1}（点击可看大图）
-                  </div>
-                </div>
+                  <figcaption class="p-3 text-left text-[11px] text-neutral-300 bg-neutral-800/95 space-y-1">
+                    <div class="font-semibold text-white">{meta.caption}</div>
+                    {(meta.testedAt || meta.protocolDisplayed || meta.toolFamily) && (
+                      <div class="text-[10px] text-neutral-400 flex flex-wrap gap-x-3 gap-y-0.5">
+                        {meta.testedAt && <span>⏱ {meta.testedAt}</span>}
+                        {meta.protocolDisplayed && <span>📡 {meta.protocolDisplayed}</span>}
+                        {meta.toolFamily && <span>🧪 {meta.toolFamily}</span>}
+                      </div>
+                    )}
+                    {meta.limitation && (
+                      <div class="text-[10px] text-amber-300/90 leading-snug">{meta.limitation}</div>
+                    )}
+                  </figcaption>
+                </figure>
               ))}
             </div>
           </div>
@@ -394,7 +685,7 @@ const breadcrumbs = [
             <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-primary/10">
               <div class="flex items-center gap-2">
                 <span class="text-xs px-2.5 py-1 rounded-full bg-primary text-white font-bold tracking-wider">
-                  ★ 2026 万字深度测评专稿
+                  ★ 2026 深度实测测评专稿
                 </span>
                 <span class="text-xs text-neutral-500 dark:text-neutral-400 hidden sm:inline">
                   实测采集 · 拓扑拆解 · 避坑守则
@@ -425,6 +716,17 @@ const breadcrumbs = [
             <article class="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-brand prose-headings:scroll-mt-24 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-table:text-xs prose-th:bg-primary/5 prose-th:p-2.5 prose-td:p-2.5">
               <RenderedContent />
             </article>
+
+            <details class="mt-6 rounded-xl bg-bg-primary dark:bg-neutral-800/70 border border-primary/10 p-4 text-xs text-neutral-600 dark:text-neutral-300">
+              <summary class="font-bold text-neutral-800 dark:text-neutral-100 cursor-pointer flex items-center justify-between">
+                <span>🧪 评测口径与数据状态透明度说明（{airport.name} · 核验日 {brandDateModified}）</span>
+                <span class="text-[11px] text-primary">展开/收起 ▼</span>
+              </summary>
+              <div class="mt-3 pt-3 border-t border-primary/10 space-y-1.5 leading-relaxed">
+                <p><strong>测速基准：</strong> 严格优先参考晚高峰（20:00–23:00）多线程并发实测与公开套餐对账；无实测截图的品牌已标注核验口径或“暂无公开实测图”。</p>
+                <p><strong>风险提示：</strong> 跨境网络受本地运营商与国际出口调度波动影响，建议新用户坚持单月月付试水，详见 <a href="/methodology/" class="text-primary underline">评测方法论</a> 与 <a href="/disclosure/" class="text-primary underline">商业披露声明</a>。</p>
+              </div>
+            </details>
           </div>
         ) : (
           <>
@@ -532,7 +834,7 @@ const breadcrumbs = [
                       </tr>
                       <tr>
                         <td class="py-2.5 px-3 font-medium text-neutral-800 dark:text-neutral-200">晚高峰丢包率</td>
-                        <td class="py-2.5 px-3">约 0.8% - 3.5%（视骨干波动）</td>
+                        <td class="py-2.5 px-3">{airport.latencyMs <= 35 ? "低波动区间（实测详见正文）" : "视公网与运营商路由波动"}</td>
                         <td class="py-2.5 px-3 font-bold text-emerald-500">0.00%（物理专线零丢包）</td>
                       </tr>
                       <tr>
@@ -577,12 +879,15 @@ const breadcrumbs = [
               <h2 class="text-xl font-bold font-brand text-neutral-900 dark:text-neutral-100 mb-4">
                 五、关于 {airport.name} 的高频疑问解答
               </h2>
-              <div class="space-y-4">
+              <div class="space-y-3">
                 {brandFaqs.map(faq => (
-                  <div class="p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5">
-                    <h4 class="font-bold text-sm text-neutral-800 dark:text-neutral-100 mb-1">{faq.question}</h4>
-                    <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">{faq.answer}</p>
-                  </div>
+                  <details class="group p-4 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/10">
+                    <summary class="font-bold text-sm text-neutral-800 dark:text-neutral-100 cursor-pointer flex items-center justify-between gap-2">
+                      <span>{faq.question}</span>
+                      <span class="text-xs text-neutral-400 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed mt-2.5 pt-2.5 border-t border-primary/5">{faq.answer}</p>
+                  </details>
                 ))}
               </div>
             </div>
@@ -649,7 +954,7 @@ const breadcrumbs = [
           <div class="space-y-3">
             {alternativeAirports.map(alt => (
               <a
-                href={`/reviews/${alt.slug}`}
+                href={`/reviews/${alt.slug}/`}
                 class="block p-3 rounded-xl bg-bg-primary dark:bg-neutral-800 border border-primary/5 hover:border-primary transition-all group"
               >
                 <div class="flex items-center justify-between mb-1">
@@ -660,6 +965,20 @@ const breadcrumbs = [
               </a>
             ))}
           </div>
+        </div>
+
+        <!-- 相关选购专题与横向对比 -->
+        <div class="p-5 rounded-2xl bg-bg-secondary dark:bg-bg-secondary-dark border border-primary/15">
+          <h3 class="text-sm font-bold text-neutral-800 dark:text-neutral-100 mb-3">
+            专题对比与避坑参考
+          </h3>
+          <ul class="space-y-2 text-xs">
+            <li><a href="/pricing/" class="text-primary hover:underline">→ 2026 性价比机场套餐与官网入口榜</a></li>
+            <li><a href="/recommend/" class="text-primary hover:underline">→ 全网口碑与稳定机场综合推荐</a></li>
+            <li><a href="/free/" class="text-primary hover:underline">→ 免费机场试用与白嫖避坑名单</a></li>
+            <li><a href="/wiki/airport-coupon-official-guide/" class="text-primary hover:underline">→ 优惠码真伪核查与防钓鱼指南</a></li>
+            <li><a href="/compare/" class="text-primary hover:underline">→ 全站机场横向参数对比矩阵</a></li>
+          </ul>
         </div>
       </div>
     </div>

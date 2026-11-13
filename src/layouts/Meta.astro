@@ -34,8 +34,12 @@ const {
 } = Astro.props;
 
 // Compute strict canonical URL based on primary apex domain https://jichangbang.org
-const pathname = Astro.url.pathname.replace(/\/$/, '') || '';
-const canonicalUrl = url || (pathname === '' ? `${siteConfig.url}/` : `${siteConfig.url}${pathname}`);
+// Ensure canonical URL has trailing slash for directory routes, matching Astro sitemap and 200 OK responses
+let pathname = Astro.url.pathname;
+if (!pathname.endsWith('/')) {
+  pathname += '/';
+}
+const canonicalUrl = url || `${siteConfig.url}${pathname}`;
 
 const rawModified = modifiedTime || publishedTime;
 const isoPublishedTime = publishedTime ? new Date(publishedTime).toISOString() : undefined;

@@ -10,7 +10,7 @@ const { title, description,keywords} = Astro.props;
 ---
 
 <Layout title={title} description={description} keywords={keywords}>
-  <main class="post-wrapper">
+  <div class="post-wrapper">
       <slot />
-  </main>
+  </div>
 </Layout>

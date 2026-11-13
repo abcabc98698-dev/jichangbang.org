@@ -50,17 +50,23 @@ const faqItems = [
 const breadcrumbs = [
   { name: "首页", url: "/" }
 ];
+const homeItemList = topAirports.map((a, i) => ({
+  name: `${a.name} (${a.lineType} · ¥${a.monthlyPrice}/${a.minDuration})`,
+  url: `/reviews/${a.slug}/`,
+  position: i + 1
+}));
 ---
 
 <Layout
-  title="机场榜一 — 2026性价比机场推荐榜 · VPN免费翻墙机场测评与稳定好用机场推荐更新"
-  description="机场榜一 (jichangbang.org) 是全网权威客观的 2026 性价比机场推荐榜与实时评测总入口。提供 VPN 免费翻墙与专线机场测评、晚高峰测速、ChatGPT/Claude 场景解锁及稳定好用机场推荐更新。"
-  keywords="2026性价比机场推荐榜, VPN, 免费翻墙, 机场测评, 稳定好用机场推荐更新, 机场推荐, 2026机场推荐, 机场排行榜, 机场哪个好, 高性价比机场, 便宜机场, 专线机场, IPLC机场, IEPL机场, ChatGPT机场, 机场榜一"
+  title="机场榜一 — 2026性价比机场推荐榜 · 稳定好用机场测评与免费试用指南"
+  description="机场榜一 (jichangbang.org) 是2026权威性价比机场推荐榜与实测平台，每日更新10-30元高性价比专线机场测评、晚高峰20:00-23:00三网测速、免费试用通道及ChatGPT/Claude原生住宅IP解锁表现，助你避开跑路坑稳选主力机场。"
+  keywords="2026性价比机场推荐榜, 性价比机场, 机场, 机场推荐, 免费机场节点, 免费机场试用, 白嫖机场, 机场测评, 稳定好用机场推荐更新, 机场排行榜, IEPL机场, ChatGPT机场, 机场榜一"
 >
   <!-- SEO JSON-LD -->
   <JsonLd type="WebSite" />
   <JsonLd type="FAQPage" faqItems={faqItems} />
   <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
+  <JsonLd type="ItemList" itemList={homeItemList} />
 
   <!-- 1. Hero 模块 -->
   <HeroSection />

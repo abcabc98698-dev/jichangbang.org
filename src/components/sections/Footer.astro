@@ -7,31 +7,32 @@ const currentYear = new Date().getFullYear();
 
 const footerLinks = {
   core: [
-    { name: "2026 机场推荐", url: "/recommend" },
-    { name: "机场综合排行", url: "/ranking" },
-    { name: "热门品牌评测", url: "/reviews" },
-    { name: "服务商数据库", url: "/providers" },
-    { name: "价格套餐筛选", url: "/pricing" },
-    { name: "两家机场对比", url: "/compare" },
+    { name: "2026 机场推荐", url: "/recommend/" },
+    { name: "机场综合排行", url: "/ranking/" },
+    { name: "性价比机场与官网", url: "/pricing/" },
+    { name: "免费机场与试用", url: "/free/" },
+    { name: "热门品牌评测", url: "/reviews/" },
+    { name: "两家机场对比", url: "/compare/" },
   ],
   tech: [
-    { name: "线路节点科普", url: "/protocols" },
-    { name: "全平台客户端", url: "/clients" },
-    { name: "新手与进阶教程", url: "/tutorials" },
-    { name: "网络排障中心", url: "/issues" },
+    { name: "服务商数据库", url: "/providers/" },
+    { name: "线路节点科普", url: "/protocols/" },
+    { name: "全平台客户端", url: "/clients/" },
+    { name: "新手与进阶教程", url: "/tutorials/" },
+    { name: "网络排障中心", url: "/issues/" },
   ],
   scene: [
-    { name: "AI与流媒体解锁", url: "/ai-streaming" },
-    { name: "机场风险监控", url: "/risk" },
-    { name: "高性价比预算榜", url: "/pricing" },
-    { name: "常青知识百科", url: "/wiki" },
+    { name: "AI与流媒体解锁", url: "/ai-streaming/" },
+    { name: "机场风险监控", url: "/risk/" },
+    { name: "常青知识百科", url: "/wiki/" },
+    { name: "性价比选型指南", url: "/wiki/cost-effective-airport-guide/" },
   ],
   about: [
-    { name: "关于机场榜一", url: "/about" },
-    { name: "评测方法与标准", url: "/methodology" },
-    { name: "推广与商业披露", url: "/disclosure" },
-    { name: "隐私保护政策", url: "/privacy" },
-    { name: "服务条款与免责", url: "/terms" },
+    { name: "关于机场榜一", url: "/about/" },
+    { name: "评测方法与标准", url: "/methodology/" },
+    { name: "推广与商业披露", url: "/disclosure/" },
+    { name: "隐私保护政策", url: "/privacy/" },
+    { name: "服务条款与免责", url: "/terms/" },
   ],
 };
 
@@ -131,7 +132,8 @@ const templateVersion = "v2026.1";
           {socialLinks.map((social) => (
             <a
               href={social.url}
-              target="_blank"
+              target={social.url.startsWith('http') ? '_blank' : undefined}
+              rel={social.url.startsWith('http') ? 'nofollow noopener noreferrer' : undefined}
               class="footer-social-icon-link text-neutral-400 dark:text-neutral-500 hover:text-primary dark:hover:text-primary-light transition-colors duration-200"
               title={social.name}
             >

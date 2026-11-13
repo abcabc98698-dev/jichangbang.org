@@ -39,15 +39,15 @@ if (currentPage === 1) {
 
 const breadcrumbs = [
   { name: "首页", url: "/" },
-  { name: "知识百科", url: "/wiki" },
-  { name: `第 ${currentPage} 页`, url: `/wiki/page/${currentPage}` }
+  { name: "知识百科", url: "/wiki/" },
+  { name: `第 ${currentPage} 页`, url: `/wiki/page/${currentPage}/` }
 ];
 ---
 
 <Layout
-  title={`出海网络常青知识百科 — 第 ${currentPage} 页【2026百科】`}
-  description={`机场榜一知识百科专栏第 ${currentPage} 页：发布专线原理深度科普、住宅家宽 IP 与机房 IP 辨析、晚高峰网络抖动成因以及出海网络抗封锁核心知识。`}
-  keywords="机场百科, 出海网络知识库, IEPL专线原理, 住宅IP科普, 机场选购指南, 机场榜一"
+  title={`出海网络知识百科 — 第 ${currentPage} 页：专线·防坑·品牌深度解析【2026】`}
+  description={`机场榜一（jichangbang.org）知识百科专栏第 ${currentPage} 页：收录高性价比机场选购指南、IEPL物理专线与住宅IP辨析、免费机场试用策略、各品牌官网防钓鱼核验、晚高峰网络抖动排查与出海客户端分流教程，为您提供可靠参考。`}
+  keywords="机场百科, 出海网络知识库, 性价比机场选购, IEPL专线原理, 住宅IP科普, 机场榜一"
 >
   <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
 

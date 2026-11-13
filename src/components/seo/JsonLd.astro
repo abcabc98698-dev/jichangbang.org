@@ -10,6 +10,7 @@ export interface Props {
     title: string;
     description: string;
     publishDate?: Date | string;
+    modifiedDate?: Date | string;
     author?: string;
     url?: string;
     image?: string;
@@ -36,9 +37,7 @@ if (type === 'Organization') {
     "logo": "https://jichangbang.org/favicon.png",
     "description": "专业客观的 2026 机场推荐、综合排行榜、品牌测评与价格对比平台。",
     "sameAs": [
-      "https://x.com/jichangbang",
-      "https://t.me/jichangbang",
-      "https://github.com/jichangbang"
+      "https://t.me/jichangbang"
     ]
   };
 } else if (type === 'WebSite') {
@@ -87,26 +86,28 @@ if (type === 'Organization') {
       "worstRating": "1"
     },
     "author": {
-      "@type": "Person",
+      "@type": "Organization",
       "name": "机场榜网络技术评测组",
-      "jobTitle": "资深网络评测工程师"
+      "url": "https://jichangbang.org/methodology/"
     },
     "publisher": {
       "@type": "Organization",
       "name": "机场榜一",
       "url": "https://jichangbang.org"
     },
-    "datePublished": "2026-08-19",
-    "dateModified": "2026-10-26"
+    "datePublished": data.datePublished || "2026-09-01",
+    "dateModified": data.dateModified || "2026-11-13"
   };
 } else if (type === 'Article' && article) {
+  const pubIso = article.publishDate ? new Date(article.publishDate).toISOString() : "2026-09-01T00:00:00.000Z";
+  const modIso = article.modifiedDate ? new Date(article.modifiedDate).toISOString() : pubIso;
   jsonLdPayload = {
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": article.title,
     "description": article.description,
-    "datePublished": article.publishDate ? new Date(article.publishDate).toISOString() : new Date().toISOString(),
-    "dateModified": article.publishDate ? new Date(article.publishDate).toISOString() : new Date().toISOString(),
+    "datePublished": pubIso,
+    "dateModified": modIso,
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": article.url || "https://jichangbang.org/wiki"

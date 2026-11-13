@@ -15,8 +15,13 @@ const lineAirports = airports.filter(a => a.lineType.includes('专线'));
 
 const breadcrumbs = [
   { name: "首页", url: "/" },
-  { name: "机场推荐", url: "/recommend" }
+  { name: "机场推荐", url: "/recommend/" }
 ];
+const recommendItemList = priorityAirports.map((a, i) => ({
+  name: `${a.name} (${a.score}分 · ${a.lineType})`,
+  url: `/reviews/${a.slug}/`,
+  position: i + 1
+}));
 
 // 8 组高价值商业转化与选购决策常见问题
 const faqList = [
@@ -56,12 +61,13 @@ const faqList = [
 ---
 
 <Layout
-  title="2026 机场推荐 — 稳定好用机场综合选购指南【全天候晚高峰实测】 | 机场榜一"
-  description="2026年机场推荐最全指南：从综合实力金牌梯队、预算价格（10元/15元/20元）、流量规格、IEPL/IPLC物理专线、ChatGPT与海外流媒体解锁场景及全球节点多维度深度评选，助你选到稳定不跑路的高质量好用机场。"
-  keywords="机场推荐, 2026机场推荐, 稳定好用机场推荐, 靠谱机场推荐, 10元机场推荐, IEPL机场推荐, ChatGPT机场推荐, 机场怎么选, 机场榜一"
+  title="2026 稳定好用机场推荐榜 — 晚高峰实测精选 · 10元至30元高性价比机场选购指南 | 机场榜一"
+  description="2026稳定好用机场推荐权威指南：基于电信/联通/移动晚高峰20:00-23:00三网实测，从综合实力、10-20元高性价比预算、IEPL/IPLC物理专线、ChatGPT/Claude住宅IP解锁及不限时备用五大维度精选靠谱老牌机场，附真实测速与官网入口。"
+  keywords="机场推荐, 2026机场推荐, 稳定好用机场推荐, 靠谱机场推荐, 性价比机场推荐, 10元机场推荐, IEPL机场推荐, ChatGPT机场推荐, 机场怎么选, 机场榜一"
 >
   <JsonLd type="BreadcrumbList" breadcrumbs={breadcrumbs} />
   <JsonLd type="FAQPage" faqItems={faqList} />
+  <JsonLd type="ItemList" itemList={recommendItemList} />
 
   <!-- 页面头部 -->
   <section class="relative z-20 site-container my-10 md:my-14">
@@ -69,6 +75,18 @@ const faqList = [
       title="2026 机场推荐：稳定好用机场综合选购指南"
       description="拒绝虚标带宽与晚高峰拥堵断流。机场榜一为您梳理六条核心内容主线，根据真实月度预算、骨干专线拓扑与关键应用场景，客观匹配最合适的机场服务商。"
     />
+
+    <!-- 上下游核心专题直达栏 -->
+    <div class="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs text-neutral-500">
+      <span>延伸专题：</span>
+      <a href="/pricing/" class="text-primary font-semibold hover:underline">性价比机场与官网入口精算 →</a>
+      <span>·</span>
+      <a href="/free/" class="text-primary font-semibold hover:underline">免费试用与白嫖避坑实测 →</a>
+      <span>·</span>
+      <a href="/wiki/airport-selection-guide/" class="text-primary font-semibold hover:underline">新手机场选购逻辑百科 →</a>
+      <span>·</span>
+      <a href="/ranking/" class="text-primary font-semibold hover:underline">42家晚高峰完整天梯榜 →</a>
+    </div>
 
     <!-- 6 大主线快捷锚点导航 -->
     <div class="flex flex-wrap items-center justify-center gap-2 mt-6 max-w-4xl mx-auto">

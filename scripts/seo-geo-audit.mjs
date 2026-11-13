@@ -301,10 +301,11 @@ recordSection('RSS', rssPassed, rssDetails);
 console.log('\n--- 6. Auditing IndexNow System ---');
 let indexNowPassed = true;
 const indexNowDetails = [];
-const indexNowKey = '8d7f2b9a4c1e6f3085a2b1c4e9d7f023';
+const statePath = path.join(seoSystemDir, 'indexnow-state.json');
+const stateJsonPreview = loadJson(statePath);
+const indexNowKey = stateJsonPreview?.key || '90bda009942249abab9bf96226f47779';
 const pubKeyPath = path.join(rootDir, 'public', `${indexNowKey}.txt`);
 const distKeyPath = path.join(distDir, `${indexNowKey}.txt`);
-const statePath = path.join(seoSystemDir, 'indexnow-state.json');
 
 if (!fs.existsSync(pubKeyPath) || !fs.existsSync(distKeyPath)) {
   logFail('INDEXNOW', `IndexNow verification key file missing (${indexNowKey}.txt).`);

@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const statePath = path.resolve(rootDir, 'seo-system/indexnow-state.json');
 const registryPath = path.resolve(rootDir, 'seo-system/existing-url-registry.json');
-const keyPath = path.resolve(rootDir, 'public/8d7f2b9a4c1e6f3085a2b1c4e9d7f023.txt');
+const keyPath = path.resolve(rootDir, 'public/90bda009942249abab9bf96226f47779.txt');
 
 console.log('🚀 Running IndexNow Incremental Submission Engine...');
 

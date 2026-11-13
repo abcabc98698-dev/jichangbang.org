@@ -1,5 +1,5 @@
 // 机场品牌核心数据库 - 机场榜一 (jichangbang.org)
-// 包含 18 个真实推广机场品牌，以【光速云】为主推榜首旗舰
+// 包含 42 家精选实测与档案收录机场品牌，以【光速云】为主推榜首旗舰（2026-10 完整核验版）
 
 export interface AirportPackage {
   name: string;
@@ -7,6 +7,32 @@ export interface AirportPackage {
   traffic: string;
   line: string;
   features: string[];
+}
+
+export interface AirportScreenshotMeta {
+  src: string;
+  caption: string;
+  alt: string;
+  testedAt?: string;
+  toolFamily?: string;
+  protocolDisplayed?: string;
+  dataStatus: 'measured' | 'vendor';
+  limitation?: string;
+}
+
+export interface AirportPackageRow {
+  name: string;
+  billingCycle: string;
+  price: string;
+  traffic: string;
+  period: string;
+}
+
+export interface AirportRegionalSpeedtest {
+  region: string;
+  latency: string;
+  download: string;
+  testDate?: string;
 }
 
 export interface Airport {
@@ -57,6 +83,18 @@ export interface Airport {
   description: string;
   screenshots?: string[];
   packages?: AirportPackage[];
+  screenshotMeta?: AirportScreenshotMeta[];
+  allPackages?: AirportPackageRow[];
+  regionalSpeedtests?: AirportRegionalSpeedtest[];
+  speedtestNote?: string;
+  secondaryCoupon?: string;
+  usageMode?: string;
+  unlockDetails?: {
+    supported: string[];
+    conditional: string[];
+    untested?: string[];
+  };
+  dataVerificationDate?: string;
 }
 
 export const airports: Airport[] = [
@@ -135,7 +173,7 @@ export const airports: Airport[] = [
     "isBudget": true,
     "isAffiliate": true,
     "minDuration": "月付",
-    "priceNote": "轻量版年付99元(折合~8.25元/月 69GB)；极速版月付25元/月(168GB 全球IPLC 2.5Gbps)；致敬斯诺克永久套餐147元(247GB永久版)；定制版680元/月",
+    "priceNote": "致敬斯诺克147永久套餐 ¥147（247GB不过期）；轻量版 ¥99/年（69GB/月）；极速版 ¥25/月（168GB）；流光版 ¥34/月（268GB）；量子版 ¥68/月（568GB）；无界版 ¥138/月（900GB）；定制套餐 ¥680/月；特殊商品不支持退款，优惠码 AMM",
     "features": [
       "2020年老牌运营",
       "IEPL专线 + 企业内网双线路",
@@ -148,12 +186,12 @@ export const airports: Airport[] = [
     ],
     "description": "光速云成立于 2020 年，是经过历次网络封锁重压检验的业内标杆级综合专线机场。全线采用全球 IPLC / IEPL 企业级内网专线架构，物理线路点对点直达，不经过 GFW 公网出口审查，即使在敏感期和晚高峰仍能提供超低延迟与零丢包体验。提供自研开箱即用客户端，同时完整兼容 Clash、Shadowrocket、Surge 等主流客户端。协议以高抗干扰的 VLESS 为主，覆盖香港、台湾、日本、新加坡、美国等核心地区原生节点。",
     "screenshots": [
+      "/assets/speedtest/guangsu-speedtest.png",
       "/assets/speedtest/photo_2026-08-19_12-20-10.jpg",
       "/assets/speedtest/photo_2026-08-19_12-18-40.jpg",
-      "/assets/speedtest/photo_2026-09-07_12-51-58.jpg",
-      "/assets/speedtest/photo_2026-09-07_12-51-59.jpg",
       "/assets/speedtest/photo_2026-08-19_12-13-01.jpg",
-      "/assets/speedtest/guangsu-speedtest.png"
+      "/assets/speedtest/photo_2026-08-19_12-13-50.jpg",
+      "/assets/speedtest/photo_2026-08-19_12-13-58.jpg"
     ],
     "packages": [
       {
@@ -195,24 +233,24 @@ export const airports: Airport[] = [
       {
         "name": "流光版 (进阶高速大流量)",
         "price": "34 元 / 月",
-        "traffic": "238 GB / 月",
-        "line": "全球 IPLC 高速专线",
+        "traffic": "268 GB / 月",
+        "line": "全球 IPLC 专线",
         "features": [
           "全节点 x1 倍率",
           "全流媒体 4K/8K 原生解锁",
-          "ChatGPT / Claude 极速响应",
+          "多地区节点支持",
           "半年9折 / 年付8折"
         ]
       },
       {
         "name": "量子版 (专业团队主力)",
         "price": "68 元 / 月",
-        "traffic": "500 GB / 月",
+        "traffic": "568 GB / 月",
         "line": "双活 IPLC / IEPL 专线",
         "features": [
-          "500GB 海量高速专线流量",
+          "568GB 海量高速专线流量",
           "适合小微团队与外贸工作室",
-          "独享高优先级服务通道",
+          "高优先级服务通道",
           "支持多端同时在线"
         ]
       },
@@ -228,7 +266,170 @@ export const airports: Airport[] = [
           "超低时延与最高隐私隔离级别"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 第三方订阅导入（Clash / Shadowrocket / Surge 等）",
+    "allPackages": [
+      {
+        "name": "光速云·致敬斯诺克147永久套餐",
+        "billingCycle": "一次性付费",
+        "price": "¥147",
+        "traffic": "247GB不过期",
+        "period": ""
+      },
+      {
+        "name": "光速云·轻量版",
+        "billingCycle": "年付",
+        "price": "¥99",
+        "traffic": "69GB",
+        "period": "每月"
+      },
+      {
+        "name": "光速云·极速版",
+        "billingCycle": "月付",
+        "price": "¥25",
+        "traffic": "168GB",
+        "period": "每月"
+      },
+      {
+        "name": "光速云·流光版",
+        "billingCycle": "月付",
+        "price": "¥34",
+        "traffic": "268GB",
+        "period": "每月"
+      },
+      {
+        "name": "光速云·量子版",
+        "billingCycle": "月付",
+        "price": "¥68",
+        "traffic": "568GB",
+        "period": "每月"
+      },
+      {
+        "name": "光速云·无界版",
+        "billingCycle": "月付",
+        "price": "¥138",
+        "traffic": "900GB",
+        "period": "每月"
+      },
+      {
+        "name": "光速云·定制套餐",
+        "billingCycle": "月付",
+        "price": "¥680",
+        "traffic": "500GB",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "22ms",
+        "download": "529Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "41ms",
+        "download": "114Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "46ms",
+        "download": "387Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "57ms",
+        "download": "135Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "143ms",
+        "download": "18Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/guangsu-speedtest.png",
+        "caption": "光速云 54节点 Shadowsocks 实测（MAI-TEST-BOT，2026-08-11 14:32:56 CST，珠海联通 5Gbps 32线程）",
+        "alt": "光速云 2026-08-11 Shadowsocks 节点测速实测截图（MAI-TEST-BOT）",
+        "testedAt": "2026-08-11 14:32:56 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev（珠海联通 5Gbps 32线程）",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单次通道快照，不含 AI/流媒体解锁校验。"
+      },
+      {
+        "src": "/assets/speedtest/photo_2026-08-19_12-20-10.jpg",
+        "caption": "光速云 70节点 VLESS 订阅实测速度曲线（MiaoKo 4.7.0，珠海联通 9Gbps 单线程，香港均速 380–424MB/s）",
+        "alt": "光速云 70节点 VLESS 订阅实测速度与延迟曲线图",
+        "testedAt": "2026-08-19 收录（MiaoKo 4.7.0）",
+        "toolFamily": "MiaoKo 4.7.0 [A14-1]（珠海联通 9Gbps 单线程）",
+        "protocolDisplayed": "VLESS",
+        "dataStatus": "measured",
+        "limitation": "仅反映当次单线程测速环境表现。"
+      },
+      {
+        "src": "/assets/speedtest/photo_2026-08-19_12-18-40.jpg",
+        "caption": "光速云 70节点 VLESS+AnyTLS 12项流媒体与 OpenAI/Steam 矩阵解锁实测（美/日/新/台/港详细列示）",
+        "alt": "光速云 70节点 YouTube Netflix Disney+ TikTok OpenAI Steam 解锁矩阵实测图",
+        "testedAt": "2026-08-19 收录（MiaoKo 4.7.0）",
+        "toolFamily": "MiaoKo 4.7.0 [A14-1]（珠海联通 9Gbps 单线程）",
+        "protocolDisplayed": "VLESS + AnyTLS",
+        "dataStatus": "measured",
+        "limitation": "流媒体与 AI 解锁状态随上游 IP 变动动态变化，以实时检测为准。"
+      },
+      {
+        "src": "/assets/speedtest/photo_2026-08-19_12-13-01.jpg",
+        "caption": "光速云 62节点 Shadowsocks 电信实测（长沙电信@2Gbps）：含 Disney+/Netflix/YouTube/OpenAI/Gemini 与 IP 风险分",
+        "alt": "光速云 长沙电信 2Gbps 62节点测速及流媒体 AI 解锁实测截图",
+        "testedAt": "2026-08-19 收录（SC-2.3.1 长沙电信）",
+        "toolFamily": "SC-2.3.1（A-长沙电信@2Gbps 6线程）",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "实测显示香港节点 OpenAI 多为仅 App 可用、Gemini 多数失败；新加坡节点双全绿。"
+      },
+      {
+        "src": "/assets/speedtest/photo_2026-08-19_12-13-50.jpg",
+        "caption": "光速云 62节点 Shadowsocks 移动实测（广西移动@2Gbps）：含延迟、平均/最高速与 AI/流媒体逐节点矩阵",
+        "alt": "光速云 广西移动 2Gbps 62节点测速与解锁对比截图",
+        "testedAt": "2026-08-19 收录（SC-2.3.1 广西移动）",
+        "toolFamily": "SC-2.3.1（A-广西移动@2Gbps 6线程）",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "广西移动跨境直连/专线接入参考快照。"
+      },
+      {
+        "src": "/assets/speedtest/photo_2026-08-19_12-13-58.jpg",
+        "caption": "光速云 62节点 Shadowsocks 联通实测（河北联通@2Gbps）：北方联通三网交叉验证节点可达性与解锁",
+        "alt": "光速云 河北联通 2Gbps 62节点测速与流媒体解锁截图",
+        "testedAt": "2026-08-19 收录（SC-2.3.1 河北联通）",
+        "toolFamily": "SC-2.3.1（A-河北联通@2Gbps 6线程）",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "河北联通接入参考快照，三网实测可交叉验证稳定性。"
+      }
+    ],
+    "unlockDetails": {
+      "supported": [
+        "Claude",
+        "Netflix",
+        "Disney+",
+        "YouTube",
+        "HBO Max",
+        "TikTok",
+        "Spotify"
+      ],
+      "conditional": [
+        "ChatGPT（视节点而定，建议选用美国/日本/新加坡等原生或已验证节点）",
+        "Gemini（视节点而定，实测新加坡与部分冷门地区节点稳定，港/美/日部分节点可能失败）"
+      ]
+    },
+    "speedtestNote": "包含 2026-08-11 实测图、2026-08-19 电信/移动/联通三网 62 节点与 70 节点矩阵，以及 2026-10-19 非晚高峰地区参考测速（香港 22ms / 529Mbps、新加坡 46ms / 387Mbps）。"
   },
   {
     "id": "feimao",
@@ -343,7 +544,105 @@ export const airports: Airport[] = [
           "不限设备连接"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端（含双十一特惠/年付/按月多档）+ 支持第三方通用订阅",
+    "allPackages": [
+      {
+        "name": "飞猫·学生版",
+        "billingCycle": "年付",
+        "price": "¥84",
+        "traffic": "50GB",
+        "period": "每月"
+      },
+      {
+        "name": "飞猫·星耀版",
+        "billingCycle": "月付",
+        "price": "¥25",
+        "traffic": "150GB",
+        "period": "每月"
+      },
+      {
+        "name": "飞猫·星环版",
+        "billingCycle": "月付",
+        "price": "¥45",
+        "traffic": "300GB",
+        "period": "每月"
+      },
+      {
+        "name": "飞猫·银河版",
+        "billingCycle": "月付",
+        "price": "¥85",
+        "traffic": "600GB",
+        "period": "每月"
+      },
+      {
+        "name": "飞猫·宇宙版",
+        "billingCycle": "月付",
+        "price": "¥150",
+        "traffic": "1000GB",
+        "period": "每月"
+      },
+      {
+        "name": "飞猫·不限时套餐",
+        "billingCycle": "一次性付费",
+        "price": "¥680",
+        "traffic": "1000GB",
+        "period": "一次性"
+      },
+      {
+        "name": "飞猫·定制套餐",
+        "billingCycle": "月付",
+        "price": "¥550",
+        "traffic": "500GB",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "21ms",
+        "download": "526Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "41ms",
+        "download": "116Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "45ms",
+        "download": "413Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "54ms",
+        "download": "138Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "178ms",
+        "download": "14Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/feimao-speedtest.png",
+        "caption": "飞猫云 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 08:52:30 CST）",
+        "alt": "飞猫云 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 08:52:30 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
+    ],
+    "speedtestNote": "已双源核对：具备 2026-08-11 节点实测图与 2026-10-19 非晚高峰 5 地区测速记录。"
   },
   {
     "id": "breeze",
@@ -445,7 +744,112 @@ export const airports: Airport[] = [
           "晚高峰低延迟保障"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "专属客户端，下载登录即用（2026 年 10 月起部分通道不提供通用订阅链接）",
+    "allPackages": [
+      {
+        "name": "清风 (Breeze)",
+        "billingCycle": "年付",
+        "price": "¥137",
+        "traffic": "100GB",
+        "period": "每月"
+      },
+      {
+        "name": "乘风 (Riding)",
+        "billingCycle": "月付",
+        "price": "¥27",
+        "traffic": "200GB",
+        "period": "每月"
+      },
+      {
+        "name": "破风 (Breaking)",
+        "billingCycle": "月付",
+        "price": "¥57",
+        "traffic": "500GB",
+        "period": "每月"
+      },
+      {
+        "name": "御风 (Mastery)",
+        "billingCycle": "月付",
+        "price": "¥127",
+        "traffic": "1200GB",
+        "period": "每月"
+      },
+      {
+        "name": "信风·不限时",
+        "billingCycle": "一次性付费",
+        "price": "¥200",
+        "traffic": "270GB",
+        "period": "一次性"
+      },
+      {
+        "name": "长风·不限时",
+        "billingCycle": "一次性付费",
+        "price": "¥370",
+        "traffic": "570GB",
+        "period": "一次性"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "25ms",
+        "download": "546Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "40ms",
+        "download": "115Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "43ms",
+        "download": "384Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "54ms",
+        "download": "131Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "167ms",
+        "download": "17Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/breeze-speedtest.png",
+        "caption": "微风网络 50节点 VLESS 订阅速度实测（MiaoKo 4.7.0，2026-07-19 18:38:20 CST，珠海联通 9Gbps 32线程）",
+        "alt": "微风网络 50节点 VLESS 晚高峰前段实测速度截图",
+        "testedAt": "2026-07-19 18:38:20 (CST)",
+        "toolFamily": "MiaoKo 4.7.0 [A11-32]（珠海联通 9Gbps 32线程）",
+        "protocolDisplayed": "VLESS",
+        "dataStatus": "measured",
+        "limitation": "该次采样台湾02与日本05接近无吞吐，其余港/新/日/台/美节点正常，不含 AI 专项校验。"
+      }
+    ],
+    "unlockDetails": {
+      "supported": [
+        "ChatGPT",
+        "Claude",
+        "Netflix",
+        "Disney+",
+        "YouTube",
+        "HBO Max",
+        "TikTok",
+        "Spotify"
+      ],
+      "conditional": [
+        "Gemini（视节点而定）"
+      ]
+    }
   },
   {
     "id": "muguang",
@@ -509,7 +913,7 @@ export const airports: Airport[] = [
     "isBudget": false,
     "isAffiliate": true,
     "minDuration": "月付",
-    "priceNote": "月付18元/100GB起；专属优惠码 muguang5555",
+    "priceNote": "月付 ¥20/120GB 起，另有标准版 ¥40/240GB、旗舰版 ¥100/700GB、至尊版 ¥180/1.5TB、年付轻量 ¥109/年(70GB/月) 及三档不限时流量包；总表历史记录优惠码 muguang5555，2026-10 核查暂无公开新码，下单前请核对结账页或咨询客服",
     "features": [
       "BGP智能调度",
       "专线级出口",
@@ -517,9 +921,7 @@ export const airports: Airport[] = [
       "低延迟优化"
     ],
     "description": "暮光加速采用 BGP 智能调度与专线级出口架构，针对亚太和欧美常用访问场景进行针对性路由优化。兼容 Windows、macOS、iOS、Android 全平台客户端，提供稳定的网络表现与流媒体解锁能力。",
-    "screenshots": [
-      "/assets/speedtest/muguang-speedtest.png"
-    ],
+    "screenshots": [],
     "packages": [
       {
         "name": "暮光·基础版",
@@ -543,7 +945,123 @@ export const airports: Airport[] = [
           "工单优先处理"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "支持多平台客户端（Windows / macOS / iOS / Android / Linux）及多设备同时在线",
+    "allPackages": [
+      {
+        "name": "【暮光·基础版】",
+        "billingCycle": "月付",
+        "price": "¥20",
+        "traffic": "120GB",
+        "period": "每月"
+      },
+      {
+        "name": "【暮光·标准版】",
+        "billingCycle": "月付",
+        "price": "¥40",
+        "traffic": "240GB",
+        "period": "每月"
+      },
+      {
+        "name": "【暮光·旗舰版】",
+        "billingCycle": "月付",
+        "price": "¥100",
+        "traffic": "700GB",
+        "period": "每月"
+      },
+      {
+        "name": "【暮光·至尊版】",
+        "billingCycle": "月付",
+        "price": "¥180",
+        "traffic": "1500GB",
+        "period": "每月"
+      },
+      {
+        "name": "【暮光·年付轻量版】",
+        "billingCycle": "年付",
+        "price": "¥109",
+        "traffic": "70GB",
+        "period": "每月"
+      },
+      {
+        "name": "【暮光·不限时轻量包】",
+        "billingCycle": "一次性付费",
+        "price": "¥219",
+        "traffic": "150GB",
+        "period": "一次性"
+      },
+      {
+        "name": "【暮光·不限时标准包】",
+        "billingCycle": "一次性付费",
+        "price": "¥529",
+        "traffic": "400GB",
+        "period": "一次性"
+      },
+      {
+        "name": "【暮光·不限时大容量包】",
+        "billingCycle": "一次性付费",
+        "price": "¥959",
+        "traffic": "800GB",
+        "period": "一次性"
+      },
+      {
+        "name": "独享私人定制节点",
+        "billingCycle": "月付",
+        "price": "¥600",
+        "traffic": "500GB",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "26ms",
+        "download": "509Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "40ms",
+        "download": "107Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "43ms",
+        "download": "419Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "53ms",
+        "download": "150Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "160ms",
+        "download": "19Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [],
+    "unlockDetails": {
+      "supported": [
+        "ChatGPT",
+        "Claude",
+        "Netflix",
+        "Disney+",
+        "YouTube",
+        "HBO Max",
+        "TikTok",
+        "Spotify"
+      ],
+      "conditional": [
+        "Gemini（视节点而定）"
+      ]
+    },
+    "speedtestNote": "已收录 2026-10-19 非晚高峰 5 地区参考测速（香港 26ms / 509Mbps、新加坡 43ms / 419Mbps、日本 53ms / 150Mbps）；暂未随 16 家测速包发布独立单图截图。"
   },
   {
     "id": "dalaoyun",
@@ -627,7 +1145,9 @@ export const airports: Airport[] = [
           "适合文字与日常浏览"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入"
   },
   {
     "id": "xingdaomeng",
@@ -728,7 +1248,119 @@ export const airports: Airport[] = [
           "多端畅连"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入（Clash / Sing-box / Shadowrocket）",
+    "allPackages": [
+      {
+        "name": "星岛梦·贴心小包",
+        "billingCycle": "年付",
+        "price": "¥96",
+        "traffic": "60GB",
+        "period": "每月"
+      },
+      {
+        "name": "星岛梦·超量150G",
+        "billingCycle": "月付",
+        "price": "¥25",
+        "traffic": "150GB",
+        "period": "每月"
+      },
+      {
+        "name": "星岛梦·进阶300G",
+        "billingCycle": "月付",
+        "price": "¥50",
+        "traffic": "300GB",
+        "period": "每月"
+      },
+      {
+        "name": "星岛梦·闪光500G",
+        "billingCycle": "月付",
+        "price": "¥70",
+        "traffic": "500GB",
+        "period": "每月"
+      },
+      {
+        "name": "星岛梦·旗舰1T版",
+        "billingCycle": "月付",
+        "price": "¥130",
+        "traffic": "1000GB",
+        "period": "每月"
+      },
+      {
+        "name": "星岛梦·永久不限时100",
+        "billingCycle": "一次性付费",
+        "price": "¥100",
+        "traffic": "100GB",
+        "period": "一次性"
+      },
+      {
+        "name": "星岛梦·永久不限时300",
+        "billingCycle": "一次性付费",
+        "price": "¥300",
+        "traffic": "300GB",
+        "period": "一次性"
+      },
+      {
+        "name": "星岛梦·永久不限时1TB",
+        "billingCycle": "一次性付费",
+        "price": "¥600",
+        "traffic": "1000GB",
+        "period": "一次性"
+      },
+      {
+        "name": "星岛梦·定制套餐",
+        "billingCycle": "月付",
+        "price": "¥680",
+        "traffic": "500GB",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "27ms",
+        "download": "504Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "41ms",
+        "download": "103Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "44ms",
+        "download": "411Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "57ms",
+        "download": "136Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "177ms",
+        "download": "18Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/xingdaomeng-speedtest.png",
+        "caption": "星岛梦 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 01:48:13 CST）",
+        "alt": "星岛梦 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 01:48:13 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
+    ],
+    "speedtestNote": "已双源核对：具备 2026-08-11 节点实测图与 2026-10-19 非晚高峰 5 地区测速记录。"
   },
   {
     "id": "ermaoyun",
@@ -814,7 +1446,98 @@ export const airports: Airport[] = [
           "支持主流AI与流媒体"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研全平台客户端 + 支持第三方通用订阅导入",
+    "allPackages": [
+      {
+        "name": "二猫云·不限时套餐",
+        "billingCycle": "一次性付费",
+        "price": "¥99",
+        "traffic": "100GB",
+        "period": "一次性"
+      },
+      {
+        "name": "二猫年付小包",
+        "billingCycle": "年付",
+        "price": "¥89",
+        "traffic": "60GB",
+        "period": "每月"
+      },
+      {
+        "name": "二猫云·白猫套餐",
+        "billingCycle": "月付",
+        "price": "¥20",
+        "traffic": "130GB",
+        "period": "每月"
+      },
+      {
+        "name": "二猫云·橘猫畅玩版",
+        "billingCycle": "月付",
+        "price": "¥40",
+        "traffic": "230GB",
+        "period": "每月"
+      },
+      {
+        "name": "二猫云·牛奶猫尊享版",
+        "billingCycle": "月付",
+        "price": "¥80",
+        "traffic": "430GB",
+        "period": "每月"
+      },
+      {
+        "name": "二猫云·黑猫重度用户版",
+        "billingCycle": "月付",
+        "price": "¥160",
+        "traffic": "850GB",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "22ms",
+        "download": "481Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "41ms",
+        "download": "118Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "46ms",
+        "download": "407Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "53ms",
+        "download": "143Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "134ms",
+        "download": "17Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/ermaoyun-speedtest.png",
+        "caption": "二猫云 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 10:45:27 CST）",
+        "alt": "二猫云 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 10:45:27 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
+    ],
+    "speedtestNote": "已双源核对：具备 2026-08-11 节点实测图与 2026-10-19 非晚高峰 5 地区测速记录。"
   },
   {
     "id": "wuyou",
@@ -912,7 +1635,130 @@ export const airports: Airport[] = [
           "多设备不限"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "原生通用订阅直连（支持 Clash / Shadowrocket，无需转换器）",
+    "allPackages": [
+      {
+        "name": "MINI链接",
+        "billingCycle": "年付",
+        "price": "¥79",
+        "traffic": "40GB",
+        "period": "每月"
+      },
+      {
+        "name": "舒心链接",
+        "billingCycle": "月付",
+        "price": "¥19",
+        "traffic": "100GB",
+        "period": "每月"
+      },
+      {
+        "name": "省心链接",
+        "billingCycle": "月付",
+        "price": "¥33",
+        "traffic": "200GB",
+        "period": "每月"
+      },
+      {
+        "name": "随心链接",
+        "billingCycle": "月付",
+        "price": "¥77",
+        "traffic": "500GB",
+        "period": "每月"
+      },
+      {
+        "name": "忘忧链接",
+        "billingCycle": "月付",
+        "price": "¥117",
+        "traffic": "1000GB",
+        "period": "每月"
+      },
+      {
+        "name": "100G永久不限时 无忧链接",
+        "billingCycle": "一次性付费",
+        "price": "¥108",
+        "traffic": "100GB",
+        "period": "一次性"
+      },
+      {
+        "name": "300G永久不限时 无忧链接",
+        "billingCycle": "一次性付费",
+        "price": "¥298",
+        "traffic": "300GB",
+        "period": "一次性"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "23ms",
+        "download": "531Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "41ms",
+        "download": "107Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "42ms",
+        "download": "418Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "55ms",
+        "download": "147Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "145ms",
+        "download": "17Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/wuyou-speedtest-1.jpg",
+        "caption": "无忧链接 50节点 VLESS 订阅速度实测（MiaoKo 4.7.0，2026-07-18 21:40:48 CST，珠海联通 9Gbps 32线程）",
+        "alt": "无忧链接 50节点 VLESS 订阅速度实测截图",
+        "testedAt": "2026-07-18 21:40:48 (CST)",
+        "toolFamily": "MiaoKo 4.7.0 [A11-32]（珠海联通 9Gbps 32线程）",
+        "protocolDisplayed": "VLESS",
+        "dataStatus": "measured",
+        "limitation": "单次采样记录，新加坡02 测速接近停滞属单点异常，整体香港均速 392–554MB/s。"
+      },
+      {
+        "src": "/assets/speedtest/wuyou-speedtest-2.jpg",
+        "caption": "无忧链接 50节点 御三家流媒体（YouTube/Netflix/Disney+）解锁实测（2026-07-18 21:47:23 CST）",
+        "alt": "无忧链接 50节点 YouTube Netflix Disney+ 流媒体解锁实测矩阵",
+        "testedAt": "2026-07-18 21:47:23 (CST)",
+        "toolFamily": "MiaoKo 4.7.0 [A11-32]（珠海联通 9Gbps 32线程）",
+        "protocolDisplayed": "VLESS",
+        "dataStatus": "measured",
+        "limitation": "该次实测 50/50 节点中香港01 YouTube 送中，其余美/新/台/日/港主流解锁通过。"
+      }
+    ],
+    "unlockDetails": {
+      "supported": [
+        "ChatGPT",
+        "Netflix",
+        "Disney+",
+        "YouTube",
+        "HBO Max",
+        "TikTok",
+        "Spotify"
+      ],
+      "conditional": [
+        "Claude（视节点而定）",
+        "Gemini（视节点而定）"
+      ]
+    },
+    "speedtestNote": "具备 2026-07-18 晚间 50 节点 VLESS 速度与御三家解锁双图，以及 2026-10-19 非晚高峰 5 地区参考数据（香港 29ms / 676Mbps、新加坡 50ms / 499Mbps）。"
   },
   {
     "id": "weitu",
@@ -998,7 +1844,126 @@ export const airports: Airport[] = [
           "不限设备连接"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "专属客户端 / 支持 Clash、Shadowrocket 等主流客户端导入",
+    "allPackages": [
+      {
+        "name": "唯兔云·年付加强专线",
+        "billingCycle": "年付",
+        "price": "¥120",
+        "traffic": "75GB",
+        "period": "每月"
+      },
+      {
+        "name": "唯兔云·年付版限量款",
+        "billingCycle": "年付",
+        "price": "¥79.90",
+        "traffic": "45GB",
+        "period": "每月"
+      },
+      {
+        "name": "唯兔云·节假日限时开启（14.9元）",
+        "billingCycle": "月付",
+        "price": "¥14.9",
+        "traffic": "100GB",
+        "period": "每月"
+      },
+      {
+        "name": "唯兔云·普通版",
+        "billingCycle": "月付",
+        "price": "¥19.90",
+        "traffic": "150GB",
+        "period": "每月"
+      },
+      {
+        "name": "唯兔云·进阶版",
+        "billingCycle": "月付",
+        "price": "¥29.90",
+        "traffic": "200GB",
+        "period": "每月"
+      },
+      {
+        "name": "唯兔云·专业版",
+        "billingCycle": "月付",
+        "price": "¥59.90",
+        "traffic": "500GB",
+        "period": "每月"
+      },
+      {
+        "name": "唯兔云·至尊版",
+        "billingCycle": "月付",
+        "price": "¥119.90",
+        "traffic": "1000GB",
+        "period": "每月"
+      },
+      {
+        "name": "唯兔云·永久不限时",
+        "billingCycle": "一次性付费",
+        "price": "¥100",
+        "traffic": "100GB",
+        "period": "一次性"
+      },
+      {
+        "name": "唯兔云·永久不限时",
+        "billingCycle": "一次性付费",
+        "price": "¥160",
+        "traffic": "200GB",
+        "period": "一次性"
+      },
+      {
+        "name": "唯兔云·永久不限时",
+        "billingCycle": "一次性付费",
+        "price": "¥340",
+        "traffic": "500GB",
+        "period": "一次性"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "27ms",
+        "download": "500Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "37ms",
+        "download": "100Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "44ms",
+        "download": "414Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "56ms",
+        "download": "147Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "179ms",
+        "download": "17Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/weitu-speedtest.png",
+        "caption": "唯兔云 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 13:55:08 CST）",
+        "alt": "唯兔云 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 13:55:08 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
+    ],
+    "speedtestNote": "已双源核对：具备 2026-08-11 节点实测图与 2026-10-19 非晚高峰 5 地区测速记录。"
   },
   {
     "id": "firefly",
@@ -1013,8 +1978,7 @@ export const airports: Airport[] = [
     "traffic": 100,
     "lineType": "IPLC专线",
     "protocols": [
-      "VLESS",
-      "Shadowsocks"
+      "VLESS"
     ],
     "nodeCount": 50,
     "speedMbps": 650,
@@ -1084,7 +2048,100 @@ export const airports: Airport[] = [
           "原生IP解锁"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "专属客户端，下载登录即用（不提供第三方订阅链接；与微风/飞鸟/一云梯同系）",
+    "allPackages": [
+      {
+        "name": "Firefly 年付版",
+        "billingCycle": "年付",
+        "price": "¥96",
+        "traffic": "60GB",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Lite",
+        "billingCycle": "月付",
+        "price": "¥25",
+        "traffic": "150GB",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Plus",
+        "billingCycle": "月付",
+        "price": "¥45",
+        "traffic": "300GB",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Blaze",
+        "billingCycle": "月付",
+        "price": "¥85",
+        "traffic": "600GB",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Nova",
+        "billingCycle": "月付",
+        "price": "¥150",
+        "traffic": "1000GB",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly 不限时",
+        "billingCycle": "一次性付费",
+        "price": "¥100",
+        "traffic": "100GB",
+        "period": "一次性"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "27ms",
+        "download": "547Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "39ms",
+        "download": "135Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "42ms",
+        "download": "445Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "57ms",
+        "download": "147Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "143ms",
+        "download": "30Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "unlockDetails": {
+      "supported": [
+        "ChatGPT",
+        "Claude",
+        "Netflix",
+        "Disney+",
+        "YouTube",
+        "HBO Max",
+        "TikTok",
+        "Spotify"
+      ],
+      "conditional": [
+        "Gemini（视节点而定）"
+      ]
+    }
   },
   {
     "id": "yuzhou",
@@ -1094,7 +2151,7 @@ export const airports: Airport[] = [
     "established": "2025年",
     "score": 9.3,
     "ratingCount": 980,
-    "monthlyPrice": 19,
+    "monthlyPrice": 8,
     "annualPrice": 190,
     "traffic": 150,
     "lineType": "IEPL专线",
@@ -1146,8 +2203,8 @@ export const airports: Airport[] = [
     "isTopRank": false,
     "isBudget": true,
     "isAffiliate": true,
-    "minDuration": "月付",
-    "priceNote": "月付19元/150GB起；优惠码 YUZHOU553",
+    "minDuration": "年付",
+    "priceNote": "历史资料起价 ¥96/年（月流量未从当前资料确定，历史优惠码 YUZHOU553 称新用户8折）；现有资料不足以列出完整多档套餐表，购买前请在官网核实",
     "features": [
       "IEPL专线",
       "VLESS协议",
@@ -1170,7 +2227,29 @@ export const airports: Airport[] = [
           "4K无压力"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "待核实（历史资料提及自研客户端，未默认是否提供通用订阅）",
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/yuzhou-speedtest.png",
+        "caption": "宇宙云 节点测速实测（main 4.3.3 (696) / miaosu 4.7.0 (A11-32)，协议显示：VLESS，时间：2026-08-11 21:04:24 CST）",
+        "alt": "宇宙云 2026-08-11 VLESS 节点测速实测截图",
+        "testedAt": "2026-08-11 21:04:24 (CST)",
+        "toolFamily": "main 4.3.3 (696) / miaosu 4.7.0 (A11-32)",
+        "protocolDisplayed": "VLESS",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
+    ],
+    "unlockDetails": {
+      "supported": [],
+      "conditional": [],
+      "untested": [
+        "AI 工具与流媒体解锁现状待核实（2026-10 清单明确留空，未默认支持）"
+      ]
+    },
+    "speedtestNote": "已录入 2026-08-11 00:21:18 CST（VLESS）节点测速快照图；2026-10-19 分地区汇总表格及当前全部套餐细节待补充。"
   },
   {
     "id": "u1s1",
@@ -1255,6 +2334,89 @@ export const airports: Airport[] = [
           "无暗箱计费",
           "稳定抗干扰"
         ]
+      }
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "支持 Clash / Shadowrocket / Sing-box 等第三方通用订阅",
+    "allPackages": [
+      {
+        "name": "u1s1·就是好用包",
+        "billingCycle": "年付",
+        "price": "¥96",
+        "traffic": "60GB",
+        "period": "每月"
+      },
+      {
+        "name": "u1s1·普通人真够了包",
+        "billingCycle": "月付",
+        "price": "¥20",
+        "traffic": "120GB",
+        "period": "每月"
+      },
+      {
+        "name": "u1s1·你以为用不到包",
+        "billingCycle": "月付",
+        "price": "¥40",
+        "traffic": "300GB",
+        "period": "每月"
+      },
+      {
+        "name": "u1s1·瘾大就拉满包",
+        "billingCycle": "月付",
+        "price": "¥100",
+        "traffic": "700GB",
+        "period": "每月"
+      },
+      {
+        "name": "u1s1·我全都要包",
+        "billingCycle": "月付",
+        "price": "¥180",
+        "traffic": "1500GB",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "24ms",
+        "download": "538Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "39ms",
+        "download": "107Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "46ms",
+        "download": "414Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "57ms",
+        "download": "133Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "134ms",
+        "download": "20Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/u1s1-speedtest.png",
+        "caption": "U1S1 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 22:33:29 CST）",
+        "alt": "U1S1 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 22:33:29 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
       }
     ]
   },
@@ -1342,6 +2504,97 @@ export const airports: Airport[] = [
           "支持4K流媒体"
         ]
       }
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入",
+    "secondaryCoupon": "lingmao",
+    "allPackages": [
+      {
+        "name": "灵猫·年付小包",
+        "billingCycle": "年付",
+        "price": "¥85",
+        "traffic": "45GB",
+        "period": "每月"
+      },
+      {
+        "name": "灵猫·年付Small",
+        "billingCycle": "年付",
+        "price": "¥195",
+        "traffic": "150GB",
+        "period": "每月"
+      },
+      {
+        "name": "灵猫·年付Big",
+        "billingCycle": "年付",
+        "price": "¥295",
+        "traffic": "300GB",
+        "period": "每月"
+      },
+      {
+        "name": "灵猫·季付Big",
+        "billingCycle": "季付",
+        "price": "¥125",
+        "traffic": "300GB",
+        "period": "每月"
+      },
+      {
+        "name": "灵猫·月付Small",
+        "billingCycle": "月付",
+        "price": "¥25",
+        "traffic": "150GB",
+        "period": "每月"
+      },
+      {
+        "name": "灵猫·月付Big",
+        "billingCycle": "月付",
+        "price": "¥45",
+        "traffic": "300GB",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "22ms",
+        "download": "492Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "40ms",
+        "download": "109Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "46ms",
+        "download": "409Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "57ms",
+        "download": "147Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "164ms",
+        "download": "19Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/lingmao-speedtest.png",
+        "caption": "灵猫网络 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 18:45:40 CST）",
+        "alt": "灵猫网络 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 18:45:40 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
     ]
   },
   {
@@ -1426,6 +2679,20 @@ export const airports: Airport[] = [
           "AI大模型解锁",
           "抗干扰强"
         ]
+      }
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入",
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/jilianyun-speedtest.png",
+        "caption": "极连云 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 22:46:50 CST）",
+        "alt": "极连云 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 22:46:50 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
       }
     ]
   },
@@ -1512,6 +2779,20 @@ export const airports: Airport[] = [
           "全设备支持"
         ]
       }
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入",
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/guangnianti-speedtest.png",
+        "caption": "光年梯 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 14:38:04 CST）",
+        "alt": "光年梯 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 14:38:04 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
     ]
   },
   {
@@ -1596,7 +2877,113 @@ export const airports: Airport[] = [
           "不限设备"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入",
+    "secondaryCoupon": "1FLYYUN",
+    "allPackages": [
+      {
+        "name": "轻享版",
+        "billingCycle": "月付",
+        "price": "¥20",
+        "traffic": "150GB",
+        "period": "每月"
+      },
+      {
+        "name": "舒享版",
+        "billingCycle": "月付",
+        "price": "¥35",
+        "traffic": "350GB",
+        "period": "每月"
+      },
+      {
+        "name": "尊享版",
+        "billingCycle": "月付",
+        "price": "¥55",
+        "traffic": "600GB",
+        "period": "每月"
+      },
+      {
+        "name": "极致版",
+        "billingCycle": "月付",
+        "price": "¥95",
+        "traffic": "1.2TB",
+        "period": "每月"
+      },
+      {
+        "name": "98¥·年付小包",
+        "billingCycle": "年付",
+        "price": "¥98",
+        "traffic": "60GB",
+        "period": "每月"
+      },
+      {
+        "name": "轻享版·不限时包",
+        "billingCycle": "一次性付费",
+        "price": "¥100",
+        "traffic": "100GB",
+        "period": "一次性"
+      },
+      {
+        "name": "舒享版·不限时包",
+        "billingCycle": "一次性付费",
+        "price": "¥200",
+        "traffic": "250GB",
+        "period": "一次性"
+      },
+      {
+        "name": "尊享版·不限时包",
+        "billingCycle": "一次性付费",
+        "price": "¥400",
+        "traffic": "500GB",
+        "period": "一次性"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "23ms",
+        "download": "477Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "40ms",
+        "download": "117Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "42ms",
+        "download": "390Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "53ms",
+        "download": "136Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "180ms",
+        "download": "20Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/yifanyun-speedtest.png",
+        "caption": "一翻云 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 00:21:30 CST）",
+        "alt": "一翻云 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 00:21:30 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
+    ],
+    "speedtestNote": "已双源核对：具备 2026-08-11 节点实测图与 2026-10-19 非晚高峰 5 地区测速记录。"
   },
   {
     "id": "sogoyun",
@@ -1680,22 +3067,136 @@ export const airports: Airport[] = [
           "优惠码折上折"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入",
+    "secondaryCoupon": "SOGO10000",
+    "allPackages": [
+      {
+        "name": "小包-年付版",
+        "billingCycle": "年付",
+        "price": "¥98",
+        "traffic": "60GB",
+        "period": "每月"
+      },
+      {
+        "name": "基础版",
+        "billingCycle": "月付",
+        "price": "¥25",
+        "traffic": "150GB",
+        "period": "每月"
+      },
+      {
+        "name": "优选版",
+        "billingCycle": "月付",
+        "price": "¥45",
+        "traffic": "350GB",
+        "period": "每月"
+      },
+      {
+        "name": "强化版",
+        "billingCycle": "月付",
+        "price": "¥80",
+        "traffic": "550GB",
+        "period": "每月"
+      },
+      {
+        "name": "顶配版",
+        "billingCycle": "月付",
+        "price": "¥150",
+        "traffic": "1.1TB",
+        "period": "每月"
+      },
+      {
+        "name": "SOGO基础餐不限时版",
+        "billingCycle": "一次性付费",
+        "price": "¥120",
+        "traffic": "120GB",
+        "period": "一次性"
+      },
+      {
+        "name": "SOGO优选餐不限时版",
+        "billingCycle": "一次性付费",
+        "price": "¥220",
+        "traffic": "250GB",
+        "period": "一次性"
+      },
+      {
+        "name": "SOGO强化餐不限时版",
+        "billingCycle": "一次性付费",
+        "price": "¥450",
+        "traffic": "500GB",
+        "period": "一次性"
+      },
+      {
+        "name": "SOGO至尊餐不限时版",
+        "billingCycle": "一次性付费",
+        "price": "¥850",
+        "traffic": "1.0TB",
+        "period": "一次性"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "26ms",
+        "download": "488Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "39ms",
+        "download": "118Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "43ms",
+        "download": "401Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "57ms",
+        "download": "137Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "140ms",
+        "download": "17Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/sogoyun-speedtest.png",
+        "caption": "SOGO 云 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 18:57:59 CST）",
+        "alt": "SOGO 云 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 18:57:59 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
+    ],
+    "speedtestNote": "已双源核对：具备 2026-08-11 节点实测图与 2026-10-19 非晚高峰 5 地区测速记录。"
   },
   {
     "id": "kexinyun",
     "name": "可信云",
     "slug": "kexinyun",
     "slogan": "诚实标注无虚标 · 真实数据披露 · 稳健线路运营",
-    "established": "2023年",
+    "established": "2024年",
     "score": 9.1,
     "ratingCount": 940,
-    "monthlyPrice": 18,
+    "monthlyPrice": 25,
     "annualPrice": 180,
-    "traffic": 120,
+    "traffic": 150,
     "lineType": "IEPL专线",
     "protocols": [
-      "Shadowsocks"
+      "Shadowsocks (实测图显示)",
+      "VLESS (品牌资料)"
     ],
     "nodeCount": 46,
     "speedMbps": 590,
@@ -1708,16 +3209,16 @@ export const airports: Airport[] = [
       "台湾"
     ],
     "aiUnlock": {
-      "chatgpt": true,
-      "claude": true,
-      "gemini": true,
-      "cursor": true
+      "chatgpt": false,
+      "claude": false,
+      "gemini": false,
+      "cursor": false
     },
     "streamingUnlock": {
-      "netflix": true,
-      "disney": true,
+      "netflix": false,
+      "disney": false,
       "youtube": true,
-      "tiktok": true
+      "tiktok": false
     },
     "pros": [
       "官方资料诚实标注数据缺口与测速边界，拒绝虚假宣传",
@@ -1741,7 +3242,7 @@ export const airports: Airport[] = [
     "isBudget": true,
     "isAffiliate": true,
     "minDuration": "月付",
-    "priceNote": "月付18元/120GB起；优惠码 kkk333",
+    "priceNote": "官方基础档 ¥25/月（150GB/月）；优惠码 kkk333",
     "features": [
       "诚实标注数据",
       "IEPL专线",
@@ -1764,22 +3265,45 @@ export const airports: Airport[] = [
           "多设备支持"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "支持第三方通用订阅（Clash / Shadowrocket 等）",
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/kexinyun-speedtest.png",
+        "caption": "可信云 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 15:32:35 CST）（注：截图右下角可见 15:32:35 CST，完整日历日期由 2026-08-11 批次校准推断）",
+        "alt": "可信云 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 15:32:35 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
+    ],
+    "unlockDetails": {
+      "supported": [],
+      "conditional": [],
+      "untested": [
+        "品牌资料明确注明：AI 与流媒体目前缺乏统一实测数据，保持中性待核实结论（不预言必定解锁）"
+      ]
+    },
+    "speedtestNote": "已有 2026-08-11 15:32:35 CST Shadowsocks 测速快照（完整日期由同批次推断）；AI 与流媒体解锁暂缺统一实测数据。"
   },
   {
     "id": "sujie",
     "name": "速界",
     "slug": "sujie",
     "slogan": "高频 AI 工具深度优化 · 跨境电商赋能 · 快速响应",
-    "established": "2022年",
+    "established": "2024年",
     "score": 9.1,
     "ratingCount": 1040,
-    "monthlyPrice": 18,
+    "monthlyPrice": 25,
     "annualPrice": 180,
-    "traffic": 120,
+    "traffic": 150,
     "lineType": "IEPL专线",
     "protocols": [
-      "Shadowsocks"
+      "Shadowsocks (实测图显示)",
+      "VLESS (品牌资料)"
     ],
     "nodeCount": 48,
     "speedMbps": 610,
@@ -1825,7 +3349,7 @@ export const airports: Airport[] = [
     "isBudget": true,
     "isAffiliate": true,
     "minDuration": "月付",
-    "priceNote": "月付18元/120GB起；优惠码 sss1111",
+    "priceNote": "官方基础档 ¥25/月（150GB/月）；优惠码 sss1111",
     "features": [
       "高频AI支持",
       "跨境电商优化",
@@ -1848,7 +3372,32 @@ export const airports: Airport[] = [
           "流媒体全开"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入",
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/sujie-speedtest.png",
+        "caption": "速界 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 15:39:36 CST）",
+        "alt": "速界 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 15:39:36 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
+    ],
+    "unlockDetails": {
+      "supported": [
+        "YouTube"
+      ],
+      "conditional": [
+        "ChatGPT / Claude / Gemini：品牌资料明确强调 AI 使用场景，但受 IP 与风控规则影响不可承诺永久稳定，请结合节点实测"
+      ],
+      "untested": [
+        "Netflix / Disney+ / TikTok 流媒体缺乏同批次独立解锁截图"
+      ]
+    }
   },
   {
     "id": "shanyue",
@@ -1863,8 +3412,7 @@ export const airports: Airport[] = [
     "traffic": 150,
     "lineType": "IPLC专线",
     "protocols": [
-      "Shadowsocks",
-      "VLESS"
+      "IPLC 纯专线（官网原文未标注具体传输协议）"
     ],
     "nodeCount": 50,
     "speedMbps": 660,
@@ -1931,7 +3479,93 @@ export const airports: Airport[] = [
           "4K无阻碍"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "专属客户端，下载登录即用（不提供第三方订阅链接）",
+    "allPackages": [
+      {
+        "name": "闪跃年付版",
+        "billingCycle": "年付",
+        "price": "¥96",
+        "traffic": "60GB",
+        "period": "每月"
+      },
+      {
+        "name": "闪动 (Flicker)",
+        "billingCycle": "月付",
+        "price": "¥24",
+        "traffic": "150GB",
+        "period": "每月"
+      },
+      {
+        "name": "飞跃 (Leap)",
+        "billingCycle": "月付",
+        "price": "¥44",
+        "traffic": "300GB",
+        "period": "每月"
+      },
+      {
+        "name": "瞬移 (Teleport)",
+        "billingCycle": "月付",
+        "price": "¥84",
+        "traffic": "600GB",
+        "period": "每月"
+      },
+      {
+        "name": "跃迁 (Warp)",
+        "billingCycle": "月付",
+        "price": "¥134",
+        "traffic": "1000GB",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "23ms",
+        "download": "548Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "38ms",
+        "download": "110Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "44ms",
+        "download": "383Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "53ms",
+        "download": "144Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "143ms",
+        "download": "18Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "unlockDetails": {
+      "supported": [
+        "ChatGPT",
+        "Claude",
+        "Netflix",
+        "Disney+",
+        "YouTube",
+        "HBO Max",
+        "TikTok",
+        "Spotify"
+      ],
+      "conditional": [
+        "Gemini（视节点而定）"
+      ]
+    }
   },
   {
     "id": "quanqiuyun",
@@ -2016,7 +3650,120 @@ export const airports: Airport[] = [
           "支持日常追剧"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入",
+    "secondaryCoupon": "qq88",
+    "allPackages": [
+      {
+        "name": "BGP 智能优化·不限时轻量包",
+        "billingCycle": "一次性付费",
+        "price": "¥100",
+        "traffic": "100GB",
+        "period": "一次性"
+      },
+      {
+        "name": "BGP 智能优化·不限时标准包",
+        "billingCycle": "一次性付费",
+        "price": "¥360",
+        "traffic": "400GB",
+        "period": "一次性"
+      },
+      {
+        "name": "BGP 智能优化·不限时大容量包",
+        "billingCycle": "一次性付费",
+        "price": "¥700",
+        "traffic": "800GB",
+        "period": "一次性"
+      },
+      {
+        "name": "轻量版",
+        "billingCycle": "年付",
+        "price": "¥99",
+        "traffic": "59GB",
+        "period": "每月"
+      },
+      {
+        "name": "BGP 智能优化·入门方案",
+        "billingCycle": "月付",
+        "price": "¥20",
+        "traffic": "120GB",
+        "period": "每月"
+      },
+      {
+        "name": "BGP 智能优化·进阶方案",
+        "billingCycle": "月付",
+        "price": "¥40",
+        "traffic": "300GB",
+        "period": "每月"
+      },
+      {
+        "name": "BGP 智能优化·高端方案",
+        "billingCycle": "月付",
+        "price": "¥100",
+        "traffic": "700GB",
+        "period": "每月"
+      },
+      {
+        "name": "BGP 智能优化·商业方案",
+        "billingCycle": "月付",
+        "price": "¥180",
+        "traffic": "1500GB",
+        "period": "每月"
+      },
+      {
+        "name": "独享私人专线节点",
+        "billingCycle": "月付",
+        "price": "¥680",
+        "traffic": "500GB",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "25ms",
+        "download": "489Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "台湾",
+        "latency": "37ms",
+        "download": "117Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "新加坡",
+        "latency": "45ms",
+        "download": "430Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "日本",
+        "latency": "55ms",
+        "download": "133Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      },
+      {
+        "region": "美国",
+        "latency": "138ms",
+        "download": "18Mbps",
+        "testDate": "2026-10-19 (非晚高峰)"
+      }
+    ],
+    "screenshotMeta": [
+      {
+        "src": "/assets/speedtest/quanqiuyun-speedtest.png",
+        "caption": "全球云 节点测速实测（MAI-TEST-BOT 2.0.0-dev，协议显示：Shadowsocks，时间：2026-08-11 15:50:43 CST）",
+        "alt": "全球云 2026-08-11 Shadowsocks 节点测速实测截图",
+        "testedAt": "2026-08-11 15:50:43 (CST)",
+        "toolFamily": "MAI-TEST-BOT 2.0.0-dev",
+        "protocolDisplayed": "Shadowsocks",
+        "dataStatus": "measured",
+        "limitation": "单日单次实测快照，不同品牌采样时段不同，不构成跨品牌实时排名，亦不单独证明长期在线率。 本截图未覆盖 AI 与流媒体逐项解锁。"
+      }
+    ],
+    "speedtestNote": "已双源核对：具备 2026-08-11 节点实测图与 2026-10-19 非晚高峰 5 地区测速记录。"
   },
   {
     "id": "shandianshu",
@@ -2097,7 +3844,9 @@ export const airports: Airport[] = [
           "适合轻度文字浏览"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入"
   },
   {
     "id": "yunjiexian",
@@ -2177,7 +3926,9 @@ export const airports: Airport[] = [
           "香港/美西节点"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入（注册链接格式无 #，打开前请确认）"
   },
   {
     "id": "liulianyun",
@@ -2192,7 +3943,7 @@ export const airports: Airport[] = [
     "traffic": 60,
     "lineType": "BGP隧道中转",
     "protocols": [
-      "Shadowsocks"
+      "待核实（品牌资料未统一公布协议类型）"
     ],
     "nodeCount": 32,
     "speedMbps": 400,
@@ -2226,7 +3977,7 @@ export const airports: Airport[] = [
       "寻找备用机场的玩家"
     ],
     "riskStatus": "正常运营",
-    "riskNote": "运行平稳",
+    "riskNote": "2024年运营极限平价档（约¥5.6/月），需注意官方品牌资料未统一公布具体代理协议类型，下单前建议月付/季付小额测试",
     "affiliateUrl": "https://qwerty.liulianyunaff.com#/?code=hS5pvbfE",
     "officialUrl": "https://qwerty.liulianyunaff.com#/?code=hS5pvbfE",
     "couponCode": "ll88",
@@ -2255,7 +4006,9 @@ export const airports: Airport[] = [
           "日常网页浏览"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入（具体协议类型官方未统一公示）"
   },
   {
     "id": "shenxing",
@@ -2335,7 +4088,9 @@ export const airports: Airport[] = [
           "流媒体支持"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入"
   },
   {
     "id": "huanqiuti",
@@ -2413,7 +4168,9 @@ export const airports: Airport[] = [
           "轻量使用"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研客户端 + 支持第三方通用订阅导入（注册链接格式无 #，打开前请确认）"
   },
   {
     "id": "yinxingren",
@@ -2428,7 +4185,7 @@ export const airports: Airport[] = [
     "traffic": 80,
     "lineType": "IPLC专线",
     "protocols": [
-      "Shadowsocks"
+      "IPLC 企业专线（官网未公开标明协议字段）"
     ],
     "nodeCount": 60,
     "speedMbps": 720,
@@ -2477,7 +4234,7 @@ export const airports: Airport[] = [
     "isBudget": true,
     "isAffiliate": true,
     "minDuration": "年付",
-    "priceNote": "年付小包109元/年(折合~9.08元/月 80GB)；月付24元(144GB)；优惠码 moon80 享受8折",
+    "priceNote": "年付小包「星耀风暴」¥109/年（80GB/月，折约 ¥9.08/月）；月付「白银纪元」¥24/144GB 起；主用优惠码 yxr888（另有历史折扣码 moon80 可8折，无试用，仅支持自有客户端）",
     "features": [
       "IPLC专线直连",
       "自研专属客户端",
@@ -2510,7 +4267,90 @@ export const airports: Airport[] = [
           "故障1小时修复保障"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "专属自带客户端（不提供 Clash/Shadowrocket 等第三方订阅链接）",
+    "secondaryCoupon": "moon80",
+    "allPackages": [
+      {
+        "name": "隐形人 白银纪元",
+        "billingCycle": "月付",
+        "price": "¥24",
+        "traffic": "144GB",
+        "period": "每月"
+      },
+      {
+        "name": "隐形人 黄金序列",
+        "billingCycle": "月付",
+        "price": "¥48",
+        "traffic": "360GB",
+        "period": "每月"
+      },
+      {
+        "name": "隐形人 铂金至臻",
+        "billingCycle": "月付",
+        "price": "¥105",
+        "traffic": "750GB",
+        "period": "每月"
+      },
+      {
+        "name": "隐形人 钻石穹顶",
+        "billingCycle": "月付",
+        "price": "¥185",
+        "traffic": "1.6TB",
+        "period": "每月"
+      },
+      {
+        "name": "王者定制版",
+        "billingCycle": "月付",
+        "price": "¥680",
+        "traffic": "500GB",
+        "period": "每月"
+      },
+      {
+        "name": "星耀风暴 365天不熄",
+        "billingCycle": "年付",
+        "price": "¥109",
+        "traffic": "80GB",
+        "period": "每月"
+      },
+      {
+        "name": "一次性小流量",
+        "billingCycle": "一次性付费",
+        "price": "¥229",
+        "traffic": "160GB",
+        "period": "一次性"
+      },
+      {
+        "name": "一次性标准流量包",
+        "billingCycle": "一次性付费",
+        "price": "¥549",
+        "traffic": "420GB",
+        "period": "一次性"
+      },
+      {
+        "name": "一次性精英流量包",
+        "billingCycle": "一次性付费",
+        "price": "¥1199",
+        "traffic": "1.0TB",
+        "period": "一次性"
+      }
+    ],
+    "unlockDetails": {
+      "supported": [
+        "ChatGPT",
+        "Netflix",
+        "Disney+",
+        "YouTube",
+        "HBO Max",
+        "Spotify"
+      ],
+      "conditional": [
+        "Claude（视节点而定）",
+        "Gemini（视节点而定）",
+        "TikTok（视节点而定）"
+      ]
+    }
   },
   {
     "id": "tiziyun",
@@ -2597,7 +4437,9 @@ export const airports: Airport[] = [
           "AI与流媒体全开"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研全平台一键客户端 + 支持第三方通用订阅双模式"
   },
   {
     "id": "wgetcloud",
@@ -2695,7 +4537,76 @@ export const airports: Airport[] = [
           "全流媒体解锁"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "allPackages": [
+      {
+        "name": "基础专线服务",
+        "billingCycle": "季付",
+        "price": "¥297",
+        "traffic": "230GB/月",
+        "period": "每月"
+      },
+      {
+        "name": "优质专线服务",
+        "billingCycle": "季付",
+        "price": "¥327",
+        "traffic": "250GB/月",
+        "period": "每月"
+      },
+      {
+        "name": "精品专线服务",
+        "billingCycle": "季付",
+        "price": "¥357",
+        "traffic": "270GB/月",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "日本",
+        "latency": "69.4ms",
+        "download": "462.04Mbps",
+        "testDate": "2026-05-02"
+      },
+      {
+        "region": "美国",
+        "latency": "170.2ms",
+        "download": "440.04Mbps",
+        "testDate": "2026-05-02"
+      },
+      {
+        "region": "香港",
+        "latency": "25.9ms",
+        "download": "431.24Mbps",
+        "testDate": "2026-05-02"
+      },
+      {
+        "region": "新加坡",
+        "latency": "55.6ms",
+        "download": "422.97Mbps",
+        "testDate": "2026-05-02"
+      },
+      {
+        "region": "台湾",
+        "latency": "41.3ms",
+        "download": "407.66Mbps",
+        "testDate": "2026-05-02"
+      },
+      {
+        "region": "印度",
+        "latency": "95ms",
+        "download": "341.92Mbps",
+        "testDate": "2026-05-02"
+      },
+      {
+        "region": "印尼",
+        "latency": "88ms",
+        "download": "318.64Mbps",
+        "testDate": "2026-05-02"
+      }
+    ],
+    "speedtestNote": "保留 2026-05-02 历史批次地区统计实测值（非 2026-10-19 新测，不代表现时或长期在线率）；购买前请在官网复核当前套餐与可用性。"
   },
   {
     "id": "baiyueguang",
@@ -2783,7 +4694,97 @@ export const airports: Airport[] = [
           "主流AI解锁"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "allPackages": [
+      {
+        "name": "小包",
+        "billingCycle": "季付",
+        "price": "¥66",
+        "traffic": "每月100GB高速流量",
+        "period": "每月"
+      },
+      {
+        "name": "中包",
+        "billingCycle": "季付",
+        "price": "¥126",
+        "traffic": "每月250GB高速流量",
+        "period": "每月"
+      },
+      {
+        "name": "大包",
+        "billingCycle": "季付",
+        "price": "¥156",
+        "traffic": "每月400GB高速流量",
+        "period": "每月"
+      },
+      {
+        "name": "超大包",
+        "billingCycle": "季付",
+        "price": "¥216",
+        "traffic": "每月750GB高速流量",
+        "period": "每月"
+      },
+      {
+        "name": "不差钱",
+        "billingCycle": "季付",
+        "price": "¥231",
+        "traffic": "每月900GB高速流量",
+        "period": "每月"
+      },
+      {
+        "name": "旗舰包",
+        "billingCycle": "年付",
+        "price": "¥2500",
+        "traffic": "每月2500GB超大流量",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "香港",
+        "latency": "160.7ms",
+        "download": "114.94Mbps",
+        "testDate": "2026-07-17"
+      },
+      {
+        "region": "美国",
+        "latency": "302.6ms",
+        "download": "70.53Mbps",
+        "testDate": "2026-07-17"
+      },
+      {
+        "region": "日本",
+        "latency": "202.4ms",
+        "download": "77.65Mbps",
+        "testDate": "2026-07-17"
+      },
+      {
+        "region": "台湾",
+        "latency": "—",
+        "download": "0.03Mbps",
+        "testDate": "2026-07-17"
+      },
+      {
+        "region": "新加坡",
+        "latency": "186.8ms",
+        "download": "85.22Mbps",
+        "testDate": "2026-07-17"
+      },
+      {
+        "region": "加拿大",
+        "latency": "344ms",
+        "download": "62Mbps",
+        "testDate": "2026-07-17"
+      },
+      {
+        "region": "韩国",
+        "latency": "358ms",
+        "download": "31.28Mbps",
+        "testDate": "2026-07-17"
+      }
+    ],
+    "speedtestNote": "保留 2026-07-17 历史批次地区统计实测值（非 2026-10-19 新测，不代表现时或长期在线率）；购买前请在官网复核当前套餐与可用性。"
   },
   {
     "id": "flyingbird",
@@ -2865,7 +4866,131 @@ export const airports: Airport[] = [
           "支持9折优惠码 theo"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "secondaryCoupon": "year85",
+    "allPackages": [
+      {
+        "name": "青铜套餐",
+        "billingCycle": "月付",
+        "price": "¥15",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "青铜套餐",
+        "billingCycle": "季付",
+        "price": "¥41",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "青铜套餐",
+        "billingCycle": "半年付",
+        "price": "¥77",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "青铜套餐",
+        "billingCycle": "年付",
+        "price": "¥144",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "白银套餐",
+        "billingCycle": "月付",
+        "price": "¥30",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "白银套餐",
+        "billingCycle": "季付",
+        "price": "¥81",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "白银套餐",
+        "billingCycle": "半年付",
+        "price": "¥153",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "白银套餐",
+        "billingCycle": "年付",
+        "price": "¥288",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "黄金套餐",
+        "billingCycle": "月付",
+        "price": "¥75",
+        "traffic": "500G",
+        "period": "每月"
+      },
+      {
+        "name": "黄金套餐",
+        "billingCycle": "季付",
+        "price": "¥203",
+        "traffic": "500G",
+        "period": "每月"
+      },
+      {
+        "name": "黄金套餐",
+        "billingCycle": "半年付",
+        "price": "¥383",
+        "traffic": "500G",
+        "period": "每月"
+      },
+      {
+        "name": "黄金套餐",
+        "billingCycle": "年付",
+        "price": "¥720",
+        "traffic": "500G",
+        "period": "每月"
+      },
+      {
+        "name": "钻石套餐",
+        "billingCycle": "月付",
+        "price": "¥150",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "钻石套餐",
+        "billingCycle": "季付",
+        "price": "¥405",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "钻石套餐",
+        "billingCycle": "半年付",
+        "price": "¥765",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "钻石套餐",
+        "billingCycle": "年付",
+        "price": "¥1440",
+        "traffic": "1000G",
+        "period": "每月"
+      }
+    ],
+    "speedtestNote": "暂无可对比的按地区独立实测与近 30 日晚高峰采样（资料来源为 2026-08-09 品牌库历史归档，未提供独立推广入口）。",
+    "unlockDetails": {
+      "supported": [],
+      "conditional": [],
+      "untested": [
+        "AI 与流媒体独立逐项测试待核实，不可直接推断全量支持"
+      ]
+    }
   },
   {
     "id": "cyberguard",
@@ -2947,7 +5072,97 @@ export const airports: Airport[] = [
           "流媒体支持"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "allPackages": [
+      {
+        "name": "150G｜轻量套餐",
+        "billingCycle": "半年付",
+        "price": "¥95",
+        "traffic": "150GB/月",
+        "period": "每月"
+      },
+      {
+        "name": "350G｜标准套餐",
+        "billingCycle": "月付",
+        "price": "¥32",
+        "traffic": "350GB/月",
+        "period": "每月"
+      },
+      {
+        "name": "650G｜高速套餐",
+        "billingCycle": "月付",
+        "price": "¥55",
+        "traffic": "650GB/月",
+        "period": "每月"
+      },
+      {
+        "name": "220G流量包｜不限时",
+        "billingCycle": "一次性付费",
+        "price": "¥79",
+        "traffic": "220GB",
+        "period": "一次性（具体有效期待核实）"
+      },
+      {
+        "name": "840G流量包｜不限时",
+        "billingCycle": "一次性付费",
+        "price": "¥188",
+        "traffic": "840GB",
+        "period": "一次性（具体有效期待核实）"
+      },
+      {
+        "name": "2050G｜企业套餐",
+        "billingCycle": "月付",
+        "price": "¥200",
+        "traffic": "2050GB/月",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "日本",
+        "latency": "123.8ms",
+        "download": "488.83Mbps",
+        "testDate": "2025-06-21"
+      },
+      {
+        "region": "美国",
+        "latency": "614ms",
+        "download": "245.6Mbps",
+        "testDate": "2025-06-21"
+      },
+      {
+        "region": "澳大利亚",
+        "latency": "277ms",
+        "download": "279.64Mbps",
+        "testDate": "2025-06-21"
+      },
+      {
+        "region": "韩国",
+        "latency": "6000ms",
+        "download": "552.8Mbps",
+        "testDate": "2025-06-21"
+      },
+      {
+        "region": "德国",
+        "latency": "390.5ms",
+        "download": "159.96Mbps",
+        "testDate": "2025-06-21"
+      },
+      {
+        "region": "法国",
+        "latency": "384ms",
+        "download": "204.08Mbps",
+        "testDate": "2025-06-21"
+      },
+      {
+        "region": "阿联酋",
+        "latency": "345ms",
+        "download": "342.76Mbps",
+        "testDate": "2025-06-21"
+      }
+    ],
+    "speedtestNote": "保留 2025-06-21 历史批次地区统计实测值（非 2026-10-19 新测，不代表现时或长期在线率）；购买前请在官网复核当前套餐与可用性。"
   },
   {
     "id": "longmaoyun",
@@ -3028,7 +5243,130 @@ export const airports: Airport[] = [
           "日常4K支持"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "allPackages": [
+      {
+        "name": "VIP1",
+        "billingCycle": "月付",
+        "price": "¥15",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "季付",
+        "price": "¥41",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "半年付",
+        "price": "¥77",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "年付",
+        "price": "¥144",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "月付",
+        "price": "¥30",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "季付",
+        "price": "¥81",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "半年付",
+        "price": "¥153",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "年付",
+        "price": "¥288",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "月付",
+        "price": "¥60",
+        "traffic": "400G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "季付",
+        "price": "¥162",
+        "traffic": "400G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "半年付",
+        "price": "¥306",
+        "traffic": "400G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "年付",
+        "price": "¥576",
+        "traffic": "400G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "月付",
+        "price": "¥120",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "季付",
+        "price": "¥324",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "半年付",
+        "price": "¥697",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "年付",
+        "price": "¥1152",
+        "traffic": "1000G",
+        "period": "每月"
+      }
+    ],
+    "speedtestNote": "暂无可对比的按地区独立实测与近 30 日晚高峰采样（资料来源为 2026-08-09 品牌库历史归档，未提供独立推广入口）。",
+    "unlockDetails": {
+      "supported": [],
+      "conditional": [],
+      "untested": [
+        "AI 与流媒体独立逐项测试待核实，不可直接推断全量支持"
+      ]
+    }
   },
   {
     "id": "fatcat",
@@ -3109,7 +5447,137 @@ export const airports: Airport[] = [
           "支持主流AI"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "allPackages": [
+      {
+        "name": "年付加强版",
+        "billingCycle": "年付",
+        "price": "¥96",
+        "traffic": "60G",
+        "period": "每月"
+      },
+      {
+        "name": "基础套餐",
+        "billingCycle": "月付",
+        "price": "¥20",
+        "traffic": "120G",
+        "period": "每月"
+      },
+      {
+        "name": "基础套餐",
+        "billingCycle": "季付",
+        "price": "¥54",
+        "traffic": "120G",
+        "period": "每月"
+      },
+      {
+        "name": "基础套餐",
+        "billingCycle": "半年付",
+        "price": "¥102",
+        "traffic": "120G",
+        "period": "每月"
+      },
+      {
+        "name": "基础套餐",
+        "billingCycle": "年付",
+        "price": "¥192",
+        "traffic": "120G",
+        "period": "每月"
+      },
+      {
+        "name": "标准套餐",
+        "billingCycle": "月付",
+        "price": "¥40",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "标准套餐",
+        "billingCycle": "季付",
+        "price": "¥108",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "标准套餐",
+        "billingCycle": "半年付",
+        "price": "¥204",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "标准套餐",
+        "billingCycle": "年付",
+        "price": "¥384",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "旗舰套餐",
+        "billingCycle": "月付",
+        "price": "¥100",
+        "traffic": "700G",
+        "period": "每月"
+      },
+      {
+        "name": "旗舰套餐",
+        "billingCycle": "季付",
+        "price": "¥270",
+        "traffic": "700G",
+        "period": "每月"
+      },
+      {
+        "name": "旗舰套餐",
+        "billingCycle": "半年付",
+        "price": "¥510",
+        "traffic": "700G",
+        "period": "每月"
+      },
+      {
+        "name": "旗舰套餐",
+        "billingCycle": "年付",
+        "price": "¥960",
+        "traffic": "700G",
+        "period": "每月"
+      },
+      {
+        "name": "企业套餐",
+        "billingCycle": "月付",
+        "price": "¥180",
+        "traffic": "1500G",
+        "period": "每月"
+      },
+      {
+        "name": "企业套餐",
+        "billingCycle": "季付",
+        "price": "¥486",
+        "traffic": "1500G",
+        "period": "每月"
+      },
+      {
+        "name": "企业套餐",
+        "billingCycle": "半年付",
+        "price": "¥918",
+        "traffic": "1500G",
+        "period": "每月"
+      },
+      {
+        "name": "企业套餐",
+        "billingCycle": "年付",
+        "price": "¥1728",
+        "traffic": "1500G",
+        "period": "每月"
+      }
+    ],
+    "speedtestNote": "暂无可对比的按地区独立实测与近 30 日晚高峰采样（资料来源为 2026-08-09 品牌库历史归档，未提供独立推广入口）。",
+    "unlockDetails": {
+      "supported": [],
+      "conditional": [],
+      "untested": [
+        "AI 与流媒体独立逐项测试待核实，不可直接推断全量支持"
+      ]
+    }
   },
   {
     "id": "tntcloud",
@@ -3191,7 +5659,151 @@ export const airports: Airport[] = [
           "不限设备"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "allPackages": [
+      {
+        "name": "轻量包",
+        "billingCycle": "季付",
+        "price": "¥30",
+        "traffic": "60G",
+        "period": "每月"
+      },
+      {
+        "name": "轻量包",
+        "billingCycle": "半年付",
+        "price": "¥56",
+        "traffic": "60G",
+        "period": "每月"
+      },
+      {
+        "name": "轻量包",
+        "billingCycle": "年付",
+        "price": "¥98",
+        "traffic": "60G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "月付",
+        "price": "¥20",
+        "traffic": "110G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "季付",
+        "price": "¥54",
+        "traffic": "110G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "半年付",
+        "price": "¥102",
+        "traffic": "110G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "年付",
+        "price": "¥192",
+        "traffic": "110G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "月付",
+        "price": "¥40",
+        "traffic": "220G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "季付",
+        "price": "¥108",
+        "traffic": "220G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "半年付",
+        "price": "¥204",
+        "traffic": "220G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "年付",
+        "price": "¥336",
+        "traffic": "220G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "月付",
+        "price": "¥80",
+        "traffic": "460G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "季付",
+        "price": "¥216",
+        "traffic": "460G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "半年付",
+        "price": "¥408",
+        "traffic": "460G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "年付",
+        "price": "¥768",
+        "traffic": "460G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "月付",
+        "price": "¥160",
+        "traffic": "1100G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "季付",
+        "price": "¥432",
+        "traffic": "1100G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "半年付",
+        "price": "¥816",
+        "traffic": "1100G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "年付",
+        "price": "¥1536",
+        "traffic": "1100G",
+        "period": "每月"
+      }
+    ],
+    "speedtestNote": "暂无可对比的按地区独立实测与近 30 日晚高峰采样（资料来源为 2026-08-09 品牌库历史归档，未提供独立推广入口）。",
+    "unlockDetails": {
+      "supported": [],
+      "conditional": [],
+      "untested": [
+        "AI 与流媒体独立逐项测试待核实，不可直接推断全量支持"
+      ]
+    }
   },
   {
     "id": "qingyunti",
@@ -3277,7 +5889,138 @@ export const airports: Airport[] = [
           "主流解锁保障"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "secondaryCoupon": "qyt80",
+    "allPackages": [
+      {
+        "name": "年付小包",
+        "billingCycle": "年付",
+        "price": "¥96",
+        "traffic": "60G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "月付",
+        "price": "¥25",
+        "traffic": "150G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "季付",
+        "price": "¥67",
+        "traffic": "150G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "半年付",
+        "price": "¥127",
+        "traffic": "150G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP1",
+        "billingCycle": "年付",
+        "price": "¥240",
+        "traffic": "150G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "月付",
+        "price": "¥45",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "季付",
+        "price": "¥121",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "半年付",
+        "price": "¥229",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP2",
+        "billingCycle": "年付",
+        "price": "¥432",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "月付",
+        "price": "¥85",
+        "traffic": "600G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "季付",
+        "price": "¥229",
+        "traffic": "600G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "半年付",
+        "price": "¥433",
+        "traffic": "600G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP3",
+        "billingCycle": "年付",
+        "price": "¥816",
+        "traffic": "600G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "月付",
+        "price": "¥150",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "季付",
+        "price": "¥400",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "半年付",
+        "price": "¥750",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "VIP4",
+        "billingCycle": "年付",
+        "price": "¥1360",
+        "traffic": "1000G",
+        "period": "每月"
+      }
+    ],
+    "speedtestNote": "暂无可对比的按地区独立实测与近 30 日晚高峰采样（资料来源为 2026-08-09 品牌库历史归档，未提供独立推广入口）。",
+    "unlockDetails": {
+      "supported": [],
+      "conditional": [],
+      "untested": [
+        "AI 与流媒体独立逐项测试待核实，不可直接推断全量支持"
+      ]
+    }
   },
   {
     "id": "shanshuiyun",
@@ -3357,7 +6100,97 @@ export const airports: Airport[] = [
           "日常学术浏览"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "allPackages": [
+      {
+        "name": "64G/轻量套餐",
+        "billingCycle": "年付",
+        "price": "¥88",
+        "traffic": "64GB/月",
+        "period": "每月"
+      },
+      {
+        "name": "128G/轻量套餐",
+        "billingCycle": "半年付",
+        "price": "¥88",
+        "traffic": "128GB/月",
+        "period": "每月"
+      },
+      {
+        "name": "256G/轻量套餐",
+        "billingCycle": "季付",
+        "price": "¥75",
+        "traffic": "256GB/月",
+        "period": "每月"
+      },
+      {
+        "name": "100G/月-琴",
+        "billingCycle": "月付",
+        "price": "¥15",
+        "traffic": "100GB/月",
+        "period": "每月"
+      },
+      {
+        "name": "200G/月-棋",
+        "billingCycle": "月付",
+        "price": "¥25",
+        "traffic": "200GB/月",
+        "period": "每月"
+      },
+      {
+        "name": "500G/月-书",
+        "billingCycle": "月付",
+        "price": "¥50",
+        "traffic": "500GB/月",
+        "period": "每月"
+      }
+    ],
+    "regionalSpeedtests": [
+      {
+        "region": "美国",
+        "latency": "349.3ms",
+        "download": "180.29Mbps",
+        "testDate": "2026-06-29"
+      },
+      {
+        "region": "日本",
+        "latency": "229.8ms",
+        "download": "160.51Mbps",
+        "testDate": "2026-06-29"
+      },
+      {
+        "region": "香港",
+        "latency": "151.4ms",
+        "download": "152.86Mbps",
+        "testDate": "2026-06-29"
+      },
+      {
+        "region": "新加坡",
+        "latency": "179.8ms",
+        "download": "142.98Mbps",
+        "testDate": "2026-06-29"
+      },
+      {
+        "region": "越南",
+        "latency": "232ms",
+        "download": "87.68Mbps",
+        "testDate": "2026-06-29"
+      },
+      {
+        "region": "泰国",
+        "latency": "217ms",
+        "download": "82Mbps",
+        "testDate": "2026-06-29"
+      },
+      {
+        "region": "英国",
+        "latency": "328ms",
+        "download": "65.2Mbps",
+        "testDate": "2026-06-29"
+      }
+    ],
+    "speedtestNote": "保留 2026-06-29 历史批次地区统计实测值（非 2026-10-19 新测，不代表现时或长期在线率）；购买前请在官网复核当前套餐与可用性。"
   },
   {
     "id": "lingdongyun",
@@ -3437,7 +6270,226 @@ export const airports: Airport[] = [
           "多设备不限"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "通用订阅（实测 VLESS；官网文案提及 VLESS/Trojan）",
+    "allPackages": [
+      {
+        "name": "灵动·拂风",
+        "billingCycle": "月付",
+        "price": "¥20",
+        "traffic": "100G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·拂风",
+        "billingCycle": "季付",
+        "price": "¥57",
+        "traffic": "100G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·拂风",
+        "billingCycle": "半年付",
+        "price": "¥108",
+        "traffic": "100G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·拂风",
+        "billingCycle": "年付",
+        "price": "¥204",
+        "traffic": "100G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·拂风",
+        "billingCycle": "两年付",
+        "price": "¥384",
+        "traffic": "100G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·拂风",
+        "billingCycle": "三年付",
+        "price": "¥540",
+        "traffic": "100G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·驭浪",
+        "billingCycle": "月付",
+        "price": "¥50",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·驭浪",
+        "billingCycle": "季付",
+        "price": "¥142.5",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·驭浪",
+        "billingCycle": "半年付",
+        "price": "¥270",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·驭浪",
+        "billingCycle": "年付",
+        "price": "¥510",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·驭浪",
+        "billingCycle": "两年付",
+        "price": "¥960",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·驭浪",
+        "billingCycle": "三年付",
+        "price": "¥1350",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·破晓",
+        "billingCycle": "月付",
+        "price": "¥100",
+        "traffic": "700G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·破晓",
+        "billingCycle": "季付",
+        "price": "¥285",
+        "traffic": "700G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·破晓",
+        "billingCycle": "半年付",
+        "price": "¥540",
+        "traffic": "700G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·破晓",
+        "billingCycle": "年付",
+        "price": "¥1020",
+        "traffic": "700G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·破晓",
+        "billingCycle": "两年付",
+        "price": "¥1920",
+        "traffic": "700G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·破晓",
+        "billingCycle": "三年付",
+        "price": "¥2700",
+        "traffic": "700G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·凌霄",
+        "billingCycle": "月付",
+        "price": "¥180",
+        "traffic": "1.5T/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·凌霄",
+        "billingCycle": "季付",
+        "price": "¥513",
+        "traffic": "1.5T/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·凌霄",
+        "billingCycle": "半年付",
+        "price": "¥972",
+        "traffic": "1.5T/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·凌霄",
+        "billingCycle": "年付",
+        "price": "¥1836",
+        "traffic": "1.5T/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·凌霄",
+        "billingCycle": "两年付",
+        "price": "¥3456",
+        "traffic": "1.5T/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·凌霄",
+        "billingCycle": "三年付",
+        "price": "¥4860",
+        "traffic": "1.5T/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·穿云",
+        "billingCycle": "年付",
+        "price": "¥99",
+        "traffic": "70G/月",
+        "period": "每月"
+      },
+      {
+        "name": "灵动·闲云（小流量包）",
+        "billingCycle": "一次性付费",
+        "price": "¥199",
+        "traffic": "150G",
+        "period": "一次性（套餐内流量总额）"
+      },
+      {
+        "name": "灵动·惊云（标准流量包）",
+        "billingCycle": "一次性付费",
+        "price": "¥499",
+        "traffic": "400G",
+        "period": "一次性（套餐内流量总额）"
+      },
+      {
+        "name": "灵动·飞云（精英流量包）",
+        "billingCycle": "一次性付费",
+        "price": "¥899",
+        "traffic": "800G",
+        "period": "一次性（套餐内流量总额）"
+      },
+      {
+        "name": "灵动云·至尊私人定制",
+        "billingCycle": "月付",
+        "price": "¥620",
+        "traffic": "截图遮挡",
+        "period": "每月"
+      }
+    ],
+    "speedtestNote": "2026-07-20/21（珠海联通 9Gbps，60 节点测速/解锁）：速度够用级（20–80MB/s）、HTTPS 延迟偏高；OpenAI 各地区基本全解锁；TikTok 多数失败、新加坡/台湾 YouTube 送中、美国01 节点失败、台湾落地识别偏欧（NF/D+ 显示 ES）。",
+    "unlockDetails": {
+      "supported": [
+        "OpenAI / ChatGPT（2026-07-20/21 实测多区可用）"
+      ],
+      "conditional": [
+        "Netflix / Disney+（台湾落地实测曾识别为 ES，部分可用）"
+      ],
+      "untested": [
+        "TikTok（2026-07 实测多数失败）、YouTube（部分地区送中）"
+      ]
+    }
   },
   {
     "id": "langwang",
@@ -3518,7 +6570,221 @@ export const airports: Airport[] = [
           "多端可用"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "allPackages": [
+      {
+        "name": "浪网 高端",
+        "billingCycle": "月付",
+        "price": "¥120",
+        "traffic": "800G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 高端",
+        "billingCycle": "季付",
+        "price": "¥342",
+        "traffic": "800G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 高端",
+        "billingCycle": "半年付",
+        "price": "¥648",
+        "traffic": "800G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 高端",
+        "billingCycle": "年付",
+        "price": "¥1224",
+        "traffic": "800G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 高端",
+        "billingCycle": "两年付",
+        "price": "¥2304",
+        "traffic": "800G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 高端",
+        "billingCycle": "三年付",
+        "price": "¥3240",
+        "traffic": "800G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 商业",
+        "billingCycle": "月付",
+        "price": "¥200",
+        "traffic": "2000G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 商业",
+        "billingCycle": "季付",
+        "price": "¥570",
+        "traffic": "2000G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 商业",
+        "billingCycle": "半年付",
+        "price": "¥1080",
+        "traffic": "2000G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 商业",
+        "billingCycle": "年付",
+        "price": "¥2040",
+        "traffic": "2000G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 商业",
+        "billingCycle": "两年付",
+        "price": "¥3840",
+        "traffic": "2000G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 商业",
+        "billingCycle": "三年付",
+        "price": "¥5400",
+        "traffic": "2000G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 年付标准",
+        "billingCycle": "年付",
+        "price": "¥119",
+        "traffic": "80G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 小流量包",
+        "billingCycle": "一次性付费",
+        "price": "¥239",
+        "traffic": "180G",
+        "period": "一次性（套餐内流量总额）"
+      },
+      {
+        "name": "浪网 标准流量包",
+        "billingCycle": "一次性付费",
+        "price": "¥569",
+        "traffic": "450G",
+        "period": "一次性（套餐内流量总额）"
+      },
+      {
+        "name": "浪网 定制线路包",
+        "billingCycle": "月付",
+        "price": "¥640",
+        "traffic": "500G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 精英流量包",
+        "billingCycle": "一次性付费",
+        "price": "¥1099",
+        "traffic": "900G",
+        "period": "一次性（套餐内流量总额）"
+      },
+      {
+        "name": "浪网 进阶",
+        "billingCycle": "月付",
+        "price": "¥70",
+        "traffic": "450G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 进阶",
+        "billingCycle": "季付",
+        "price": "¥199.5",
+        "traffic": "450G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 进阶",
+        "billingCycle": "半年付",
+        "price": "¥378",
+        "traffic": "450G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 进阶",
+        "billingCycle": "年付",
+        "price": "¥714",
+        "traffic": "450G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 进阶",
+        "billingCycle": "两年付",
+        "price": "¥1344",
+        "traffic": "450G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 进阶",
+        "billingCycle": "三年付",
+        "price": "¥1890",
+        "traffic": "450G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 入门",
+        "billingCycle": "月付",
+        "price": "¥30",
+        "traffic": "截150G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 入门",
+        "billingCycle": "季付",
+        "price": "¥85.5",
+        "traffic": "截150G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 入门",
+        "billingCycle": "半年付",
+        "price": "¥162",
+        "traffic": "截150G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 入门",
+        "billingCycle": "年付",
+        "price": "¥306",
+        "traffic": "截150G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 入门",
+        "billingCycle": "两年付",
+        "price": "¥576",
+        "traffic": "截150G",
+        "period": "每月"
+      },
+      {
+        "name": "浪网 入门",
+        "billingCycle": "三年付",
+        "price": "¥810",
+        "traffic": "截150G",
+        "period": "每月"
+      }
+    ],
+    "speedtestNote": "原资料标注尚未进行实测（入门档流量文字被遮挡截断），暂无法给出按地区的速度、延迟或晚高峰实测结论。",
+    "unlockDetails": {
+      "supported": [],
+      "conditional": [],
+      "untested": [
+        "流媒体、AI、设备数与测速待核实"
+      ]
+    }
   },
   {
     "id": "edgenova",
@@ -3558,9 +6824,9 @@ export const airports: Airport[] = [
       "tiktok": true
     },
     "pros": [
-      "具备多线路自动路由分配技术，动态优化链路",
-      "套餐覆盖年付小包及多档常规月付流量",
-      "支付便捷，支持国内主流方式及 USDT"
+      "直连 + IPLC 多线路自动分配，兼容国内支付宝、微信及 USDT 支付",
+      "提供多档常规月/季/半年/年付（120GB–1000GB），且支持新用户 8 折码 TH888",
+      "限时轻量年付 ¥108 适合低用量备用需求"
     ],
     "cons": [
       "冷门国家节点少，专注核心方向"
@@ -3578,7 +6844,7 @@ export const airports: Airport[] = [
     "isBudget": true,
     "isAffiliate": true,
     "minDuration": "月付",
-    "priceNote": "年付小包约120元；常规月付16元起",
+    "priceNote": "限时月付 ¥15/72GB、限时年付 ¥108/45GB/月；极界·标准 ¥25/120GB 起；优惠码 TH888 可享 8 折",
     "features": [
       "多线路自动分配",
       "IPLC接入",
@@ -3599,7 +6865,144 @@ export const airports: Airport[] = [
           "稳定抗拥塞"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "allPackages": [
+      {
+        "name": "限时月付",
+        "billingCycle": "月付",
+        "price": "¥15",
+        "traffic": "72G",
+        "period": "每月"
+      },
+      {
+        "name": "限时年付",
+        "billingCycle": "年付",
+        "price": "¥108",
+        "traffic": "45G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·标准",
+        "billingCycle": "月付",
+        "price": "¥25",
+        "traffic": "120G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·标准",
+        "billingCycle": "季付",
+        "price": "¥70",
+        "traffic": "120G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·标准",
+        "billingCycle": "半年付",
+        "price": "¥130",
+        "traffic": "120G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·标准",
+        "billingCycle": "年付",
+        "price": "¥270",
+        "traffic": "120G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·进阶",
+        "billingCycle": "月付",
+        "price": "¥50",
+        "traffic": "250G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·进阶",
+        "billingCycle": "季付",
+        "price": "¥145",
+        "traffic": "250G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·进阶",
+        "billingCycle": "半年付",
+        "price": "¥280",
+        "traffic": "250G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·进阶",
+        "billingCycle": "年付",
+        "price": "¥570",
+        "traffic": "250G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·高级",
+        "billingCycle": "月付",
+        "price": "¥100",
+        "traffic": "500G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·高级",
+        "billingCycle": "季付",
+        "price": "¥290",
+        "traffic": "500G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·高级",
+        "billingCycle": "半年付",
+        "price": "¥580",
+        "traffic": "500G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·高级",
+        "billingCycle": "年付",
+        "price": "¥1100",
+        "traffic": "500G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·极限",
+        "billingCycle": "月付",
+        "price": "¥200",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·极限",
+        "billingCycle": "季付",
+        "price": "¥580",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·极限",
+        "billingCycle": "半年付",
+        "price": "¥1150",
+        "traffic": "1000G",
+        "period": "每月"
+      },
+      {
+        "name": "极界·极限",
+        "billingCycle": "年付",
+        "price": "¥2300",
+        "traffic": "1000G",
+        "period": "每月"
+      }
+    ],
+    "couponCode": "TH888",
+    "unlockDetails": {
+      "supported": [],
+      "conditional": [],
+      "untested": [
+        "AI 与主流流媒体尚无独立逐项测速核验，购买前请实际验证"
+      ]
+    }
   },
   {
     "id": "yinghuochong",
@@ -3679,6 +7082,192 @@ export const airports: Airport[] = [
           "不限速不限设备",
           "VLESS协议"
         ]
+      }
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "专属客户端（IPLC + VLESS；与 Firefly/微风/飞鸟同系）",
+    "allPackages": [
+      {
+        "name": "Firefly年付版",
+        "billingCycle": "年付",
+        "price": "¥96",
+        "traffic": "60G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Lite",
+        "billingCycle": "月付",
+        "price": "¥25",
+        "traffic": "150G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Lite",
+        "billingCycle": "季付",
+        "price": "¥67",
+        "traffic": "150G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Lite",
+        "billingCycle": "半年付",
+        "price": "¥127",
+        "traffic": "150G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Lite",
+        "billingCycle": "年付",
+        "price": "¥240",
+        "traffic": "150G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Lite",
+        "billingCycle": "两年付",
+        "price": "¥420",
+        "traffic": "150G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Lite",
+        "billingCycle": "三年付",
+        "price": "¥540",
+        "traffic": "150G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Plus",
+        "billingCycle": "月付",
+        "price": "¥45",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Plus",
+        "billingCycle": "季付",
+        "price": "¥121",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Plus",
+        "billingCycle": "半年付",
+        "price": "¥229",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Plus",
+        "billingCycle": "年付",
+        "price": "¥432",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Plus",
+        "billingCycle": "两年付",
+        "price": "¥756",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Plus",
+        "billingCycle": "三年付",
+        "price": "¥972",
+        "traffic": "300G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Blaze",
+        "billingCycle": "月付",
+        "price": "¥85",
+        "traffic": "600G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Blaze",
+        "billingCycle": "季付",
+        "price": "¥229",
+        "traffic": "600G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Blaze",
+        "billingCycle": "半年付",
+        "price": "¥433",
+        "traffic": "600G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Blaze",
+        "billingCycle": "年付",
+        "price": "¥816",
+        "traffic": "600G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Blaze",
+        "billingCycle": "两年付",
+        "price": "¥1428",
+        "traffic": "600G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Blaze",
+        "billingCycle": "三年付",
+        "price": "¥1836",
+        "traffic": "600G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Nova",
+        "billingCycle": "月付",
+        "price": "¥150",
+        "traffic": "1000G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Nova",
+        "billingCycle": "季付",
+        "price": "¥400",
+        "traffic": "1000G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Nova",
+        "billingCycle": "半年付",
+        "price": "¥750",
+        "traffic": "1000G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Nova",
+        "billingCycle": "年付",
+        "price": "¥1360",
+        "traffic": "1000G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Nova",
+        "billingCycle": "两年付",
+        "price": "¥2399",
+        "traffic": "1000G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly Nova",
+        "billingCycle": "三年付",
+        "price": "¥3119",
+        "traffic": "1000G/月",
+        "period": "每月"
+      },
+      {
+        "name": "Firefly不限时",
+        "billingCycle": "一次性付费",
+        "price": "¥100",
+        "traffic": "100G",
+        "period": "一次性（套餐内流量总额）"
       }
     ]
   },
@@ -3763,10 +7352,105 @@ export const airports: Airport[] = [
           "商务技术协助"
         ]
       }
-    ]
+    ],
+    "dataVerificationDate": "2026-10-19（结合 2026-08-11 实测包与历史归档核对）",
+    "usageMode": "自研 Win/macOS/Android 客户端 + 支持通用订阅，提供远程协助支持",
+    "allPackages": [
+      {
+        "name": "Basic",
+        "billingCycle": "月付",
+        "price": "¥17",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "Basic",
+        "billingCycle": "季付",
+        "price": "¥46",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "Basic",
+        "billingCycle": "半年付",
+        "price": "¥87",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "Basic",
+        "billingCycle": "年付",
+        "price": "¥163",
+        "traffic": "100G",
+        "period": "每月"
+      },
+      {
+        "name": "Standard",
+        "billingCycle": "月付",
+        "price": "¥28",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "Standard",
+        "billingCycle": "季付",
+        "price": "¥76",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "Standard",
+        "billingCycle": "半年付",
+        "price": "¥143",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "Standard",
+        "billingCycle": "年付",
+        "price": "¥268",
+        "traffic": "200G",
+        "period": "每月"
+      },
+      {
+        "name": "Premium",
+        "billingCycle": "月付",
+        "price": "¥36",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "Premium",
+        "billingCycle": "季付",
+        "price": "¥97",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "Premium",
+        "billingCycle": "半年付",
+        "price": "¥183",
+        "traffic": "300G",
+        "period": "每月"
+      },
+      {
+        "name": "Premium",
+        "billingCycle": "年付",
+        "price": "¥345",
+        "traffic": "300G",
+        "period": "每月"
+      }
+    ],
+    "speedtestNote": "暂无可对比的按地区独立实测与近 30 日晚高峰采样（资料来源为 2026-08-09 品牌库历史归档，未提供独立推广入口）。",
+    "unlockDetails": {
+      "supported": [],
+      "conditional": [],
+      "untested": [
+        "AI 与流媒体独立逐项测试待核实，不可直接推断全量支持"
+      ]
+    }
   }
 ];
-
 export function getAirportBySlug(slug: string): Airport | undefined {
   return airports.find(a => a.slug === slug);
 }
