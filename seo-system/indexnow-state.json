@@ -2,7 +2,7 @@
   "host": "jichangbang.org",
   "key": "90bda009942249abab9bf96226f47779",
   "keyLocation": "https://jichangbang.org/90bda009942249abab9bf96226f47779.txt",
-  "lastSubmissionTime": "2026-11-16T08:58:54.463Z",
+  "lastSubmissionTime": "2026-11-23T10:15:14.762Z",
   "trackedUrls": {
     "https://jichangbang.org/": "initial_seed",
     "https://jichangbang.org/recommend/": "2026-11-16T08:58:54.462Z",
@@ -79,7 +79,9 @@
     "https://jichangbang.org/wiki/airport-selection-guide/": "2026-11-16T08:58:54.463Z",
     "https://jichangbang.org/wiki/airport-runaway-warning-signs/": "2026-11-16T08:58:54.463Z",
     "https://jichangbang.org/wiki/firefly": "2026-11-16T08:58:54.463Z",
-    "https://jichangbang.org/reviews/firefly": "2026-11-16T08:58:54.463Z"
+    "https://jichangbang.org/reviews/firefly": "2026-11-16T08:58:54.463Z",
+    "https://jichangbang.org/wiki/shanyue": "2026-11-23T10:15:14.761Z",
+    "https://jichangbang.org/reviews/shanyue": "2026-11-23T10:15:14.762Z"
   },
   "history": [
     {
@@ -274,6 +276,14 @@
         "https://jichangbang.org/wiki/airport-runaway-warning-signs/",
         "https://jichangbang.org/wiki/firefly",
         "https://jichangbang.org/reviews/firefly"
+      ]
+    },
+    {
+      "timestamp": "2026-11-23T10:15:14.762Z",
+      "submittedCount": 2,
+      "urls": [
+        "https://jichangbang.org/wiki/shanyue",
+        "https://jichangbang.org/reviews/shanyue"
       ]
     }
   ]
